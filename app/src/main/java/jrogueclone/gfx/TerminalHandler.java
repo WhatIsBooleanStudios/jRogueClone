@@ -49,20 +49,32 @@ public class TerminalHandler {
             }
         }
     }
+    public static final String CSI = "\033[";
+
     public boolean keyIsPressed(int c) {
         if(c < 0 || c > 256) {
             System.out.println("keyIsPressed: c must be in the range [0, 256]");
             return false;
         }
-        // System.out.println("query char: " + c);
         return keyMap[c];
     }
 
     public void initAlternateScreen() {
-        System.out.print("\033[" + "?1049h");
+        System.out.print(CSI + "?1049h");
+	internalMoveCursor(1, 1);
     }
 
     public void disableAlternateScreen() {
-        System.out.print("\033[" + "?1049l");
+        System.out.print(CSI + "?1049l");
+    }
+
+    // Note: 1, 1 is the top left corner of the screen
+    private void internalMoveCursor(int row, int col) {
+	System.out.print(CSI + String.valueOf(row) + ";" + String.valueOf(col) + "H");
+    }
+
+    public void clear() {
+	internalMoveCursor(1, 1);
+	System.out.print(CSI + "2J");
     }
 }

@@ -23,6 +23,9 @@ public class App {
             if(Global.terminalHandler.keyIsPressed((int)'\n')) {
                 System.out.println("Enter is pressed");
             }
+	    if(Global.terminalHandler.keyIsPressed((int)'c')) {
+		Global.terminalHandler.clear();
+	    }
         }
     }
 }
