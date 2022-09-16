@@ -17,3 +17,6 @@ gradle-app.setting
 build
 bin
 .vscode
+.settings
+.project
+.classpath

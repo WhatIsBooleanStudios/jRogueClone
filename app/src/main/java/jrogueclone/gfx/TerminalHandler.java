@@ -59,10 +59,10 @@ public class TerminalHandler {
     }
 
     public void initAlternateScreen() {
-        System.out.print((char)27 + " [ " + " 1049 " + " h");
+        System.out.print("\033[" + "?1049h");
     }
 
     public void disableAlternateScreen() {
-        System.out.print((char)27 + " [" + " 1049 " + " l");
+        System.out.print("\033[" + "?1049l");
     }
 }
