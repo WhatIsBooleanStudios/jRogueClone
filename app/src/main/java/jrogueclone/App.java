@@ -10,9 +10,16 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
         while(true) {
-            int data = Global.terminalHandler.read();
-            if((char)data == 'f') {
-                System.out.println("Pressed F");
+            Global.terminalHandler.updateKeyPresses();
+            if(Global.terminalHandler.keyIsPressed((int)'q')) {
+                System.out.println("quit!");
+                return;
+            }
+            if(Global.terminalHandler.keyIsPressed((int)'f')) {
+                System.out.println("F is pressed");
+            }
+            if(Global.terminalHandler.keyIsPressed((int)'\n')) {
+                System.out.println("Enter is pressed");
             }
         }
     }

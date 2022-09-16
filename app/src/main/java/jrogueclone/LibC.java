@@ -21,6 +21,7 @@ package jrogueclone;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Structure;
+import com.sun.jna.NativeLong;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,14 +33,17 @@ public interface LibC extends Library {
     public int getchar();
     public int tcgetattr(int fd, termios termios_p);
     public int tcsetattr(int fd, int optional_actions, termios termios_p);
-    public int ioctl(int fd, int request, winsize winsize);
+    int ioctl(int __fd, int __request, Object... varargs);
     public sig_t signal(int sig, sig_t fn);
+    public int read(int fd, byte[] buffer, int len);
 
     // Constants
     public int STDIN_FILENO = 0;
     public int STDOUT_FILENO = 1;
     public int TCSANOW = 0;
     public int NCCS = 32;
+    public static final int TIOCOUTQ = (int)0x5411;
+    public static final int FIONREAD = (int)0x541B;
     
 
     // Constants for c_lflag (beware of octal numbers below!!)
