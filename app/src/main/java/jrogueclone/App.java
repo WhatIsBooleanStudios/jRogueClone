@@ -9,10 +9,12 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+        Global.terminalHandler.initAlternateScreen();
         while(true) {
             Global.terminalHandler.updateKeyPresses();
             if(Global.terminalHandler.keyIsPressed((int)'q')) {
                 System.out.println("quit!");
+                Global.terminalHandler.disableAlternateScreen();
                 return;
             }
             if(Global.terminalHandler.keyIsPressed((int)'f')) {

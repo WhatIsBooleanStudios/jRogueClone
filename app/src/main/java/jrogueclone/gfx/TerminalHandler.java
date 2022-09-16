@@ -24,10 +24,6 @@ public class TerminalHandler {
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
     }
 
-    public int read() {
-        return Global.libc.getchar();
-    }
-
     private boolean[] keyMap = new boolean[257];
     public void updateKeyPresses() {
         Arrays.fill(keyMap, false);
@@ -60,5 +56,13 @@ public class TerminalHandler {
         }
         // System.out.println("query char: " + c);
         return keyMap[c];
+    }
+
+    public void initAlternateScreen() {
+        System.out.print((char)27 + " [ " + " 1049 " + " h");
+    }
+
+    public void disableAlternateScreen() {
+        System.out.print((char)27 + " [" + " 1049 " + " l");
     }
 }
