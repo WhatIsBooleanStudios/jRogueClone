@@ -12,13 +12,13 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
         Global.terminalHandler.initAlternateScreen();
+        Global.terminalHandler.hideCursor();
         while(true) {
             Global.terminalHandler.updateKeyPresses();
             Global.terminalHandler.clear();
             if(Global.terminalHandler.keyIsPressed((int)'q')) {
                 System.out.println("quit!");
-                Global.terminalHandler.disableAlternateScreen();
-                Global.terminalHandler.restoreTios();
+                Global.terminalHandler.restoreState();
                 return;
             }
             if(Global.terminalHandler.keyIsPressed((int)'f')) {

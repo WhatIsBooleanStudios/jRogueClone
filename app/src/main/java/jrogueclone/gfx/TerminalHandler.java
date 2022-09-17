@@ -34,8 +34,7 @@ public class TerminalHandler {
         terminalSize = ws;
 
         if(terminalSize.ws_col < Global.cols && terminalSize.ws_row < Global.rows) {
-            disableAlternateScreen();
-            restoreTios();
+            restoreState();
             System.err.println("Terminal too small! Must be at least (" + Global.cols + ", " + Global.rows + ")");
             System.exit(-1);
         }
@@ -118,6 +117,20 @@ public class TerminalHandler {
     // Note: 1, 1 is the top left corner of the screen
     private void internalMoveCursor(int row, int col) {
 	    System.out.print(CSI + String.valueOf(row) + ";" + String.valueOf(col) + "H");
+    }
+
+    /**
+     * Hides the terminal text cursor
+     */
+    public void hideCursor() {
+        System.out.print(CSI + "?25l");
+    }
+
+    /**
+     * Shows the terminal text cursor
+     */
+    public void showCursor() {
+        System.out.print(CSI + "?25h");
     }
 
     /**
@@ -214,5 +227,13 @@ public class TerminalHandler {
         }
         setBackgroundColor(0);
         setForegroundColor(15);
+    }
+
+    public void restoreState() {
+        disableAlternateScreen();
+        restoreTios();
+        setBackgroundColor(0);
+        setForegroundColor(15);
+        showCursor();
     }
 }
