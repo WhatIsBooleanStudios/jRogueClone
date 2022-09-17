@@ -1,11 +1,11 @@
 package jrogueclone.entity;
 
 import jrogueclone.game.Vector2D;
-import jrogueclone.game.Weapon;
+import jrogueclone.item.Weapon;
 
 public class Bat extends Entity {
-    public Bat(char entityCharecter, Vector2D entityPosition) {
-        super(entityCharecter, entityPosition);
+    public Bat(char entityCharacter, Vector2D entityPosition) {
+        super(entityCharacter, entityPosition);
     }
 
     @Override

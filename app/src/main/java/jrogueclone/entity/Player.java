@@ -1,15 +1,15 @@
 package jrogueclone.entity;
 
 import jrogueclone.game.Vector2D;
-import jrogueclone.game.Weapon;
+import jrogueclone.item.Weapon;
 
 public class Player extends Entity {
-    public Player(char entityCharecter) {
-        super(entityCharecter);
+    public Player(char entityCharacter) {
+        super(entityCharacter);
     }
 
-    public Player(char entityCharecter, Vector2D entityPosition) {
-        super(entityCharecter, entityPosition);
+    public Player(char entityCharacter, Vector2D entityPosition) {
+        super(entityCharacter, entityPosition);
     }
 
     @Override

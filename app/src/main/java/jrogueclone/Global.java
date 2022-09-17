@@ -1,6 +1,9 @@
 package jrogueclone;
 
 import jrogueclone.gfx.TerminalHandler;
+
+import com.google.common.collect.EnumBiMap;
+
 import jrogueclone.entity.Player;
 import jrogueclone.game.GameState;
 
@@ -39,5 +42,12 @@ public class Global {
     public enum GameStates {
         STARTMENU,
         GAME
+    }
+
+    // Object data
+    public enum CharacterAttributes {
+        BOLD,
+        ITALIC,
+        UNDERLINE
     }
 }

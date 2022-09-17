@@ -1,6 +1,6 @@
-package jrogueclone.game;
+package jrogueclone.item;
 
-public class Weapon {
+public class Weapon extends Item {
     public Weapon(String weaponName, int weaponDamage, int weaponDamageChance) {
         this.m_WeaponName = weaponName;    
         this.m_WeaponDamage = weaponDamage;

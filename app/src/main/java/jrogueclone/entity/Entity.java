@@ -1,18 +1,18 @@
 package jrogueclone.entity;
 
 import jrogueclone.game.Vector2D;
-import jrogueclone.game.Weapon;
+import jrogueclone.item.Weapon;
 
 public abstract class Entity {
-    public Entity(char entityCharecter) {
+    public Entity(char entityCharacter) {
 
-        this.m_EntityCharacter = entityCharecter;
+        this.m_EntityCharacter = entityCharacter;
         handleEntitySpawn();
     }
 
-    public Entity(char entityCharecter, Vector2D entityPosition) {
+    public Entity(char entityCharacter, Vector2D entityPosition) {
 
-        this.m_EntityCharacter = entityCharecter;
+        this.m_EntityCharacter = entityCharacter;
         this.m_EntityPosition = entityPosition;
         handleEntitySpawn();
     }
