@@ -49,4 +49,8 @@ public class Global {
         ITALIC,
         UNDERLINE
     }
+
+    // Render vars
+    private static final int Rows = 20;
+    private static final int Colomns = 60;
 }
