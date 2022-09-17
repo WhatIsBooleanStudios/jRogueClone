@@ -2,13 +2,12 @@ package jrogueclone;
 
 import jrogueclone.gfx.TerminalHandler;
 
-import com.google.common.collect.EnumBiMap;
-
 import jrogueclone.entity.Player;
 import jrogueclone.game.GameState;
 
-public class Global {
 
+// Game Design Doc: https://docs.google.com/document/d/1yalAcBC2sBIdWUnINqwlQOZyY0MLWz4Xha-l0T2WdQA/edit?usp=sharing
+public class Global {
     public static void setGameState(GameStates newGameState) {
         switch (newGameState) {
             case STARTMENU: {
