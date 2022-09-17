@@ -57,5 +57,5 @@ public abstract class Entity {
     protected int m_TilesPerSecond;
     private Vector2D m_EntityPosition = new Vector2D();
     private HealthController m_HealthController = new HealthController();
-    protected Vector<Weapon> m_AvailableWeapons;
+    protected Vector<Weapon> m_AvailableWeapons = new Vector<Weapon>();
 }
