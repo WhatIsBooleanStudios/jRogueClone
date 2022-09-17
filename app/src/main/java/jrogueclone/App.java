@@ -1,9 +1,5 @@
 package jrogueclone;
 
-import jrogueclone.gfx.TerminalHandler;
-
-import static java.lang.Thread.*;
-
 public class App {
     public String getGreeting() {
         return "Hello World!";
@@ -16,29 +12,25 @@ public class App {
         while(true) {
             Global.terminalHandler.updateKeyPresses();
             Global.terminalHandler.clear();
-            if(Global.terminalHandler.keyIsPressed((int)'q')) {
+            if(Global.terminalHandler.keyIsPressed('q')) {
                 System.out.println("quit!");
                 Global.terminalHandler.restoreState();
                 return;
             }
-            if(Global.terminalHandler.keyIsPressed((int)'f')) {
+            if(Global.terminalHandler.keyIsPressed('f')) {
                 System.out.println("F is pressed");
             }
-            if(Global.terminalHandler.keyIsPressed((int)'\n')) {
+            if(Global.terminalHandler.keyIsPressed('\n')) {
                 System.out.println("Enter is pressed");
             }
-            if(Global.terminalHandler.keyIsPressed((int)'c')) {
+            if(Global.terminalHandler.keyIsPressed('c')) {
                 Global.terminalHandler.clear();
             }
 
             Global.terminalHandler.begin();
             for(int i = 0; i < Global.rows; i++) {
                 for(int j = 0; j < Global.cols; j++) {
-                    if(j % 2 == 0) {
-                        Global.terminalHandler.putChar(j, i, '#', 160, 0, false);
-                    } else {
-                        Global.terminalHandler.putChar(j, i, '#', 160, 0, true);
-                    }
+                    Global.terminalHandler.putChar(j, i, '#', 160, 0, j % 2 != 0);
                 }
             }
 

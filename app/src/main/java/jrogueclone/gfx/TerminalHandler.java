@@ -8,8 +8,6 @@ import jrogueclone.Global;
 import jrogueclone.LibC;
 
 public class TerminalHandler {
-    public static final int STDIN_FILENO = 0;
-
     LibC.termios tios;
     LibC.termios initialTios;
 
@@ -55,10 +53,10 @@ public class TerminalHandler {
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, initialTios);
     }
 
-    private boolean[] keyMap = new boolean[257];
+    private final boolean[] keyMap = new boolean[257];
 
     /**
-     * Reads all of the keypresses from stdin and stores them. This should be called every frame.
+     * Reads all the keypresses from stdin and stores them. This should be called every frame.
      * To retrieve these keypresses use keyIsPressed(char key)
      * @see public void keyIsPressed(char key)
      */
@@ -81,7 +79,7 @@ public class TerminalHandler {
         Global.libc.read(LibC.STDIN_FILENO, buf, pLen.getValue());
 
         for(byte b : buf) {
-            if((int)b > 0 && (int)b < 256) {
+            if((int)b > 0) {
                 keyMap[b] = true;
             }
         }
@@ -123,7 +121,7 @@ public class TerminalHandler {
 
     // Note: 1, 1 is the top left corner of the screen
     private void internalMoveCursor(int row, int col) {
-	    System.out.print(CSI + String.valueOf(row) + ";" + String.valueOf(col) + "H");
+	    System.out.print(CSI + row + ";" + col + "H");
     }
 
     /**
@@ -208,11 +206,11 @@ public class TerminalHandler {
     }
 
     private void setForegroundColor(int color) {
-        System.out.print(CSI + "38;5;" + String.valueOf(color) + "m");
+        System.out.print(CSI + "38;5;" + color + "m");
     }
 
     private void setBackgroundColor(int color) {
-        System.out.print(CSI + "48;5;" + String.valueOf(color) + "m");
+        System.out.print(CSI + "48;5;" + color + "m");
     }
 
     private void enableBold() {
