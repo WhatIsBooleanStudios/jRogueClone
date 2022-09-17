@@ -11,10 +11,13 @@ public class TerminalHandler {
     public static final int STDIN_FILENO = 0;
 
     LibC.termios tios;
+    LibC.termios initialTios;
 
     public TerminalHandler() {
         tios = new LibC.termios();
+        initialTios = new LibC.termios();
         Global.libc.tcgetattr(LibC.STDIN_FILENO, tios);
+        Global.libc.tcgetattr(LibC.STDIN_FILENO, initialTios);
         tios.c_lflag &= ~(LibC.ICANON | LibC.ECHO | LibC.ECHONL);
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
 
@@ -23,6 +26,10 @@ public class TerminalHandler {
                 renderData[i][j] = new RenderableCharacter(' ');
             }
         }
+    }
+
+    public void restoreTios() {
+        Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, initialTios);
     }
 
     private boolean[] keyMap = new boolean[257];

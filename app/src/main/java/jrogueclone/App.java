@@ -18,6 +18,7 @@ public class App {
             if(Global.terminalHandler.keyIsPressed((int)'q')) {
                 System.out.println("quit!");
                 Global.terminalHandler.disableAlternateScreen();
+                Global.terminalHandler.restoreTios();
                 return;
             }
             if(Global.terminalHandler.keyIsPressed((int)'f')) {
