@@ -52,5 +52,5 @@ public class Global {
 
     // Render vars
     private static final int Rows = 20;
-    private static final int Colomns = 60;
+    private static final int Columns = 60;
 }
