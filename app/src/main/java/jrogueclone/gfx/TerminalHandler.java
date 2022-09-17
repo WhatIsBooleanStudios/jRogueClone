@@ -13,6 +13,8 @@ public class TerminalHandler {
     LibC.termios tios;
     LibC.termios initialTios;
 
+    LibC.winsize terminalSize;
+
     public TerminalHandler() {
         tios = new LibC.termios();
         initialTios = new LibC.termios();
@@ -23,9 +25,24 @@ public class TerminalHandler {
 
         for(int i = 0; i < Global.cols; i++) {
             for(int j = 0; j < Global.rows; j++) {
-                renderData[i][j] = new RenderableCharacter(' ');
+                renderData[i][j] = new RenderableCharacter(' ', 15, 0);
             }
         }
+
+        LibC.winsize ws = new LibC.winsize();
+        Global.libc.ioctl(LibC.STDIN_FILENO, LibC.TIOCGWINSZ, ws);
+        terminalSize = ws;
+
+        if(terminalSize.ws_col < Global.cols && terminalSize.ws_row < Global.rows) {
+            disableAlternateScreen();
+            restoreTios();
+            System.err.println("Terminal too small! Must be at least (" + Global.cols + ", " + Global.rows + ")");
+            System.exit(-1);
+        }
+    }
+
+    public final LibC.winsize getTerminalSize() {
+        return terminalSize;
     }
 
     public void restoreTios() {
@@ -113,9 +130,14 @@ public class TerminalHandler {
 
     private static class RenderableCharacter {
         public char character;
+        public int fgColor;
+        public int bgColor;
 
-        public RenderableCharacter(char c) {
+
+        public RenderableCharacter(char c, int fg, int bg) {
             character = c;
+            this.fgColor = fg;
+            this.bgColor = bg;
         }
     }
 
@@ -147,14 +169,50 @@ public class TerminalHandler {
     }
 
     /**
+     * Add a character to the renderbuffer. Be sure to call begin before calling this function and end after all rendering
+     * is complete
+     * @param col the column to insert the character at
+     * @param row the row to insert the character at
+     * @param c the character to insert
+     * @param fg the color the character should be
+     * @param bg the background color of the character
+     */
+    public void putChar(int col, int row, char c, int fg, int bg) {
+        renderData[col][row].fgColor = fg;
+        renderData[col][row].bgColor = bg;
+
+        putChar(col, row, c);
+    }
+
+    private void setForegroundColor(int color) {
+        System.out.print(CSI + "38;5;" + String.valueOf(color) + "m");
+    }
+
+    private void setBackgroundColor(int color) {
+        System.out.print(CSI + "48;5;" + String.valueOf(color) + "m");
+    }
+
+    /**
      * Flush the renderBuffer to stdout
      */
     public void end() {
+        int currentFg = 15;
+        int currentBg = 0;
         for(int i = 0; i < Global.rows; i++) {
             for (int j = 0; j < Global.cols; j++) {
+                if(renderData[j][i].fgColor != currentFg) {
+                    currentFg = renderData[j][i].fgColor;
+                    setForegroundColor(currentFg);
+                }
+                if(renderData[j][i].bgColor != currentBg) {
+                    currentBg = renderData[j][i].bgColor;
+                    setBackgroundColor(currentBg);
+                }
                 System.out.print(renderData[j][i].character);
             }
             System.out.println();
         }
+        setBackgroundColor(0);
+        setForegroundColor(15);
     }
 }

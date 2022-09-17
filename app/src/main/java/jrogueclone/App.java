@@ -38,7 +38,7 @@ public class App {
                 }
             }
 
-            Global.terminalHandler.putChar(30, 10, '@');
+            Global.terminalHandler.putChar(30, 10, '@', 165, 40);
             Global.terminalHandler.end();
 
             try {

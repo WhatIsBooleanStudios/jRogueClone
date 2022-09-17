@@ -34,6 +34,7 @@ public interface LibC extends Library {
     public int tcgetattr(int fd, termios termios_p);
     public int tcsetattr(int fd, int optional_actions, termios termios_p);
     int ioctl(int __fd, int __request, Object... varargs);
+    int ioctl(int __fd, int __request, winsize ws);
     public sig_t signal(int sig, sig_t fn);
     public int read(int fd, byte[] buffer, int len);
 
