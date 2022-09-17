@@ -1,5 +1,7 @@
 package jrogueclone.entity;
 
+import java.util.Vector;
+
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.Weapon;
 
@@ -47,7 +49,7 @@ public abstract class Entity {
         return this.m_EntityCharacter;
     }
 
-    public Weapon[] getAvailableWeapons() {
+    public Vector<Weapon> getAvailableWeapons() {
         return this.m_AvailableWeapons;
     }
 
@@ -55,5 +57,5 @@ public abstract class Entity {
     protected int m_TilesPerSecond;
     private Vector2D m_EntityPosition = new Vector2D();
     private HealthController m_HealthController = new HealthController();
-    protected Weapon[] m_AvailableWeapons;
+    protected Vector<Weapon> m_AvailableWeapons;
 }

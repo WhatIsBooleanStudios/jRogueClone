@@ -55,4 +55,8 @@ public class Global {
         ITALIC,
         UNDERLINE
     }
+
+    // Render vars
+    public static final int Rows = 20;
+    public static final int Columns = 60;
 }
