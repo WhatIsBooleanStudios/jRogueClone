@@ -15,7 +15,7 @@ public class Player extends Entity {
     @Override
     public void handleEntitySpawn() {
 
-        // Give the player a weapon with a 70% chance to enflict 34 damage
+        // Give the player a weapon with a 70% chance to inflict 34 damage
         this.m_AvailableWeapons[0] = new Weapon("Damaged Wooden Sword",
                 34, 70);
         
