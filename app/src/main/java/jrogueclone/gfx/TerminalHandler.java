@@ -250,6 +250,7 @@ public class TerminalHandler {
             }
             System.out.println();
         }
+        System.out.flush();
         setBackgroundColor(0);
         setForegroundColor(15);
     }
