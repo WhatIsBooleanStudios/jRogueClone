@@ -1,7 +1,7 @@
 package jrogueclone;
 
 import jrogueclone.gfx.TerminalHandler;
-import jrogueclone.entity.Entity;
+import jrogueclone.entity.Player;
 import jrogueclone.game.GameState;
 
 public class Global {
@@ -28,7 +28,7 @@ public class Global {
     private static final TerminalHandler m_TerminalHandler = new TerminalHandler();
 
     // Our starting player
-    private static final Entity m_PlayerEntity = new Entity('@');
+    private static final Player m_PlayerEntity = new Player('@');
 
     // Handles game funtions
     private static GameState m_GameState;

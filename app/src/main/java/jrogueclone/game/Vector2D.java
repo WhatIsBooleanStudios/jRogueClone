@@ -1,4 +1,4 @@
-package jrogueclone.entity;
+package jrogueclone.game;
 
 public class Vector2D {
 
