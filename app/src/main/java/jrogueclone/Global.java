@@ -1,6 +1,7 @@
 package jrogueclone;
 
 import jrogueclone.gfx.TerminalHandler;
+import com.sun.jna.Native;
 
 import jrogueclone.entity.Player;
 import jrogueclone.game.GameState;
@@ -26,8 +27,13 @@ public class Global {
         return m_CurrentState;
     }
 
+    // Loads the native c library for use by the terminal handler
+    public static final LibC libc = (LibC) Native.loadLibrary("c", LibC.class);
     // Handles input and renders game view
-    private static final TerminalHandler m_TerminalHandler = new TerminalHandler();
+    public static final TerminalHandler terminalHandler = new TerminalHandler();
+
+    public static final int rows = 20;
+    public static final int cols = 60;
 
     // Our starting player
     private static final Player m_PlayerEntity = new Player('@');
