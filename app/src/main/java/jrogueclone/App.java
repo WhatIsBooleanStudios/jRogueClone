@@ -2,6 +2,8 @@ package jrogueclone;
 
 import jrogueclone.gfx.TerminalHandler;
 
+import static java.lang.Thread.*;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
@@ -12,6 +14,7 @@ public class App {
         Global.terminalHandler.initAlternateScreen();
         while(true) {
             Global.terminalHandler.updateKeyPresses();
+            Global.terminalHandler.clear();
             if(Global.terminalHandler.keyIsPressed((int)'q')) {
                 System.out.println("quit!");
                 Global.terminalHandler.disableAlternateScreen();
@@ -23,9 +26,25 @@ public class App {
             if(Global.terminalHandler.keyIsPressed((int)'\n')) {
                 System.out.println("Enter is pressed");
             }
-	    if(Global.terminalHandler.keyIsPressed((int)'c')) {
-		Global.terminalHandler.clear();
-	    }
+            if(Global.terminalHandler.keyIsPressed((int)'c')) {
+                Global.terminalHandler.clear();
+            }
+
+            Global.terminalHandler.begin();
+            for(int i = 0; i < Global.rows; i++) {
+                for(int j = 0; j < Global.cols; j++) {
+                    Global.terminalHandler.putChar(j, i, '#');
+                }
+            }
+
+            Global.terminalHandler.putChar(30, 10, '@');
+            Global.terminalHandler.end();
+
+            try {
+                Thread.sleep(33);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
