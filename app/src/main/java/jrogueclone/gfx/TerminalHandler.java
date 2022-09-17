@@ -25,7 +25,7 @@ public class TerminalHandler {
 
         for(int i = 0; i < Global.cols; i++) {
             for(int j = 0; j < Global.rows; j++) {
-                renderData[i][j] = new RenderableCharacter(' ', 15, 0);
+                renderData[i][j] = new RenderableCharacter(' ', 15, 0, false);
             }
         }
 
@@ -40,10 +40,17 @@ public class TerminalHandler {
         }
     }
 
+    /**
+     * Get the terminal size
+     * @return the size of the terminal
+     */
     public final LibC.winsize getTerminalSize() {
         return terminalSize;
     }
 
+    /**
+     * Restore the low-level termios state that the user had before we messed with it
+     */
     public void restoreTios() {
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, initialTios);
     }
@@ -145,12 +152,14 @@ public class TerminalHandler {
         public char character;
         public int fgColor;
         public int bgColor;
+        public boolean bold;
 
 
-        public RenderableCharacter(char c, int fg, int bg) {
+        public RenderableCharacter(char c, int fg, int bg, boolean bold) {
             character = c;
             this.fgColor = fg;
             this.bgColor = bg;
+            this.bold = bold;
         }
     }
 
@@ -190,9 +199,10 @@ public class TerminalHandler {
      * @param fg the color the character should be
      * @param bg the background color of the character
      */
-    public void putChar(int col, int row, char c, int fg, int bg) {
+    public void putChar(int col, int row, char c, int fg, int bg, boolean bold) {
         renderData[col][row].fgColor = fg;
         renderData[col][row].bgColor = bg;
+        renderData[col][row].bold = bold;
 
         putChar(col, row, c);
     }
@@ -205,12 +215,21 @@ public class TerminalHandler {
         System.out.print(CSI + "48;5;" + String.valueOf(color) + "m");
     }
 
+    private void enableBold() {
+        System.out.print(CSI + "1m");
+    }
+
+    private void disableBold() {
+        System.out.print(CSI + "22m");
+    }
+
     /**
      * Flush the renderBuffer to stdout
      */
     public void end() {
         int currentFg = 15;
         int currentBg = 0;
+        boolean boldState = false;
         for(int i = 0; i < Global.rows; i++) {
             for (int j = 0; j < Global.cols; j++) {
                 if(renderData[j][i].fgColor != currentFg) {
@@ -220,6 +239,14 @@ public class TerminalHandler {
                 if(renderData[j][i].bgColor != currentBg) {
                     currentBg = renderData[j][i].bgColor;
                     setBackgroundColor(currentBg);
+                }
+                if(renderData[j][i].bold != boldState) {
+                    boldState = renderData[j][i].bold;
+                    if(boldState) {
+                        enableBold();
+                    } else {
+                        disableBold();
+                    }
                 }
                 System.out.print(renderData[j][i].character);
             }
@@ -232,8 +259,11 @@ public class TerminalHandler {
     public void restoreState() {
         disableAlternateScreen();
         restoreTios();
-        setBackgroundColor(0);
-        setForegroundColor(15);
+        resetTextAttributes();
         showCursor();
+    }
+
+    public void resetTextAttributes() {
+        System.out.print(CSI + "0m");
     }
 }

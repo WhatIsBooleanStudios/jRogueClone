@@ -34,11 +34,15 @@ public class App {
             Global.terminalHandler.begin();
             for(int i = 0; i < Global.rows; i++) {
                 for(int j = 0; j < Global.cols; j++) {
-                    Global.terminalHandler.putChar(j, i, '#');
+                    if(j % 2 == 0) {
+                        Global.terminalHandler.putChar(j, i, '#', 160, 0, false);
+                    } else {
+                        Global.terminalHandler.putChar(j, i, '#', 160, 0, true);
+                    }
                 }
             }
 
-            Global.terminalHandler.putChar(30, 10, '@', 165, 40);
+            Global.terminalHandler.putChar(30, 10, '@', 165, 40, false);
             Global.terminalHandler.end();
 
             try {
