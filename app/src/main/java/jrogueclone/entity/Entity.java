@@ -1,5 +1,7 @@
 package jrogueclone.entity;
 
+import jrogueclone.entity.Weapon;
+
 public class Entity {
     public Entity(char entityCharecter) {
         this.m_EntityCharacter = entityCharecter;
@@ -33,7 +35,12 @@ public class Entity {
         return this.m_EntityCharacter;
     }
 
+    public Weapon[] getAvailableWeapons() {
+        return this.m_AvailableWeapons;
+    }
+
     private final char m_EntityCharacter;
     private Vector2D m_EntityPosition = new Vector2D();
     private HealthController m_HealthController = new HealthController();
+    private Weapon[] m_AvailableWeapons;
 }
