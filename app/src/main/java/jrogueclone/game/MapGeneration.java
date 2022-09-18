@@ -5,7 +5,7 @@ import java.util.Vector;
 public class MapGeneration {
    public static Vector<Room> GenerateRooms() {
 
-      int roomCount = (int) ((Math.random() * 2) + 7), totalRoomArea = 0;
+      int roomCount = (int)Math.round(((Math.random() * 2) + 7)) , totalRoomArea = 0;
       Vector<Room> rooms = new Vector<Room>();
 
       for (int i = 0; i < roomCount; i++) {
@@ -16,26 +16,12 @@ public class MapGeneration {
          }
          
          totalRoomArea += roomHeight * roomWidth;
-         System.out.println((i + 1) + " | " + (roomHeight * roomWidth) + " || " + totalRoomArea);
+         System.out.println("room: " + (i + 1) + " room area: " + (roomHeight * roomWidth) + " total room area: " + totalRoomArea);
          rooms.add(new Room(roomWidth, roomHeight));
       }
 
-      // return null because algo isn't finsihed
       return rooms;
    }
-
-   /*
-    * minimum 5x5
-    * 2 for doors
-    * 14 for walls
-    * 9 for room space: 1 for potential chest and 8 for mobs or empty space
-    * #####
-    * #...#
-    * |...|
-    * #...#
-    * #####
-    * 
-    */
    private static final int m_MaximumRoomArea = 60, m_MinimumRoomWidth = 6,
          m_MinimumRoomHeight = 6, m_MinimumRoomArea = m_MinimumRoomHeight * m_MinimumRoomWidth;
 }
