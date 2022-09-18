@@ -5,8 +5,7 @@ import java.util.Vector;
 public class MapGeneration {
    public static Vector<Room> GenerateRooms() {
 
-      // maximum room area is 420 = 7 * 60, the total available area is 600 = 60 * 20, values found in Global.java
-      int roomCount = (int) ((Math.random() * 2) + 5), totalRoomArea = 0;
+      int roomCount = (int) ((Math.random() * 2) + 7), totalRoomArea = 0;
       Vector<Room> rooms = new Vector<Room>();
 
       for (int i = 0; i < roomCount; i++) {
@@ -37,6 +36,6 @@ public class MapGeneration {
     * #####
     * 
     */
-   private static final int m_MinimumRoomArea = 25, m_MaximumRoomArea = 60, m_MinimumRoomWidth = 5,
-         m_MinimumRoomHeight = 5;
+   private static final int m_MaximumRoomArea = 60, m_MinimumRoomWidth = 6,
+         m_MinimumRoomHeight = 6, m_MinimumRoomArea = m_MinimumRoomHeight * m_MinimumRoomWidth;
 }
