@@ -22,6 +22,6 @@ public class MapGeneration {
 
       return rooms;
    }
-   private static final int m_MaximumRoomArea = 60, m_MinimumRoomWidth = 6,
+   private static final int m_MaximumRoomArea = 66, m_MinimumRoomWidth = 6,
          m_MinimumRoomHeight = 6, m_MinimumRoomArea = m_MinimumRoomHeight * m_MinimumRoomWidth;
 }
