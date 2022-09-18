@@ -6,16 +6,19 @@ import jrogueclone.entity.Entity;
 import jrogueclone.item.LootBox;
 
 public class Room {
-    public Room(int roomWidth, int roomHeight, Vector2D roomPosition) {
+    public Room(int roomWidth, int roomHeight) {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
+    }
+
+    public void setRoomPosition(Vector2D roomPosition) {
         this.m_RoomPosition = roomPosition;
     }
 
     public Vector2D getRoomPosition() {
         return this.m_RoomPosition;
     }
-    
+
     public int getRoomHeight() {
         return this.m_RoomHeight;
     }
@@ -35,5 +38,5 @@ public class Room {
     private final int m_RoomWidth, m_RoomHeight;
     private Vector<LootBox> m_LootBox = new Vector<>();
     private Vector<Entity> m_Entities = new Vector<>();
-    private final Vector2D m_RoomPosition;
+    private Vector2D m_RoomPosition = new Vector2D(-1, -1);
 }
