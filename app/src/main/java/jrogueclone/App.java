@@ -14,7 +14,7 @@ public class App {
 
         Vector<Room> rooms = MapGeneration.GenerateRooms();
         for(Room room : rooms) {
-            System.out.println(room.getRoomHeight() * room.getRoomWidth());
+            //System.out.println(room.getRoomHeight() * room.getRoomWidth());
         }
     }
 }

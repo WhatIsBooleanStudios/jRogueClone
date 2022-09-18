@@ -11,16 +11,18 @@ public class MapGeneration {
 
       for (int i = 0; i < roomCount; i++) {
          int roomWidth = 0, roomHeight = 0;
-         while (roomWidth * roomHeight <= m_MaximumRoomArea && roomWidth * roomHeight >= m_MinimumRoomArea) {
+         while ((roomWidth * roomHeight) >= m_MaximumRoomArea || (roomWidth * roomHeight) <= m_MinimumRoomArea) {
             roomWidth = (int) ((Math.random() * 4) + m_MinimumRoomWidth);
             roomHeight = (int) ((Math.random() * 4) + m_MinimumRoomHeight);
          }
+         
          totalRoomArea += roomHeight * roomWidth;
+         System.out.println((i + 1) + " | " + (roomHeight * roomWidth) + " || " + totalRoomArea);
          rooms.add(new Room(roomWidth, roomHeight));
       }
 
       // return null because algo isn't finsihed
-      return null;
+      return rooms;
    }
 
    /*
