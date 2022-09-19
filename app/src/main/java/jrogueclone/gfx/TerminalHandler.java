@@ -21,7 +21,7 @@ public class TerminalHandler {
         tios.c_lflag &= ~(LibC.ICANON | LibC.ECHO | LibC.ECHONL);
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
 
-        for(int i = 0; i < Global.cols; i++) {
+        for(int i = 0; i < Global.columns; i++) {
             for(int j = 0; j < Global.rows; j++) {
                 renderData[i][j] = new RenderableCharacter(' ', 15, 0, false);
             }
@@ -31,9 +31,9 @@ public class TerminalHandler {
         Global.libc.ioctl(LibC.STDIN_FILENO, LibC.TIOCGWINSZ, ws);
         terminalSize = ws;
 
-        if(terminalSize.ws_col < Global.cols && terminalSize.ws_row < Global.rows) {
+        if(terminalSize.ws_col < Global.columns && terminalSize.ws_row < Global.rows) {
             restoreState();
-            System.err.println("Terminal too small! Must be at least (" + Global.cols + ", " + Global.rows + ")");
+            System.err.println("Terminal too small! Must be at least (" + Global.columns + ", " + Global.rows + ")");
             System.exit(-1);
         }
     }
@@ -161,14 +161,14 @@ public class TerminalHandler {
         }
     }
 
-    RenderableCharacter[][] renderData = new RenderableCharacter[Global.cols][Global.rows];
+    RenderableCharacter[][] renderData = new RenderableCharacter[Global.columns][Global.rows];
 
     /**
      * Begin rendering. This will clear the renderbuffer
      */
     public void begin() {
         // clear render data
-        for(int i = 0; i < Global.cols; i++) {
+        for(int i = 0; i < Global.columns; i++) {
             for(int j = 0; j < Global.rows; j++) {
                 renderData[i][j].character = ' ';
             }
@@ -229,7 +229,7 @@ public class TerminalHandler {
         int currentBg = 0;
         boolean boldState = false;
         for(int i = 0; i < Global.rows; i++) {
-            for (int j = 0; j < Global.cols; j++) {
+            for (int j = 0; j < Global.columns; j++) {
                 if(renderData[j][i].fgColor != currentFg) {
                     currentFg = renderData[j][i].fgColor;
                     setForegroundColor(currentFg);
@@ -250,6 +250,7 @@ public class TerminalHandler {
             }
             System.out.println();
         }
+        System.out.flush();
         setBackgroundColor(0);
         setForegroundColor(15);
     }
