@@ -4,45 +4,38 @@ import jrogueclone.gfx.TerminalHandler;
 import com.sun.jna.Native;
 
 import jrogueclone.entity.Player;
+import jrogueclone.game.GameLoop;
 import jrogueclone.game.GameState;
 
 
 // Game Design Doc: https://docs.google.com/document/d/1yalAcBC2sBIdWUnINqwlQOZyY0MLWz4Xha-l0T2WdQA/edit?usp=sharing
 public class Global {
-    public static void setGameState(GameStates newGameState) {
-        switch (newGameState) {
-            case STARTMENU: {
-                // gameState = startScreen;
-            }
-            case GAME: {
-                // gameState = gameScreen;
-            }
-        }
-
-        m_CurrentState = newGameState;
+    public static void setGameState(GameStates stateType, GameState gameState) {
+        m_GameState = gameState;
+        m_StateType = stateType;
         m_GameState.initialize();
     }
 
-    public static GameStates getGaemState() {
-        return m_CurrentState;
+    public static GameStates getGameType() {
+        return m_StateType;
+    }
+
+    public static GameState getGameState() {
+        return m_GameState;
     }
 
     // Loads the native c library for use by the terminal handler
     public static final LibC libc = (LibC) Native.loadLibrary("c", LibC.class);
+
     // Handles input and renders game view
     public static final TerminalHandler terminalHandler = new TerminalHandler();
-
-    public static final int rows = 20;
-    public static final int cols = 60;
 
     // Our starting player
     private static final Player m_PlayerEntity = new Player('@');
 
-    // Handles game funtions
-    private static GameState m_GameState;
-
     // Level data
-    private static GameStates m_CurrentState = GameStates.STARTMENU;
+    private static GameStates m_StateType = GameStates.STARTMENU;
+    private static GameState m_GameState;
 
     public enum GameStates {
         STARTMENU,
@@ -56,7 +49,13 @@ public class Global {
         UNDERLINE
     }
 
+    // Game loop related vars/methods
+    private final static GameLoop m_GameLoop = new GameLoop();
+    public static GameLoop getGameLoop() {
+        return m_GameLoop;
+    }
+    
     // Render vars
-    public static final int Rows = 20;
-    public static final int Columns = 60;
+    public static final int rows = 20;
+    public static final int columns = 60;
 }
