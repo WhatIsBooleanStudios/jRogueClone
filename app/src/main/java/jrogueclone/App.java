@@ -14,11 +14,11 @@ public class App {
     public static void main(String[] args) {
         Global.terminalHandler.initAlternateScreen();
         Vector<Room> rooms = MapGeneration.GenerateRooms();
-        /*Global.terminalHandler.begin();
+        Global.terminalHandler.begin();
         for(Room room : rooms) {
             room.draw();
         }
-        Global.terminalHandler.end();*/
+        Global.terminalHandler.end();
 
         while(!Global.terminalHandler.keyIsPressed('q')) Global.terminalHandler.updateKeyPresses();
         Global.terminalHandler.restoreState();

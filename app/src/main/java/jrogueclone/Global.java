@@ -32,8 +32,8 @@ public class Global {
     // Handles input and renders game view
     public static final TerminalHandler terminalHandler = new TerminalHandler();
 
-    public static final int rows = 20;
-    public static final int cols = 60;
+    public static final int rows = 24;
+    public static final int cols = 80;
 
     // Our starting player
     private static final Player m_PlayerEntity = new Player('@');
@@ -57,6 +57,6 @@ public class Global {
     }
 
     // Render vars
-    public static final int Rows = 20;
+    public static final int Rows = 22;
     public static final int Columns = 60;
 }
