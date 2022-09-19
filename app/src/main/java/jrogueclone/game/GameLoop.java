@@ -9,16 +9,17 @@ public class GameLoop {
             Global.terminalHandler.initAlternateScreen();
             Global.setGameState(GameStates.GAME, this.m_CurrentLevel);
 
-            while (this.m_EndGame != true) {
+            //while (this.m_EndGame != true) {
                 Global.terminalHandler.begin();
                 this.m_InputHandler.update();
 
                 Global.getGameState().update();
 
                 Global.terminalHandler.end();
-                Thread.sleep(100);
-            }
-            Global.terminalHandler.restoreState();
+                //Global.terminalHandler.clear();
+                Thread.sleep(1000);
+            //}
+            //Global.terminalHandler.restoreState();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
