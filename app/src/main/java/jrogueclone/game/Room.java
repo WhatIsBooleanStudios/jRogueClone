@@ -30,6 +30,9 @@ public class Room {
         return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
                 .intersects(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
     }
+    public Rectangle getRect() {
+        return new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight);
+    }
 
     public void setRoomPosition(Vector2D roomPosition) {
         this.m_RoomPosition = roomPosition;
