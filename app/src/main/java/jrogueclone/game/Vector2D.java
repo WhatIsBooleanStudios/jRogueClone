@@ -23,6 +23,10 @@ public class Vector2D {
     public int getY() {
         return this.m_Y;
     }
+
+    public String toString() {
+        return "(" + m_X + "," + m_Y + ")";
+    }
     
     private int m_X, m_Y;
 }
