@@ -1,9 +1,6 @@
 package jrogueclone;
 
-import jrogueclone.game.MapGeneration;
-import jrogueclone.game.Room;
-import jrogueclone.gfx.TerminalHandler;
-
+import jrogueclone.game.*;
 import java.util.Vector;
 
 public class App {
@@ -13,14 +10,7 @@ public class App {
 
     public static void main(String[] args) {
         Global.terminalHandler.initAlternateScreen();
-        Vector<Room> rooms = MapGeneration.GenerateRooms();
-        Global.terminalHandler.begin();
-        for(Room room : rooms) {
-            room.draw();
-        }
-        Global.terminalHandler.end();
-
-        while(!Global.terminalHandler.keyIsPressed('q')) Global.terminalHandler.updateKeyPresses();
+        Global.getGameLoop().gameHandler();
         Global.terminalHandler.restoreState();
     }
 }

@@ -1,12 +1,13 @@
 package jrogueclone.game;
 
+import java.util.Vector;
+
 import jrogueclone.Global;
 
-import java.util.Vector;
 import java.awt.Rectangle;
 
 public class MapGeneration {
-	public static Vector<Room> GenerateRooms() {
+	public static Vector<Room> generateRooms() {
 
 		int roomCount = (int) ((Math.random() * 3) + 7);
 		Vector<Room> rooms = new Vector<Room>();
@@ -15,7 +16,7 @@ public class MapGeneration {
 		int minimumRoomVerticalPadding = 1;
 		int maximumRoomWidth = 15;
 		int maximumRoomHeight = 7;
-		int maximumRoomsHorizontal = (int) (Global.cols / (minimumRoomHorizontalPadding + maximumRoomWidth));
+		int maximumRoomsHorizontal = (int) (Global.columns / (minimumRoomHorizontalPadding + maximumRoomWidth));
 		int maximumRoomsVertical = (int) (Global.rows / (minimumRoomVerticalPadding + maximumRoomHeight));
 
 		// Generate rooms
@@ -55,7 +56,7 @@ public class MapGeneration {
 					// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
 					Rectangle newRectangle = rooms.get(j).getRect();
 					if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
-							|| (curRectangle.x + curRectangle.width > Global.cols) && tgtHorizDirection == 1
+							|| (curRectangle.x + curRectangle.width > Global.columns) && tgtHorizDirection == 1
 							|| (curRectangle.x < 0) && (tgtHorizDirection == -1)) {
 						// System.out.println(curRectangle + " collides");
 						collides = true;
@@ -72,8 +73,6 @@ public class MapGeneration {
 					rooms.get(i).setRoomPosition(currentPosition);
 					tgtHorizMovement--;
 				}
-				// System.out.println(i + " position: " + rooms.get(i).getRoomPosition());
-
 			}
 			while (Math.abs(tgtVertMovement) > 0) {
 				boolean collides = false;
@@ -97,8 +96,9 @@ public class MapGeneration {
 					}
 				}
 
-				if (collides) {
-					// System.out.println("collides");
+
+				if(collides) {
+					
 					break;
 				} else {
 					Vector2D currentPosition = rooms.get(i).getRoomPosition();
@@ -106,15 +106,14 @@ public class MapGeneration {
 					rooms.get(i).setRoomPosition(currentPosition);
 					tgtVertMovement--;
 				}
-				// System.out.println(i + " position: " + rooms.get(i).getRoomPosition());
-
 			}
 		}
 		
 
-	
+      return rooms;
+   }
 
-		return rooms;
-	}
-
+   public static Level generateLevel() {
+      return new Level(generateRooms(), new Vector<Vector2D>());
+   }
 }
