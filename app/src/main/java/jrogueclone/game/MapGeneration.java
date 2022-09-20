@@ -3,6 +3,7 @@ package jrogueclone.game;
 import java.util.Vector;
 
 import jrogueclone.Global;
+import jrogueclone.entity.Player;
 
 import java.awt.Rectangle;
 
@@ -114,6 +115,7 @@ public class MapGeneration {
    }
 
    public static Level generateLevel() {
-      return new Level(generateRooms(), new Vector<Vector2D>());
+	  // TODO: player should be global
+      return new Level(generateRooms(), new Vector<Vector2D>(), new Player('@'));
    }
 }

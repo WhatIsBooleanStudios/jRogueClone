@@ -139,6 +139,13 @@ public class TerminalHandler {
     }
 
     /**
+     * Set the cursor to the top left corner
+     */
+    public void resetCursor() {
+        internalMoveCursor(1, 1);
+    }
+
+    /**
      * Clears the screen
      */
     public void clear() {
@@ -171,6 +178,9 @@ public class TerminalHandler {
         for(int i = 0; i < Global.columns; i++) {
             for(int j = 0; j < Global.rows; j++) {
                 renderData[i][j].character = ' ';
+                renderData[i][j].fgColor = 232;
+                renderData[i][j].bgColor = 232;
+                renderData[i][j].bold = false;
             }
         }
     }
@@ -185,7 +195,7 @@ public class TerminalHandler {
      * @see public void end()
      */
     public void putChar(int col, int row, char c) {
-        renderData[col][row].character = c;
+        putChar(col, row, c, 15, 0, false);
     }
 
     /**
@@ -201,15 +211,16 @@ public class TerminalHandler {
         renderData[col][row].fgColor = fg;
         renderData[col][row].bgColor = bg;
         renderData[col][row].bold = bold;
-
-        putChar(col, row, c);
+        renderData[col][row].character = c;
     }
 
     private void setForegroundColor(int color) {
+        //System.out.println("38;5;" + color + "m");
         System.out.print(CSI + "38;5;" + color + "m");
     }
 
     private void setBackgroundColor(int color) {
+        //System.out.println("48;5;" + color + "m");
         System.out.print(CSI + "48;5;" + color + "m");
     }
 
@@ -222,21 +233,53 @@ public class TerminalHandler {
     }
 
     /**
+     * Get the current character at the given position in the renderbuffer
+     * @param col the column of the target character
+     * @param row the row of the target character
+     * @return the char that occupies the given position
+     */
+    public int getCurrentCharacterAt(int col, int row) {
+        return renderData[col][row].character;
+    }
+
+    /**
+     * Get the forground color at the given position in the renderbuffer
+     * @param col the column of the target character
+     * @param row the row of the target character
+     * @return the forground color of the character that occupies the given position
+     */
+    public int getForgroundColorAt(int col, int row) {
+        return renderData[col][row].fgColor;
+    }
+
+    /**
+     * Get the background color at the given position in the renderbuffer
+     * @param col the column of the target character
+     * @param row the row of the target character
+     * @return the forground color of the character that occupies the given position
+     */
+    public int getBackgroundColorAt(int col, int row) {
+        return renderData[col][row].bgColor;
+    }
+
+    /**
      * Flush the renderBuffer to stdout
      */
     public void end() {
-        int currentFg = 15;
-        int currentBg = 0;
+        int currentFg = Integer.MAX_VALUE;
+        int currentBg = Integer.MAX_VALUE;
         boolean boldState = false;
         for(int i = 0; i < Global.rows; i++) {
             for (int j = 0; j < Global.columns; j++) {
                 if(renderData[j][i].fgColor != currentFg) {
                     currentFg = renderData[j][i].fgColor;
                     setForegroundColor(currentFg);
+                    System.out.flush();
                 }
                 if(renderData[j][i].bgColor != currentBg) {
                     currentBg = renderData[j][i].bgColor;
                     setBackgroundColor(currentBg);
+                    System.out.flush();
                 }
                 if(renderData[j][i].bold != boldState) {
                     boldState = renderData[j][i].bold;
@@ -248,11 +291,15 @@ public class TerminalHandler {
                 }
                 System.out.print(renderData[j][i].character);
             }
-            System.out.println();
+            System.out.print('\n');
         }
         System.out.flush();
-        setBackgroundColor(0);
-        setForegroundColor(15);
+        resetTextAttributes();
+        /*for(int i = 0; i < Global.rows; i++) {
+            for(int j = 0; j < Global.columns; j++) {
+                System.out.println("bg: " + renderData[j][i].bgColor + ", fg: " + renderData[j][i].fgColor);
+            }
+        }*/
     }
 
     public void restoreState() {

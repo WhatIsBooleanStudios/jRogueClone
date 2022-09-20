@@ -17,7 +17,10 @@ public class Room {
     public void draw() {
         for(int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
             for(int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
-                Global.terminalHandler.putChar(j, i, '#');
+                if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1)
+                    Global.terminalHandler.putChar(j, i, '#', 15, 232, false);
+                else
+                    Global.terminalHandler.putChar(j, i, '.', 245, 232, false);
             }
         }
     }
