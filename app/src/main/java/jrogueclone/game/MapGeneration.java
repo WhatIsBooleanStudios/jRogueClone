@@ -2,6 +2,7 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
+import javafx.util.Pair;
 import jrogueclone.Global;
 
 import java.awt.Rectangle;
@@ -9,7 +10,6 @@ import java.awt.Rectangle;
 public class MapGeneration {
 	public static Vector<Room> generateRooms() {
 
-		int roomCount = (int) ((Math.random() * 3) + 7);
 		Vector<Room> rooms = new Vector<Room>();
 
 		int minimumRoomHorizontalPadding = 3;
@@ -112,8 +112,56 @@ public class MapGeneration {
 
       return rooms;
    }
-
    public static Level generateLevel() {
-      return new Level(generateRooms(), new Vector<Vector2D>());
+      return new Level(generateRooms(), new Vector<Pair<Vector2D, Vector2D>>());
+   }
+
+   public static Level tgenerateLevel() {
+      Vector<Room> rooms = generateRooms(), tempRooms = rooms;
+      Vector<Pair<Vector2D, Vector2D>> connectors = new Vector<>();
+      int closestDistance = 1000;
+
+      // our random start room
+      Room currentRoom = rooms.elementAt((int) Math.round((Math.random() * (rooms.size() - 1)) + 1)),
+            nextRoom = null;
+
+      tempRooms.remove(currentRoom);
+      while (tempRooms.size() > 0) {
+         Vector2D currentRoomMiddle = new Vector2D(currentRoom.getRoomPosition().getX() / 2,
+               currentRoom.getRoomPosition().getY() / 2);
+
+         // find the closest room
+         for (Room room : tempRooms) {
+            if (room == currentRoom)
+               continue;
+
+            // d = sqrt((y2 - y1)^2 + (x2 - x1)^2)
+            Vector2D roomMiddle = new Vector2D(room.getRoomPosition().getX() / 2,
+                  room.getRoomPosition().getY() / 2);
+
+            int distance = (int) Math.round(Math.sqrt(Math.pow(roomMiddle.getY() - currentRoomMiddle.getY(), 2)
+                  + Math.pow(roomMiddle.getX() - currentRoomMiddle.getX(), 2)));
+
+            if (distance <= closestDistance) {
+               nextRoom = room;
+            }
+         }
+         tempRooms.remove(nextRoom); // we don't need to count this room again
+
+         /*
+          * CONNECT THEM HERE
+          */
+         Vector2D roomMiddle = new Vector2D(nextRoom.getRoomPosition().getX() / 2,
+               nextRoom.getRoomPosition().getY() / 2);
+         int vX = currentRoomMiddle.getX();
+         while (vX < currentRoom.getRoomWidth() + currentRoom.getRoomPosition().getX() - 1) {
+            vX++;
+         }
+         // set the closest room to the next closest
+         currentRoom = nextRoom;
+
+      }
+
+      return new Level(rooms, connectors);
    }
 }

@@ -17,7 +17,7 @@ public class GameLoop {
 
                 Global.terminalHandler.end();
                 //Global.terminalHandler.clear();
-                Thread.sleep(1000);
+                Thread.sleep(1000000000);
             //}
             //Global.terminalHandler.restoreState();
 

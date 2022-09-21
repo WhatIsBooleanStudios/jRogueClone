@@ -2,10 +2,10 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
-import jrogueclone.Global;
+import javafx.util.Pair;
 
 public class Level implements GameState{
-    public Level(Vector<Room> room, Vector<Vector2D> connector) {
+    public Level(Vector<Room> room, Vector<Pair<Vector2D,Vector2D>> connector) {
         this.m_Room = room;
         this.m_Connector = connector;
     }
@@ -14,21 +14,13 @@ public class Level implements GameState{
         return this.m_Room;
     }
 
-    public Vector<Vector2D> getConnectors() {
+    public Vector<Pair<Vector2D,Vector2D>> getConnectors() {
         return this.m_Connector;
     }
 
     private void draw() {
         for (Room room : this.m_Room)
             room.draw();
-
-        for (Vector2D connector : this.m_Connector) {
-            for (int x = 0; x < connector.getX(); x++) {
-                for (int y = 0; y < connector.getY(); y++) {
-                    Global.terminalHandler.putChar(x, y, '#');
-                }
-            }
-        }
     }
 
     @Override public void initialize() {
@@ -40,5 +32,5 @@ public class Level implements GameState{
     }
 
     private Vector<Room> m_Room = new Vector<Room>();
-    private Vector<Vector2D> m_Connector = new Vector<Vector2D>();
+    private Vector<Pair<Vector2D,Vector2D>> m_Connector = new Vector<>();
 }
