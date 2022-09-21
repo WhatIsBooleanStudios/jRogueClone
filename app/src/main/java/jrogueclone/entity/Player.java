@@ -1,9 +1,11 @@
 package jrogueclone.entity;
 
+import java.util.Vector;
+
 import jrogueclone.Global;
-import jrogueclone.game.Room;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.Weapon;
+import jrogueclone.game.Room;
 
 public class Player extends Entity {
     public Player(char entityCharacter) {
@@ -26,7 +28,9 @@ public class Player extends Entity {
     }
 
     @Override
-    public boolean isMonster() { return false; }
+    public boolean isMonster() {
+        return false;
+    }
 
     @Override
     public void handleEntitySpawn() {
@@ -40,7 +44,7 @@ public class Player extends Entity {
 
     public void tryMoveUp() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
-        
+
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getY() > 0 && uData == null) {
             setPosition(newPosition);
@@ -57,7 +61,7 @@ public class Player extends Entity {
 
     public void tryMoveDown() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
-        Object uData =  Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getY() < Global.rows - 1 && uData == null) {
             setPosition(newPosition);
         }
@@ -65,7 +69,7 @@ public class Player extends Entity {
 
     public void tryMoveRight() {
         Vector2D newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
-        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY()); 
+        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getX() < Global.columns - 1 && uData == null) {
             setPosition(newPosition);
         }
@@ -73,17 +77,27 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if(Global.terminalHandler.keyIsPressed('w') ) {
+        if (Global.terminalHandler.keyIsPressed('w')) {
             this.tryMoveUp();
         }
-        if(Global.terminalHandler.keyIsPressed('a')) {
+        if (Global.terminalHandler.keyIsPressed('a')) {
             this.tryMoveLeft();
         }
-        if(Global.terminalHandler.keyIsPressed('s')) {
+        if (Global.terminalHandler.keyIsPressed('s')) {
             this.tryMoveDown();
         }
-        if(Global.terminalHandler.keyIsPressed('d')) {
+        if (Global.terminalHandler.keyIsPressed('d')) {
             this.tryMoveRight();
         }
     }
+
+    public Vector<Room> getDiscoveredRooms() {
+        return this.m_DiscoveredRooms;
+    }
+
+    public void setRoomDiscovered(Room room) {
+        this.m_DiscoveredRooms.add(room);
+    }
+
+    private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
 }
