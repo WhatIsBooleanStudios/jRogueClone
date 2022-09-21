@@ -3,6 +3,8 @@ package jrogueclone.game;
 import java.util.Vector;
 
 import jrogueclone.Global;
+import jrogueclone.entity.Entity;
+import jrogueclone.entity.Bat;
 import jrogueclone.entity.Player;
 
 public class Level implements GameState{
@@ -16,6 +18,11 @@ public class Level implements GameState{
             playerSpawnRoom.getRoomPosition().getX() + (int)((double)playerSpawnRoom.getRoomWidth() / 2),
             playerSpawnRoom.getRoomPosition().getY() + (int)((double)playerSpawnRoom.getRoomHeight() / 2)
         ));
+
+        for(Room room : m_Rooms) {
+            room.spawnEntities();
+        }
+
     }
 
     public Vector<Room> getRooms() {
@@ -58,10 +65,20 @@ public class Level implements GameState{
         if(Global.terminalHandler.keyIsPressed('d')) {
             m_Player.tryMoveRight();
         }
+
+        for(Room room : m_Rooms) {
+            room.update();
+        }
+        m_Player.update();
+
+        for(Room room : m_Rooms) {
+            room.draw();
+        }
         m_Player.draw();
     }
 
     private Vector<Room> m_Rooms = new Vector<Room>();
     private Vector<Vector2D> m_Connector = new Vector<Vector2D>();
     private Player m_Player;
+
 }

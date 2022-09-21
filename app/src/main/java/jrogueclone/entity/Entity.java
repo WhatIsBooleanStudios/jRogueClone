@@ -37,6 +37,7 @@ public abstract class Entity {
     }
 
     public abstract void handleEntitySpawn();
+    public abstract boolean isMonster();
 
     public HealthController getHealthController() {
         return this.m_HealthController;
@@ -49,6 +50,7 @@ public abstract class Entity {
     public void setPosition(Vector2D position) { m_EntityPosition = position; }
 
     public void draw() { Global.terminalHandler.putChar(m_EntityPosition.getX(), m_EntityPosition.getY(), m_EntityCharacter);}
+    public void update() {}
 
     public char getEntityCharacter() {
         return this.m_EntityCharacter;
@@ -58,7 +60,7 @@ public abstract class Entity {
         return this.m_AvailableWeapons;
     }
 
-    private final char m_EntityCharacter;
+    protected char m_EntityCharacter;
     protected int m_TilesPerSecond;
     private Vector2D m_EntityPosition = new Vector2D();
     private HealthController m_HealthController = new HealthController();

@@ -7,11 +7,21 @@ import jrogueclone.Global;
 import jrogueclone.entity.Entity;
 import jrogueclone.item.LootBox;
 
+import jrogueclone.entity.Bat;
+
 public class Room {
     public Room(Vector2D position, int roomWidth, int roomHeight) {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
+
+    }
+
+    public void spawnEntities() {
+        m_Monsters.add(new Bat('V', new Vector2D(
+            getRoomPosition().getX() + (int)((double)getRoomWidth() / 2 - 2),
+            getRoomPosition().getY() + (int)((double)getRoomHeight() / 2)
+        )));
     }
 
     public void draw() {
@@ -40,6 +50,16 @@ public class Room {
                 } else
                     Global.terminalHandler.putChar(j, i, '.', 245, 232, false, null);
             }
+        }
+
+        for(Entity monster : m_Monsters) {
+            monster.draw();
+        }
+    }
+
+    public void update() {
+        for(Entity monster : m_Monsters) {
+            monster.update();
         }
     }
 
@@ -82,5 +102,6 @@ public class Room {
     private final int m_RoomWidth, m_RoomHeight;
     private Vector<LootBox> m_LootBox = new Vector<LootBox>();
     private Vector<Entity> m_Entities = new Vector<Entity>();
+    private Vector<Entity> m_Monsters = new Vector<Entity>();
     private Vector2D m_RoomPosition = new Vector2D(-1, -1);
 }

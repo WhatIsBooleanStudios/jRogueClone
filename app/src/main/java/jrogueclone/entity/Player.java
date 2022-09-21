@@ -26,6 +26,9 @@ public class Player extends Entity {
     }
 
     @Override
+    public boolean isMonster() { return false; }
+
+    @Override
     public void handleEntitySpawn() {
 
         // Give the player a weapon with a 70% chance to enflict 34 damage
