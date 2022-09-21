@@ -2,9 +2,6 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
-import jrogueclone.Global;
-import jrogueclone.entity.Entity;
-import jrogueclone.entity.Bat;
 import jrogueclone.entity.Player;
 
 public class Level implements GameState {

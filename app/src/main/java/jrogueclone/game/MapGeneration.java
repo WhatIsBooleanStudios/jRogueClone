@@ -9,8 +9,6 @@ import java.awt.Rectangle;
 
 public class MapGeneration {
 	public static Vector<Room> generateRooms() {
-
-		int roomCount = (int) ((Math.random() * 3) + 7);
 		Vector<Room> rooms = new Vector<Room>();
 
 		int minimumRoomHorizontalPadding = 3;
