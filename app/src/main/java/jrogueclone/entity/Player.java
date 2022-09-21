@@ -36,38 +36,54 @@ public class Player extends Entity {
                 34, 70));
 
         this.getHealthController().setHealth(100);
-        this.m_TilesPerSecond = 1;
     }
 
     public void tryMoveUp() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
-        //System.out.println(Global.terminalHandler.getUserDataAt(getPosition().getX(), getPosition().getY() - 1).getClass());
+        
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getY() > 0 && (uData == null || uData.getClass() != Room.class))
+        if (getPosition().getY() > 0 && uData == null) {
             setPosition(newPosition);
+        }
     }
 
     public void tryMoveLeft() {
         Vector2D newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
-        Object userData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getX() > 0 && (userData == null || userData.getClass() != Room.class)) {
+        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+        if (getPosition().getX() > 0 && uData == null) {
             setPosition(newPosition);
         }
     }
 
     public void tryMoveDown() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
-        Object userData =  Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getY() < Global.rows - 1 && (userData == null || userData.getClass() != Room.class)) {
+        Object uData =  Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+        if (getPosition().getY() < Global.rows - 1 && uData == null) {
             setPosition(newPosition);
         }
     }
 
     public void tryMoveRight() {
         Vector2D newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
-        Object userData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY()); 
-        if (getPosition().getX() < Global.columns - 1 && (userData == null || userData.getClass() != Room.class)) {
+        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY()); 
+        if (getPosition().getX() < Global.columns - 1 && uData == null) {
             setPosition(newPosition);
+        }
+    }
+
+    @Override
+    public void update() {
+        if(Global.terminalHandler.keyIsPressed('w') ) {
+            this.tryMoveUp();
+        }
+        if(Global.terminalHandler.keyIsPressed('a')) {
+            this.tryMoveLeft();
+        }
+        if(Global.terminalHandler.keyIsPressed('s')) {
+            this.tryMoveDown();
+        }
+        if(Global.terminalHandler.keyIsPressed('d')) {
+            this.tryMoveRight();
         }
     }
 }

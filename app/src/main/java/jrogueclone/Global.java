@@ -30,9 +30,6 @@ public class Global {
     // Handles input and renders game view
     public static final TerminalHandler terminalHandler = new TerminalHandler();
 
-    // Our starting player
-    private static final Player m_PlayerEntity = new Player('@');
-
     // Level data
     private static GameStates m_StateType = GameStates.STARTMENU;
     private static GameState m_GameState;

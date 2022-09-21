@@ -14,17 +14,25 @@ public class Room {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
-
     }
 
     public void spawnEntities() {
-        m_Monsters.add(new Bat('V', new Vector2D(
+    
+        m_Entities.add(new Bat(' ', new Vector2D(
             getRoomPosition().getX() + (int)((double)getRoomWidth() / 2 - 2),
             getRoomPosition().getY() + (int)((double)getRoomHeight() / 2)
         )));
     }
 
-    public void draw() {
+    public void spawnItems() {
+        if(Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
+            m_LootBox.add(new LootBox('=', 214,  new Vector2D(
+                getRoomPosition().getX() + 1,
+                getRoomPosition().getY() + 1
+            )));
+        }        
+    }
+    private void drawRoomBounds() {
         for(int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
             for(int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
                 if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
@@ -51,26 +59,25 @@ public class Room {
                     Global.terminalHandler.putChar(j, i, '.', 245, 232, false, null);
             }
         }
+    }
+    public void draw() {
+        drawRoomBounds();
 
-        for(Entity monster : m_Monsters) {
-            monster.draw();
+        for(Entity entity : this.m_Entities) {
+            entity.draw();
+        }
+        
+        for(LootBox lootBox : this.m_LootBox) {
+            lootBox.draw();
         }
     }
 
     public void update() {
-        for(Entity monster : m_Monsters) {
-            monster.update();
+        for(Entity entity : this.m_Entities) {
+            entity.update();
         }
     }
 
-    public Rectangle getIntersection(Room room) {
-        return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
-                .intersection(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
-    }
-    public boolean intersects(Room room) {
-        return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
-                .intersects(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
-    }
     public Rectangle getRect() {
         return new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight);
     }
@@ -102,6 +109,5 @@ public class Room {
     private final int m_RoomWidth, m_RoomHeight;
     private Vector<LootBox> m_LootBox = new Vector<LootBox>();
     private Vector<Entity> m_Entities = new Vector<Entity>();
-    private Vector<Entity> m_Monsters = new Vector<Entity>();
     private Vector2D m_RoomPosition = new Vector2D(-1, -1);
 }

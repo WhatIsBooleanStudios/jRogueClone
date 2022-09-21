@@ -13,7 +13,7 @@ public abstract class Item {
         this.m_ItemPosition = itemPosition;
         this.m_CharacterAttributes.add(CharacterAttributes.BOLD);
     }
-    
+
     public Vector2D getItemPosition() {
         return this.m_ItemPosition;
     }
@@ -31,12 +31,21 @@ public abstract class Item {
     }
 
     /*
+     * Is available on the map to be picked up or used.
+     */
+    public boolean isUseable() {
+        return this.m_ItemPosition != new Vector2D(-1, -1);
+    }
+
+    public abstract void draw();
+
+    /*
      * default position is -1, -1
      * This means that the item is in some Entities inventory
      * if the items position is on the map(not -1, -1) it will be seen by the player
      */
     private Vector2D m_ItemPosition = new Vector2D(-1, -1);
     private char m_ItemCharacter;
-    private int m_ItemCharacterColor;
+    protected int m_ItemCharacterColor;
     private Vector<CharacterAttributes> m_CharacterAttributes = new Vector<>();
 }
