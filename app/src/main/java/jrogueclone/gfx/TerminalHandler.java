@@ -23,7 +23,7 @@ public class TerminalHandler {
 
         for(int i = 0; i < Global.columns; i++) {
             for(int j = 0; j < Global.rows; j++) {
-                renderData[i][j] = new RenderableCharacter(' ', 15, 0, false);
+                renderData[i][j] = new RenderableCharacter(' ', 15, 0, false, null);
             }
         }
 
@@ -158,13 +158,15 @@ public class TerminalHandler {
         public int fgColor;
         public int bgColor;
         public boolean bold;
+        public Object userData;
 
 
-        public RenderableCharacter(char c, int fg, int bg, boolean bold) {
+        public RenderableCharacter(char c, int fg, int bg, boolean bold, Object userData) {
             character = c;
             this.fgColor = fg;
             this.bgColor = bg;
             this.bold = bold;
+            this.userData = userData;
         }
     }
 
@@ -181,6 +183,7 @@ public class TerminalHandler {
                 renderData[i][j].fgColor = 232;
                 renderData[i][j].bgColor = 232;
                 renderData[i][j].bold = false;
+                renderData[i][j].userData = null;
             }
         }
     }
@@ -208,6 +211,21 @@ public class TerminalHandler {
      * @param bg the background color of the character
      */
     public void putChar(int col, int row, char c, int fg, int bg, boolean bold) {
+        putChar(col, row, c, fg, bg, bold, null);
+    }
+
+    /**
+     * Add a character to the renderbuffer. Be sure to call begin before calling this function and end after all rendering
+     * is complete
+     * @param col the column to insert the character at
+     * @param row the row to insert the character at
+     * @param c the character to insert
+     * @param fg the color the character should be
+     * @param bg the background color of the character
+     * @param userData user specified data that can be retrieved from the renderbuffer by the user
+     */
+    public void putChar(int col, int row, char c, int fg, int bg, boolean bold, Object userData) {
+        renderData[col][row].userData = userData;
         renderData[col][row].fgColor = fg;
         renderData[col][row].bgColor = bg;
         renderData[col][row].bold = bold;
@@ -256,10 +274,20 @@ public class TerminalHandler {
      * Get the background color at the given position in the renderbuffer
      * @param col the column of the target character
      * @param row the row of the target character
-     * @return the forground color of the character that occupies the given position
+     * @return the background color of the character that occupies the given position
      */
     public int getBackgroundColorAt(int col, int row) {
         return renderData[col][row].bgColor;
+    }
+
+    /**
+     * Get the user specified data at the given position in the renderbuffer
+     * @param col the column of the target character
+     * @param row the row of the target character
+     * @return the user data at the given position
+     */
+    public Object getUserDataAt(int col, int row) {
+        return renderData[col][row].userData;
     }
 
     /**
@@ -295,13 +323,11 @@ public class TerminalHandler {
         }
         System.out.flush();
         resetTextAttributes();
-        /*for(int i = 0; i < Global.rows; i++) {
-            for(int j = 0; j < Global.columns; j++) {
-                System.out.println("bg: " + renderData[j][i].bgColor + ", fg: " + renderData[j][i].fgColor);
-            }
-        }*/
     }
 
+    /**
+     * Reset terminal state for our users to use after this program is done messing with it
+     */
     public void restoreState() {
         disableAlternateScreen();
         restoreTios();
@@ -309,6 +335,9 @@ public class TerminalHandler {
         showCursor();
     }
 
+    /**
+     * Set text attributes (color, bold) back to normal
+     */
     public void resetTextAttributes() {
         System.out.print(CSI + "0m");
     }

@@ -17,10 +17,28 @@ public class Room {
     public void draw() {
         for(int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
             for(int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
-                if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1)
-                    Global.terminalHandler.putChar(j, i, '#', 15, 232, false);
-                else
-                    Global.terminalHandler.putChar(j, i, '.', 245, 232, false);
+                if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                    if(j == this.getRoomPosition().getX()) {
+                        if(i == this.getRoomPosition().getY()) {
+                            Global.terminalHandler.putChar(j, i, '╔', 255, 232, false, this);
+                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                            Global.terminalHandler.putChar(j, i, '╚', 255, 232, false, this);
+                        } else {
+                            Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
+                        }
+                    } else if(j == this.getRoomPosition().getX() + this.getRoomWidth() - 1) {
+                        if(i == this.getRoomPosition().getY()) {
+                            Global.terminalHandler.putChar(j, i, '╗', 255, 232, false, this);
+                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                            Global.terminalHandler.putChar(j, i, '╝', 255, 232, false, this);
+                        } else {
+                            Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
+                        }
+                    } else {
+                        Global.terminalHandler.putChar(j, i, '═', 255, 232, false, this);
+                    }
+                } else
+                    Global.terminalHandler.putChar(j, i, '.', 245, 232, false, null);
             }
         }
     }
