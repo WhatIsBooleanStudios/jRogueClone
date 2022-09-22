@@ -10,6 +10,8 @@ public class Hallway {
         int LEFT = 2;
         int RIGHT = 3;
 
+        //if(endPosition.equals(new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE))) return;
+
         System.out.println("start: " + startPosition + " end: " + endPosition);
 
         for(int i = 0; i < Global.rows; i++) {
@@ -69,13 +71,28 @@ public class Hallway {
             )) {
                 cursorPos.setX(cursorPos.getX() + (xDirection == LEFT ? -1 : 1));
                 movedX = true;
-                System.out.println("loop x");
+                System.out.println("loop x: " + cursorPos);
                 System.out.flush();
             }
             if(movedX) {
                 m_Waypoints.add(new Vector2D(cursorPos));
                 System.out.println("waypointX: " + cursorPos);
             }
+
+            if(!cursorPos.equals(finalWaypoint)) {
+                boolean adjustX = false;
+                while(
+                    (cursorPos.getY() != Global.rows - 1 && yDirection == DOWN && roomMap[cursorPos.getX()][cursorPos.getY() + 1] == '#') ||
+                    (cursorPos.getY() > 0 && yDirection == UP && roomMap[cursorPos.getX()][cursorPos.getY() - 1] == '#')) {
+                    cursorPos.setX(cursorPos.getX() + (xDirection == LEFT ? -1 : 1));
+                    System.out.println("overshoot caseX: " + cursorPos);
+                    adjustX = true;
+                }
+                if(adjustX)
+                    m_Waypoints.add(new Vector2D(cursorPos));
+            }
+            xDirection = m_Waypoints.lastElement().getX() < finalWaypoint.getX() ? RIGHT : LEFT;
+            yDirection = m_Waypoints.lastElement().getY() < finalWaypoint.getY() ? DOWN : UP;
             
             boolean movedY = false;
             while(!(
@@ -84,7 +101,7 @@ public class Hallway {
                 (yDirection == DOWN && cursorPos.getY() == Global.rows - 1) ||
                 (roomMap[cursorPos.getX()][cursorPos.getY() + (yDirection == DOWN ? 1 : -1)] == '#')
             )) {
-                System.out.println("Loop y");
+                System.out.println("Loop y: " + cursorPos);
                 System.out.flush();
                 cursorPos.setY(cursorPos.getY() + (yDirection == UP ? -1 : 1));
                 movedY = true;
@@ -92,6 +109,19 @@ public class Hallway {
             if(movedY) {
                 m_Waypoints.add(new Vector2D(cursorPos));
                 System.out.println("waypointY: " + cursorPos);
+            }
+
+            if(!cursorPos.equals(finalWaypoint)) {
+                boolean adjustY = false;
+                while(
+                    (cursorPos.getX() != Global.columns - 1 && xDirection == RIGHT && roomMap[cursorPos.getX() + 1][cursorPos.getY()] == '#') ||
+                    (cursorPos.getX() > 0 && xDirection == LEFT && roomMap[cursorPos.getX() - 1][cursorPos.getY()] == '#')) {
+                    cursorPos.setY(cursorPos.getY() + (yDirection == DOWN ? -1 : 1));
+                    System.out.println("overshoot caseY: " + cursorPos);
+                    adjustY = true;
+                }
+                if(adjustY)
+                    m_Waypoints.add(new Vector2D(cursorPos));
             }
 
         }

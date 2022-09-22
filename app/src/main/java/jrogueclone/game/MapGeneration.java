@@ -2,6 +2,7 @@ package jrogueclone.game;
 
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.HashSet;
 
 import jrogueclone.util.Pair;
 import jrogueclone.Global;
@@ -77,6 +78,7 @@ public class MapGeneration {
 						tgtHorizMovement--;
 					}
 				}
+
 				while (Math.abs(tgtVertMovement) > 0) {
 					boolean collides = false;
 					for (int j = 0; j < rooms.size(); j++) {
@@ -117,7 +119,7 @@ public class MapGeneration {
 		return rooms;
 	}
 
-	private static Vector2D findNearestConnection(Vector2D position, Room parentRoom, Vector<Room> rooms) {
+	private static Vector2D findNearestConnection(Vector2D position, Room parentRoom, Vector<Room> rooms, HashSet<Vector2D> usedPositions) {
 		Vector2D closest = new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		double closestDistance = Double.MAX_VALUE;
 		for(Room room : rooms) {
@@ -125,6 +127,7 @@ public class MapGeneration {
 				continue;
 			}
 			for(Vector2D connectionPoint : room.getHallwayConnectionPoints()) {
+				if(usedPositions.contains(connectionPoint)) continue;
 				double distance = Math.sqrt(
 					Math.pow((connectionPoint.getX() - position.getX()), 2) +
 					Math.pow((connectionPoint.getY() - position.getY()), 2)
@@ -163,9 +166,16 @@ public class MapGeneration {
 			}
 		}
 		Vector<Hallway> hallways = new Vector<Hallway>();
-		Vector2D startPosition = new Vector2D(rooms.get(0).getHallwayConnectionPoints().get(0));
-		Vector2D connectionPoint = findNearestConnection(new Vector2D(startPosition), rooms.get(0), rooms);
-		hallways.add(new Hallway(startPosition, connectionPoint, roomMap));
+		HashSet<Vector2D> usedPositions = new HashSet<Vector2D>();
+		for(Room room : rooms) {
+			for(Vector2D startPosition : room.getHallwayConnectionPoints()) {
+				if(usedPositions.contains(startPosition)) continue;
+				Vector2D connectionPoint = findNearestConnection(new Vector2D(startPosition), room, rooms, usedPositions);
+				hallways.add(new Hallway(startPosition, connectionPoint, roomMap));
+				usedPositions.add(startPosition);
+				usedPositions.add(connectionPoint);
+			}
+		}
 
 		return hallways;
 	}
