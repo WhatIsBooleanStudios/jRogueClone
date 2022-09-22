@@ -30,5 +30,5 @@ public class LootBox extends Item {
         this.draw();
     }
 
-    public final static int m_SpawnChance = 100;
+    public final static int m_SpawnChance = 40;
 }

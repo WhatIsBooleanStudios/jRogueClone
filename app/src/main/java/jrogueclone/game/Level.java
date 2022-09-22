@@ -31,12 +31,18 @@ public class Level implements GameState {
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
                 playerSpawnRoom.getRoomPosition().getY() + (int) ((double) playerSpawnRoom.getRoomHeight() / 2)));
 
-        this.m_Player.setRoomDiscovered(playerSpawnRoom);
+        
 
         for (Room room : m_Rooms) {
             room.spawnEntities();
             room.spawnItems();
+
+            // remove this when playing real game
+            this.m_Player.setRoomDiscovered(room);
         }
+
+        // Uncomment when playing real game
+        //this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
     @Override
