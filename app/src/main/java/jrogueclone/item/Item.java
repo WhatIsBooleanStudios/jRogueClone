@@ -22,6 +22,10 @@ public abstract class Item {
         return this.m_ItemCharacter;
     }
 
+    public void setItemCharacter(char itemCharacter) {
+        this.m_ItemCharacter = itemCharacter;
+    }
+
     public int getItemCharacterColor() {
         return this.m_ItemCharacterColor;
     }
@@ -34,9 +38,10 @@ public abstract class Item {
      * Is available on the map to be picked up or used.
      */
     public boolean isUseable() {
-        return this.m_ItemPosition != new Vector2D(-1, -1);
+        return !this.m_ItemUsed;
     }
 
+    public abstract void useItem();
     public abstract void draw();
 
     /*
@@ -44,7 +49,8 @@ public abstract class Item {
      * This means that the item is in some Entities inventory
      * if the items position is on the map(not -1, -1) it will be seen by the player
      */
-    private Vector2D m_ItemPosition = new Vector2D(-1, -1);
+    protected boolean m_ItemUsed = false;
+    protected Vector2D m_ItemPosition = new Vector2D(-1, -1);
     private char m_ItemCharacter;
     protected int m_ItemCharacterColor;
     private Vector<CharacterAttributes> m_CharacterAttributes = new Vector<>();

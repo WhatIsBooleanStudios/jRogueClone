@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
+import jrogueclone.item.LootBox;
 import jrogueclone.item.Weapon;
 import jrogueclone.game.Room;
 
@@ -42,7 +43,7 @@ public class Player extends Entity {
         this.getHealthController().setHealth(100);
     }
 
-    public void tryMoveUp() {
+    private void tryMoveUp() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
 
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
@@ -51,7 +52,7 @@ public class Player extends Entity {
         }
     }
 
-    public void tryMoveLeft() {
+    private void tryMoveLeft() {
         Vector2D newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getX() > 0 && uData == null) {
@@ -59,7 +60,7 @@ public class Player extends Entity {
         }
     }
 
-    public void tryMoveDown() {
+    private void tryMoveDown() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getY() < Global.rows - 1 && uData == null) {
@@ -67,11 +68,36 @@ public class Player extends Entity {
         }
     }
 
-    public void tryMoveRight() {
+    private void tryMoveRight() {
         Vector2D newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getX() < Global.columns - 1 && uData == null) {
             setPosition(newPosition);
+        }
+    }
+
+    private void tryUse() {
+        int pX = this.getPosition().getX(), pY = this.getPosition().getY();
+        Vector<Object> uData = new Vector<Object>();
+
+        for (int i = -1; i <= 1; i++) {
+            if (Global.terminalHandler.getUserDataAt(pX + i, pY) != null)
+                uData.add(Global.terminalHandler.getUserDataAt(pX + i, pY));
+
+            if (Global.terminalHandler.getUserDataAt(pX, pY + i) != null)
+                uData.add(Global.terminalHandler.getUserDataAt(pX, pY + i));
+        }
+
+        for (Object object : uData) {
+            if (object.getClass().getName().toLowerCase().indexOf("lootbox") > 0) {
+                for (Room room : this.m_DiscoveredRooms) {
+                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                        LootBox lootBox = (LootBox) object;
+                        if (lootBox.isUseable())
+                            lootBox.useItem();
+                    }
+                }
+            }
         }
     }
 
@@ -88,6 +114,9 @@ public class Player extends Entity {
         }
         if (Global.terminalHandler.keyIsPressed('d')) {
             this.tryMoveRight();
+        }
+        if (Global.terminalHandler.keyIsPressed('e')) {
+            this.tryUse();
         }
     }
 

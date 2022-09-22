@@ -25,6 +25,12 @@ public class Weapon extends Item {
             // draw it
         }
     }
+    
+    @Override
+    public void useItem() {
+        // TODO Auto-generated method stub
+        
+    }
 
     private String m_WeaponName = "";
     private int m_WeaponDamage = 0;

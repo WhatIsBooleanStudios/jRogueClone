@@ -15,7 +15,8 @@ public class GameLoop {
                 if(!firstFrame && !(Global.terminalHandler.keyIsPressed(' ') ||
                                     Global.terminalHandler.keyIsPressed('w') || 
                                     Global.terminalHandler.keyIsPressed('a') || 
-                                    Global.terminalHandler.keyIsPressed('s') || 
+                                    Global.terminalHandler.keyIsPressed('s') ||
+                                    Global.terminalHandler.keyIsPressed('e') || 
                                     Global.terminalHandler.keyIsPressed('d'))) {
                     Thread.sleep(100);
                     continue;

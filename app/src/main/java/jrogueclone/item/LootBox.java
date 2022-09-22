@@ -10,8 +10,8 @@ public class LootBox extends Item {
 
     @Override
     public void draw() {
-        if(this.isUseable()) {
-            // render it
+        if(this.m_ItemPosition != new Vector2D(-1, -1)) {
+
             Global.terminalHandler.putChar(
                 getItemPosition().getX(),
                 getItemPosition().getY(),
@@ -23,5 +23,12 @@ public class LootBox extends Item {
         }
     }
 
-    public final static int m_SpawnChance = 40;
+    @Override
+    public void useItem() {
+        this.m_ItemUsed = true;
+        this.setItemCharacter('␣');
+        this.draw();
+    }
+
+    public final static int m_SpawnChance = 100;
 }

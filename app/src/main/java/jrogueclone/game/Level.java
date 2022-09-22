@@ -20,7 +20,7 @@ public class Level implements GameState {
     }
 
     private void drawLevel() {
-        for (Room room : this.m_DiscoveredRooms)
+        for (Room room : this.m_Player.getDiscoveredRooms())
             room.draw();
     }
 
@@ -31,7 +31,7 @@ public class Level implements GameState {
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
                 playerSpawnRoom.getRoomPosition().getY() + (int) ((double) playerSpawnRoom.getRoomHeight() / 2)));
 
-        this.m_DiscoveredRooms.add(playerSpawnRoom);
+        this.m_Player.setRoomDiscovered(playerSpawnRoom);
 
         for (Room room : m_Rooms) {
             room.spawnEntities();
@@ -44,13 +44,13 @@ public class Level implements GameState {
         this.drawLevel();
 
         m_Player.update();
-        for (Room room : m_DiscoveredRooms)
+        for (Room room : m_Player.getDiscoveredRooms())
             room.update();
 
         m_Player.draw();
     }
 
-    private Vector<Room> m_Rooms = new Vector<Room>(), m_DiscoveredRooms = new Vector<Room>();
+    private Vector<Room> m_Rooms = new Vector<Room>();
     private Vector<Vector2D> m_Connector = new Vector<Vector2D>();
     private Player m_Player;
 }

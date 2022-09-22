@@ -24,9 +24,13 @@ public class Room {
         )));
     }
 
+    public void removeItem(LootBox lootBox) {
+        this.m_LootBox.remove(lootBox);
+    }
+
     public void spawnItems() {
         if(Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
-            m_LootBox.add(new LootBox('␣', 214,  new Vector2D(
+            m_LootBox.add(new LootBox('=', 214,  new Vector2D(
                 getRoomPosition().getX() + 1,
                 getRoomPosition().getY() + 1
             )));
