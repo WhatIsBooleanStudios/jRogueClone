@@ -1,5 +1,6 @@
 package jrogueclone.entity;
 
+import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.Weapon;
 
@@ -9,6 +10,9 @@ public class Bat extends Entity {
     }
 
     @Override
+    public boolean isMonster() { return true; }
+
+    @Override
     public void handleEntitySpawn() {
         // Give the player a weapon with a 50% chance to enflict 12 damage
         this.m_AvailableWeapons.add(new Weapon("Fangs",
@@ -16,5 +20,14 @@ public class Bat extends Entity {
 
         this.getHealthController().setHealth(20);
         this.m_TilesPerSecond = 1;
+    }
+
+    private int animationFrame = 0;
+    @Override
+    public void draw() {
+        animationFrame++;
+        animationFrame %= 2;
+        char c = animationFrame == 0 ? 'ʌ' : 'v';
+        Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), c, 255, 232, false, this);
     }
 }

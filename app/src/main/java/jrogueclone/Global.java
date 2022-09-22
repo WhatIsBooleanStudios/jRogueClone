@@ -51,7 +51,7 @@ public class Global {
 
     // Game loop related vars/methods
     private final static GameLoop m_GameLoop = new GameLoop();
-    public static GameLoop getGameLoop() {
+    public final static GameLoop getGameLoop() {
         return m_GameLoop;
     }
     
