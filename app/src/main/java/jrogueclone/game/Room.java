@@ -7,6 +7,8 @@ import jrogueclone.Global;
 import jrogueclone.entity.Entity;
 import jrogueclone.item.LootBox;
 
+import jrogueclone.entity.Bat;
+
 public class Room {
     public Room(Vector2D position, int roomWidth, int roomHeight) {
         this.m_RoomWidth = roomWidth;
@@ -14,22 +16,72 @@ public class Room {
         this.m_RoomPosition = position;
     }
 
-    public void draw() {
+    public void spawnEntities() {
+    
+        m_Entities.add(new Bat(' ', new Vector2D(
+            getRoomPosition().getX() + (int)((double)getRoomWidth() / 2 - 2),
+            getRoomPosition().getY() + (int)((double)getRoomHeight() / 2)
+        )));
+    }
+
+    public void removeItem(LootBox lootBox) {
+        this.m_LootBox.remove(lootBox);
+    }
+
+    public void spawnItems() {
+        if(Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
+            m_LootBox.add(new LootBox('=', 214,  new Vector2D(
+                getRoomPosition().getX() + 1,
+                getRoomPosition().getY() + 1
+            )));
+        }        
+    }
+    private void drawRoomBounds() {
         for(int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
             for(int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
-                Global.terminalHandler.putChar(j, i, '#');
+                if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                    if(j == this.getRoomPosition().getX()) {
+                        if(i == this.getRoomPosition().getY()) {
+                            Global.terminalHandler.putChar(j, i, '╔', 255, 232, false, this);
+                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                            Global.terminalHandler.putChar(j, i, '╚', 255, 232, false, this);
+                        } else {
+                            Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
+                        }
+                    } else if(j == this.getRoomPosition().getX() + this.getRoomWidth() - 1) {
+                        if(i == this.getRoomPosition().getY()) {
+                            Global.terminalHandler.putChar(j, i, '╗', 255, 232, false, this);
+                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                            Global.terminalHandler.putChar(j, i, '╝', 255, 232, false, this);
+                        } else {
+                            Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
+                        }
+                    } else {
+                        Global.terminalHandler.putChar(j, i, '═', 255, 232, false, this);
+                    }
+                } else
+                    Global.terminalHandler.putChar(j, i, '.', 245, 232, false, null);
             }
         }
     }
+    public void draw() {
+        drawRoomBounds();
 
-    public Rectangle getIntersection(Room room) {
-        return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
-                .intersection(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
+        for(Entity entity : this.m_Entities) {
+            entity.draw();
+        }
+        
+        for(LootBox lootBox : this.m_LootBox) {
+            lootBox.draw();
+        }
     }
-    public boolean intersects(Room room) {
-        return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
-                .intersects(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
+
+    public void update() {
+        for(Entity entity : this.m_Entities) {
+            entity.update();
+        }
     }
+
     public Rectangle getRect() {
         return new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight);
     }
