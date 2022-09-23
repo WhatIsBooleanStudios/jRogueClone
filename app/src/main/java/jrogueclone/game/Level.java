@@ -9,6 +9,15 @@ public class Level implements GameState {
         this.m_Rooms = rooms;
         this.m_Connector = connector;
         this.m_Player = player;
+        setDifficulty(1);
+    }
+
+    public void setDifficulty(int levelDifficulty) {
+        this.m_LevelDifficuty = levelDifficulty;
+    }
+
+    public int getDifficulty() {
+        return this.m_LevelDifficuty;
     }
 
     public Vector<Room> getRooms() {
@@ -31,8 +40,6 @@ public class Level implements GameState {
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
                 playerSpawnRoom.getRoomPosition().getY() + (int) ((double) playerSpawnRoom.getRoomHeight() / 2)));
 
-        
-
         for (Room room : m_Rooms) {
             room.spawnEntities();
             room.spawnItems();
@@ -42,7 +49,7 @@ public class Level implements GameState {
         }
 
         // Uncomment when playing real game
-        //this.m_Player.setRoomDiscovered(playerSpawnRoom);
+        // this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
     @Override
@@ -59,4 +66,5 @@ public class Level implements GameState {
     private Vector<Room> m_Rooms = new Vector<Room>();
     private Vector<Vector2D> m_Connector = new Vector<Vector2D>();
     private Player m_Player;
+    private int m_LevelDifficuty;
 }

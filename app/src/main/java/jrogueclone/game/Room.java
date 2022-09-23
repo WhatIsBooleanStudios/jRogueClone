@@ -17,11 +17,17 @@ public class Room {
     }
 
     public void spawnEntities() {
-    
-        m_Entities.add(new Bat(' ', new Vector2D(
-            getRoomPosition().getX() + (int)((double)getRoomWidth() / 2 - 2),
-            getRoomPosition().getY() + (int)((double)getRoomHeight() / 2)
-        )));
+        int levelDifficulty = GameLoop.getLevelDifficulty();
+
+        switch (levelDifficulty) {
+            case 1: {
+                m_Entities.add(new Bat(' ', new Vector2D(
+                        getRoomPosition().getX() + (int) ((double) getRoomWidth() / 2 - 2),
+                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2))));
+                break;
+            }
+        }
+
     }
 
     public void removeItem(LootBox lootBox) {
@@ -29,29 +35,31 @@ public class Room {
     }
 
     public void spawnItems() {
-        if(Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
-            m_LootBox.add(new LootBox('=', 214,  new Vector2D(
-                getRoomPosition().getX() + 1,
-                getRoomPosition().getY() + 1
-            )));
-        }        
+        if (Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
+            m_LootBox.add(new LootBox('=', 214, new Vector2D(
+                    getRoomPosition().getX() + 1,
+                    getRoomPosition().getY() + 1)));
+        }
     }
+
     private void drawRoomBounds() {
-        for(int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
-            for(int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
-                if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
-                    if(j == this.getRoomPosition().getX()) {
-                        if(i == this.getRoomPosition().getY()) {
+        for (int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
+            for (int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
+                if (j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1
+                        || i == this.getRoomPosition().getY()
+                        || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                    if (j == this.getRoomPosition().getX()) {
+                        if (i == this.getRoomPosition().getY()) {
                             Global.terminalHandler.putChar(j, i, '╔', 255, 232, false, this);
-                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                        } else if (i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
                             Global.terminalHandler.putChar(j, i, '╚', 255, 232, false, this);
                         } else {
                             Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
                         }
-                    } else if(j == this.getRoomPosition().getX() + this.getRoomWidth() - 1) {
-                        if(i == this.getRoomPosition().getY()) {
+                    } else if (j == this.getRoomPosition().getX() + this.getRoomWidth() - 1) {
+                        if (i == this.getRoomPosition().getY()) {
                             Global.terminalHandler.putChar(j, i, '╗', 255, 232, false, this);
-                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                        } else if (i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
                             Global.terminalHandler.putChar(j, i, '╝', 255, 232, false, this);
                         } else {
                             Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
@@ -64,21 +72,23 @@ public class Room {
             }
         }
     }
+
     public void draw() {
         drawRoomBounds();
 
-        for(Entity entity : this.m_Entities) {
+        for (Entity entity : this.m_Entities) {
             entity.draw();
         }
-        
-        for(LootBox lootBox : this.m_LootBox) {
+
+        for (LootBox lootBox : this.m_LootBox) {
             lootBox.draw();
         }
     }
 
     public void update() {
-        for(Entity entity : this.m_Entities) {
-            entity.update();
+        if(Global.getGameLoop().updateEntities()) {
+            for (Entity entity : this.m_Entities)
+                entity.update();
         }
     }
 
