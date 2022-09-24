@@ -1,18 +1,21 @@
 package jrogueclone.entity;
 
+import java.io.InvalidClassException;
 import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
+import jrogueclone.gfx.ui.Inventory;
 import jrogueclone.item.Weapon;
 
 public abstract class Entity {
-    
+
     public Entity(char entityCharacter) {
 
         this.m_EntityCharacter = entityCharacter;
         handleEntitySpawn();
     }
+
     public Entity(char entityCharacter, Vector2D entityPosition) {
 
         this.m_EntityCharacter = entityCharacter;
@@ -44,28 +47,34 @@ public abstract class Entity {
         return this.m_EntityPosition;
     }
 
-    public void setPosition(Vector2D position) { m_EntityPosition = position; }
-
-    public void draw() { Global.terminalHandler.putChar(m_EntityPosition.getX(), m_EntityPosition.getY(), m_EntityCharacter); }
+    public void setPosition(Vector2D position) {
+        m_EntityPosition = position;
+    }
 
     public char getEntityCharacter() {
         return this.m_EntityCharacter;
     }
-    
+
     protected void setEntityCharacter(char entityCharacter) {
         this.m_EntityCharacter = entityCharacter;
     }
 
-    public Vector<Weapon> getAvailableWeapons() {
-        return this.m_AvailableWeapons;
+    public void draw() {
+        Global.terminalHandler.putChar(m_EntityPosition.getX(), m_EntityPosition.getY(), m_EntityCharacter);
+    }
+
+    public Inventory getInventory() {
+        return this.m_Inventory;
     }
 
     public abstract void handleEntitySpawn();
+
     public abstract boolean isMonster();
+
     public abstract void update();
 
     private char m_EntityCharacter;
     private Vector2D m_EntityPosition = new Vector2D();
     private HealthController m_HealthController = new HealthController();
-    protected Vector<Weapon> m_AvailableWeapons = new Vector<Weapon>();
+    private Inventory m_Inventory = new Inventory();
 }

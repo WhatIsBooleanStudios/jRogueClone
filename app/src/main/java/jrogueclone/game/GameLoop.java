@@ -44,4 +44,5 @@ public class GameLoop {
     private static Level m_CurrentLevel = MapGeneration.generateLevel();
     private InputHandler m_InputHandler = new InputHandler();
     private boolean m_EndGame = false, m_UpdateEntities = false;
+    public boolean m_Inventory = false;
 }

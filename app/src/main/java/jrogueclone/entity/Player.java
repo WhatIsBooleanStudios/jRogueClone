@@ -37,42 +37,54 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         // Give the player a weapon with a 70% chance to enflict 34 damage
-        this.m_AvailableWeapons.add(new Weapon("Damaged Wooden Sword",
+        this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
                 34, 70));
 
         this.getHealthController().setHealth(100);
     }
 
-    private void tryMoveUp() {
-        Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
-
-        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getY() > 0 && uData == null) {
-            setPosition(newPosition);
-        }
+    private enum MoveDirection {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     }
 
-    private void tryMoveLeft() {
-        Vector2D newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
-        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getX() > 0 && uData == null) {
-            setPosition(newPosition);
-        }
-    }
+    private void handleMovment(MoveDirection moveDirection) {
+        Vector2D newPosition = null;
+        Object uData = null;
+        switch (moveDirection) {
+            case DOWN:
+                newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
+                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                if (getPosition().getY() < Global.rows - 1 && uData == null) {
+                    setPosition(newPosition);
+                }
+                break;
+            case LEFT:
+                newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
+                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                if (getPosition().getX() > 0 && uData == null) {
+                    setPosition(newPosition);
+                }
+                break;
+            case RIGHT:
+                newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
+                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                if (getPosition().getX() < Global.columns - 1 && uData == null) {
+                    setPosition(newPosition);
+                }
+                break;
+            case UP:
+                newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
+                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                if (getPosition().getY() > 0 && uData == null) {
+                    setPosition(newPosition);
+                }
+                break;
+            default:
+                break;
 
-    private void tryMoveDown() {
-        Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
-        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getY() < Global.rows - 1 && uData == null) {
-            setPosition(newPosition);
-        }
-    }
-
-    private void tryMoveRight() {
-        Vector2D newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
-        Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-        if (getPosition().getX() < Global.columns - 1 && uData == null) {
-            setPosition(newPosition);
         }
     }
 
@@ -101,23 +113,24 @@ public class Player extends Entity {
         }
     }
 
+    public static void toggleInventoryState() {
+        Global.getGameLoop().m_Inventory = !Global.getGameLoop().m_Inventory;
+    }
+
     @Override
     public void update() {
-        if (Global.terminalHandler.keyIsPressed('w')) {
-            this.tryMoveUp();
-        }
-        if (Global.terminalHandler.keyIsPressed('a')) {
-            this.tryMoveLeft();
-        }
-        if (Global.terminalHandler.keyIsPressed('s')) {
-            this.tryMoveDown();
-        }
-        if (Global.terminalHandler.keyIsPressed('d')) {
-            this.tryMoveRight();
-        }
-        if (Global.terminalHandler.keyIsPressed('e')) {
+        if (Global.terminalHandler.keyIsPressed('w'))
+            this.handleMovment(MoveDirection.UP);
+        if (Global.terminalHandler.keyIsPressed('a'))
+            this.handleMovment(MoveDirection.LEFT);
+        if (Global.terminalHandler.keyIsPressed('s'))
+            this.handleMovment(MoveDirection.DOWN);
+        if (Global.terminalHandler.keyIsPressed('d'))
+            this.handleMovment(MoveDirection.RIGHT);
+        if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
-        }
+        if (Global.terminalHandler.keyIsPressed('i'))
+            toggleInventoryState();
     }
 
     public Vector<Room> getDiscoveredRooms() {
