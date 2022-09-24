@@ -18,7 +18,7 @@ public class GameLoop {
         Global.setGameState(GameStates.GAME, m_CurrentLevel);
 
         boolean firstFrame = true;
-        while (this.m_EndGame != true) {
+        while (!this.m_EndGame) {
             Global.terminalHandler.begin();
             this.m_InputHandler.update();
             try {
@@ -40,6 +40,7 @@ public class GameLoop {
     public void endGame() {
         this.m_EndGame = true;
     }
+
 
     private static Level m_CurrentLevel = MapGeneration.generateLevel();
     private InputHandler m_InputHandler = new InputHandler();
