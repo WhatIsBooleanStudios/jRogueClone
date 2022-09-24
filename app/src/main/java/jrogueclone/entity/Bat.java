@@ -10,7 +10,9 @@ public class Bat extends Entity {
     }
 
     @Override
-    public boolean isMonster() { return true; }
+    public boolean isMonster() {
+        return true;
+    }
 
     @Override
     public void handleEntitySpawn() {
@@ -19,15 +21,21 @@ public class Bat extends Entity {
                 12, 50));
 
         this.getHealthController().setHealth(20);
-        this.m_TilesPerSecond = 1;
     }
 
-    private int animationFrame = 0;
     @Override
     public void draw() {
-        animationFrame++;
-        animationFrame %= 2;
-        char c = animationFrame == 0 ? 'ʌ' : 'v';
-        Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), c, 255, 232, false, this);
+        m_AnimationFrame++;
+        m_AnimationFrame %= 2;
+        setEntityCharacter(m_AnimationFrame == 0 ? 'ʌ' : 'v');
+        Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), getEntityCharacter(), 255, 232,
+                false, this);
+    }
+
+    private int m_AnimationFrame = 0;
+
+    @Override
+    public void update() {
+
     }
 }

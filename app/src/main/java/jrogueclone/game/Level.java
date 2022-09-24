@@ -2,28 +2,24 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
-import jrogueclone.Global;
-import jrogueclone.entity.Entity;
-import jrogueclone.entity.Bat;
 import jrogueclone.entity.Player;
 import jrogueclone.util.Pair;
 
 public class Level implements GameState{
     public Level(Vector<Room> rooms, Vector<Hallway> hallways, Player player) {
+
         this.m_Rooms = rooms;
         this.m_Hallways = hallways;
         this.m_Player = player;
+        setDifficulty(1);
+    }
 
-        Room playerSpawnRoom = m_Rooms.get((int)(Math.random() * m_Rooms.size()));
-        m_Player.setPosition(new Vector2D(
-            playerSpawnRoom.getRoomPosition().getX() + (int)((double)playerSpawnRoom.getRoomWidth() / 2),
-            playerSpawnRoom.getRoomPosition().getY() + (int)((double)playerSpawnRoom.getRoomHeight() / 2)
-        ));
+    public void setDifficulty(int levelDifficulty) {
+        this.m_LevelDifficuty = levelDifficulty;
+    }
 
-        for(Room room : m_Rooms) {
-            room.spawnEntities();
-        }
-
+    public int getDifficulty() {
+        return this.m_LevelDifficuty;
     }
 
     public Vector<Room> getRooms() {
@@ -35,41 +31,43 @@ public class Level implements GameState{
     }
 
     private void drawLevel() {
-        for (Room room : this.m_Rooms)
+        for (Room room : this.m_Player.getDiscoveredRooms())
             room.draw();
-
+        }
         for (Hallway hallway : m_Hallways) {
             hallway.draw();
-        }
+    }
     }
 
-    @Override public void initialize() {
-        
+
+    @Override
+    public void initialize() {
+        Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size()));
+        m_Player.setPosition(new Vector2D(
+                playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
+                playerSpawnRoom.getRoomPosition().getY() + (int) ((double) playerSpawnRoom.getRoomHeight() / 2)));
+
+        for (Room room : m_Rooms) {
+            room.spawnEntities();
+            room.spawnItems();
+
+
+            // remove this when playing real game
+            this.m_Player.setRoomDiscovered(room);
+        }
+
+        // Uncomment when playing real game
+        // this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
-    @Override public void update() {
-        this.drawLevel(); // call this first as player updating depends on the result
-        if(Global.terminalHandler.keyIsPressed('w') ) {
-            m_Player.tryMoveUp();
-        }
-        if(Global.terminalHandler.keyIsPressed('a')) {
-            m_Player.tryMoveLeft();
-        }
-        if(Global.terminalHandler.keyIsPressed('s')) {
-            m_Player.tryMoveDown();
-        }
-        if(Global.terminalHandler.keyIsPressed('d')) {
-            m_Player.tryMoveRight();
-        }
+    @Override
+    public void update() {
+        this.drawLevel();
 
-        for(Room room : m_Rooms) {
-            room.update();
-        }
         m_Player.update();
+        for (Room room : m_Player.getDiscoveredRooms())
+            room.update();
 
-        for(Room room : m_Rooms) {
-            room.draw();
-        }
         m_Player.draw();
         System.out.flush();
     }
@@ -77,5 +75,5 @@ public class Level implements GameState{
     private Vector<Room> m_Rooms = new Vector<Room>();
     private Vector<Hallway> m_Hallways = new Vector<Hallway>();
     private Player m_Player;
-
+    private int m_LevelDifficuty;
 }

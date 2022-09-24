@@ -19,6 +19,19 @@ public class Weapon extends Item {
         return this.m_WeaponDamageChance;
     }
 
+    @Override
+    public void draw() {
+        if(this.isUseable()) {
+            // draw it
+        }
+    }
+    
+    @Override
+    public void useItem() {
+        // TODO Auto-generated method stub
+        
+    }
+
     private String m_WeaponName = "";
     private int m_WeaponDamage = 0;
     private int m_WeaponDamageChance = 0;

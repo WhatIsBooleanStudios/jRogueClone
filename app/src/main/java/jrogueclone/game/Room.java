@@ -14,7 +14,6 @@ public class Room {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
-    }
 
     public void generateHallwayConnectionPoints() {
         m_HallwayConnections.add(new Vector2D(
@@ -39,28 +38,49 @@ public class Room {
     }
 
     public void spawnEntities() {
-        m_Monsters.add(new Bat('V', new Vector2D(
-            getRoomPosition().getX() + (int)((double)getRoomWidth() / 2 - 2),
-            getRoomPosition().getY() + (int)((double)getRoomHeight() / 2)
-        )));
+        int levelDifficulty = GameLoop.getLevelDifficulty();
+
+        switch (levelDifficulty) {
+            case 1: {
+                m_Entities.add(new Bat(' ', new Vector2D(
+                        getRoomPosition().getX() + (int) ((double) getRoomWidth() / 2 - 2),
+                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2))));
+                break;
+            }
+        }
+
     }
 
-    public void draw() {
-        for(int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
-            for(int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
-                if(j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1 || i == this.getRoomPosition().getY() || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
-                    if(j == this.getRoomPosition().getX()) {
-                        if(i == this.getRoomPosition().getY()) {
+    public void removeItem(LootBox lootBox) {
+        this.m_LootBox.remove(lootBox);
+    }
+
+    public void spawnItems() {
+        if (Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
+            m_LootBox.add(new LootBox('=', 214, new Vector2D(
+                    getRoomPosition().getX() + 1,
+                    getRoomPosition().getY() + 1)));
+        }
+    }
+
+    private void drawRoomBounds() {
+        for (int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
+            for (int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
+                if (j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1
+                        || i == this.getRoomPosition().getY()
+                        || i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                    if (j == this.getRoomPosition().getX()) {
+                        if (i == this.getRoomPosition().getY()) {
                             Global.terminalHandler.putChar(j, i, '╔', 255, 232, false, this);
-                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                        } else if (i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
                             Global.terminalHandler.putChar(j, i, '╚', 255, 232, false, this);
                         } else {
                             Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
                         }
-                    } else if(j == this.getRoomPosition().getX() + this.getRoomWidth() - 1) {
-                        if(i == this.getRoomPosition().getY()) {
+                    } else if (j == this.getRoomPosition().getX() + this.getRoomWidth() - 1) {
+                        if (i == this.getRoomPosition().getY()) {
                             Global.terminalHandler.putChar(j, i, '╗', 255, 232, false, this);
-                        } else if(i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
+                        } else if (i == this.getRoomPosition().getY() + this.getRoomHeight() - 1) {
                             Global.terminalHandler.putChar(j, i, '╝', 255, 232, false, this);
                         } else {
                             Global.terminalHandler.putChar(j, i, '║', 255, 232, false, this);
@@ -76,26 +96,27 @@ public class Room {
                 Global.terminalHandler.putChar(connection.getX(), connection.getY(), '╬', 255, 232, false, this);
             }
         }
+    }
 
-        for(Entity monster : m_Monsters) {
-            monster.draw();
+    public void draw() {
+        drawRoomBounds();
+
+        for (Entity entity : this.m_Entities) {
+            entity.draw();
+        }
+
+        for (LootBox lootBox : this.m_LootBox) {
+            lootBox.draw();
         }
     }
 
     public void update() {
-        for(Entity monster : m_Monsters) {
-            monster.update();
+        if(Global.getGameLoop().updateEntities()) {
+            for (Entity entity : this.m_Entities)
+                entity.update();
         }
     }
 
-    public Rectangle getIntersection(Room room) {
-        return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
-                .intersection(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
-    }
-    public boolean intersects(Room room) {
-        return (new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight))
-                .intersects(new Rectangle(room.m_RoomPosition.getX(), room.m_RoomPosition.getY(), room.getRoomWidth(), room.getRoomHeight()));
-    }
     public Rectangle getRect() {
         return new Rectangle(m_RoomPosition.getX(), m_RoomPosition.getY(), m_RoomWidth, m_RoomHeight);
     }
@@ -127,7 +148,9 @@ public class Room {
     private final int m_RoomWidth, m_RoomHeight;
     private Vector<LootBox> m_LootBox = new Vector<LootBox>();
     private Vector<Entity> m_Entities = new Vector<Entity>();
+
     private Vector<Entity> m_Monsters = new Vector<Entity>();
     private Vector<Vector2D> m_HallwayConnections = new Vector<Vector2D>();
+
     private Vector2D m_RoomPosition = new Vector2D(-1, -1);
 }

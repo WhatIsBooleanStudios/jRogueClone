@@ -66,7 +66,7 @@ public class TerminalHandler {
         IntByReference pLen = new IntByReference();
         pLen.setValue(0);
 
-        int ioctlRet = Global.libc.ioctl(LibC.STDIN_FILENO, LibC.FIONREAD, pLen); // TODO: make a function that checks if we are on mac. If so, make the value LibC.TIOCOUTQ instead of LibC.FIONREAD
+        int ioctlRet = Global.libc.ioctl(LibC.STDIN_FILENO, LibC.FIONREAD, pLen);
         if(ioctlRet < 0) {
             System.err.println("IOCTL error!");
             return;

@@ -11,8 +11,8 @@ import java.awt.Rectangle;
 
 public class MapGeneration {
 	public static Vector<Room> generateRooms() {
-
 		Vector<Room> rooms = new Vector<>();
+
 
 		int minimumRoomHorizontalPadding = 3;
 		int minimumRoomVerticalPadding = 1;
