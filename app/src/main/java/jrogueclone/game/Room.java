@@ -27,6 +27,13 @@ public class Room {
         );
     }
 
+    public void addExtraHallwayConnectionPoint() {
+        m_HallwayConnections.add(new Vector2D(
+            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
+            m_RoomPosition.getY() + m_RoomHeight - 1)
+        );
+    }
+
     public Vector<Vector2D> getHallwayConnectionPoints() {
         return m_HallwayConnections;
     }

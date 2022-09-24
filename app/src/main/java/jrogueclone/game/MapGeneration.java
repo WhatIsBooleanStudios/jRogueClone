@@ -1,14 +1,17 @@
 package jrogueclone.game;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Vector;
 import java.util.HashSet;
+import java.util.HashMap;
 
 import jrogueclone.util.Pair;
 import jrogueclone.Global;
 import jrogueclone.entity.Player;
 
 import java.awt.Rectangle;
+import java.nio.channels.InterruptedByTimeoutException;
 
 public class MapGeneration {
 	public static Vector<Room> generateRooms() {
@@ -34,7 +37,7 @@ public class MapGeneration {
 		}
 
 		// Delete random room
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 3; i++)
 			rooms.remove((int) (Math.random() * rooms.size()));
 
 		// move them around
@@ -110,6 +113,11 @@ public class MapGeneration {
 						rooms.get(i).setRoomPosition(currentPosition);
 						tgtVertMovement--;
 					}
+
+					if(rooms.get(i).getRoomPosition().getY() + 1 - minimumRoomVerticalPadding <= 0 ||
+					   rooms.get(i).getRoomPosition().getY() <= rooms.get(i).getRoomHeight() - 1) {
+						break;
+					}
 				}
 			}
 
@@ -119,15 +127,18 @@ public class MapGeneration {
 		return rooms;
 	}
 
-	private static Vector2D findNearestConnection(Vector2D position, Room parentRoom, Vector<Room> rooms, HashSet<Vector2D> usedPositions) {
+	private static Vector2D findNearestConnection(Vector2D position, Room parentRoom, Vector<Room> rooms, HashSet<Vector2D> usedPositions, HashMap<Room, HashSet<Room>> alreadyConnectedRooms) {
 		Vector2D closest = new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		double closestDistance = Double.MAX_VALUE;
+		Room closestRoom = null;
 		for(Room room : rooms) {
 			if(parentRoom.getRoomPosition().equals(room.getRoomPosition())){ 
 				continue;
 			}
 			for(Vector2D connectionPoint : room.getHallwayConnectionPoints()) {
 				if(usedPositions.contains(connectionPoint)) continue;
+				alreadyConnectedRooms.putIfAbsent(parentRoom, new HashSet<Room>());
+				if(alreadyConnectedRooms.get(parentRoom).contains(room)) continue;
 				double distance = Math.sqrt(
 					Math.pow((connectionPoint.getX() - position.getX()), 2) +
 					Math.pow((connectionPoint.getY() - position.getY()), 2)
@@ -136,6 +147,7 @@ public class MapGeneration {
 				if(closestDistance > distance) {
 					closestDistance = distance;
 					closest = connectionPoint;
+					closestRoom = room;
 				}
 			}
 		}
@@ -146,9 +158,52 @@ public class MapGeneration {
 		Global.terminalHandler.initAlternateScreen();*/
 		//System.out.println("closest: " + closest);
 
+		alreadyConnectedRooms.putIfAbsent(parentRoom, new HashSet<Room>());
+		alreadyConnectedRooms.get(parentRoom).add(closestRoom);
+		alreadyConnectedRooms.putIfAbsent(closestRoom, new HashSet<Room>());
+		alreadyConnectedRooms.get(closestRoom).add(parentRoom);
+
 		return closest;
 	}
 
+	private static Room findRoomInBottomLeftCorner(Vector<Room> rooms) {
+		Vector<Room> sortedRooms = (Vector<Room>)rooms.clone();
+		sortedRooms.sort(new Comparator<Room>() {
+			@Override
+			public int compare(Room a, Room b) {
+				Integer aPosX = (a.getRoomPosition().getX());
+				Integer bPosX = (b.getRoomPosition().getY());
+				Integer aPosY = (a.getRoomPosition().getY());
+				Integer bPosY = (b.getRoomPosition().getY());
+				Integer xComparison = aPosX.compareTo(bPosX);
+				if(xComparison != 0) {
+					return xComparison;
+				} else {
+					return bPosY.compareTo(aPosY);
+				}
+			}
+		});
+		return sortedRooms.get(0);
+	}
+	private static Room findRoomInBottomRightCorner(Vector<Room> rooms) {
+		Vector<Room> sortedRooms = (Vector<Room>)rooms.clone();
+		sortedRooms.sort(new Comparator<Room>() {
+			@Override
+			public int compare(Room a, Room b) {
+				Integer aPosX = (a.getRoomPosition().getX());
+				Integer bPosX = (b.getRoomPosition().getY());
+				Integer aPosY = (a.getRoomPosition().getY());
+				Integer bPosY = (b.getRoomPosition().getY());
+				Integer xComparison = bPosX.compareTo(aPosX);
+				if(xComparison != 0) {
+					return xComparison;
+				} else {
+					return bPosY.compareTo(aPosY);
+				}
+			}
+		});
+		return sortedRooms.get(0);
+	}
 	private static Vector<Hallway> generateHallways(Vector<Room> rooms) {
 		System.out.println("generate hallways");
 		System.out.flush();
@@ -167,14 +222,34 @@ public class MapGeneration {
 		}
 		Vector<Hallway> hallways = new Vector<Hallway>();
 		HashSet<Vector2D> usedPositions = new HashSet<Vector2D>();
+		HashMap<Room, HashSet<Room>> alreadyConnectedRooms = new HashMap<Room, HashSet<Room>>();
+		Vector<Vector2D> mustConnectHallways = new Vector<Vector2D>();
 		for(Room room : rooms) {
 			for(Vector2D startPosition : room.getHallwayConnectionPoints()) {
 				if(usedPositions.contains(startPosition)) continue;
-				Vector2D connectionPoint = findNearestConnection(new Vector2D(startPosition), room, rooms, usedPositions);
-				hallways.add(new Hallway(startPosition, connectionPoint, roomMap));
-				usedPositions.add(startPosition);
-				usedPositions.add(connectionPoint);
+				Vector2D connectionPoint = findNearestConnection(new Vector2D(startPosition), room, rooms, usedPositions, alreadyConnectedRooms);
+				if(connectionPoint.equals(new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
+					mustConnectHallways.add(startPosition);
+				} else {
+					hallways.add(new Hallway(startPosition, connectionPoint, roomMap));
+					usedPositions.add(startPosition);
+					usedPositions.add(connectionPoint);
+				}
 			}
+		}
+
+		for(int i = 0; i < mustConnectHallways.size() - (mustConnectHallways.size() % 2 == 0 ? 0 : 1); i += 2) {
+			hallways.add(new Hallway(mustConnectHallways.get(i), mustConnectHallways.get(i + 1), roomMap));
+		}
+
+		Room bottomLeft = findRoomInBottomLeftCorner(rooms);
+		Room bottomRight = findRoomInBottomRightCorner(rooms);
+
+		if(!alreadyConnectedRooms.get(bottomLeft).contains(bottomRight)) {
+			System.out.println("connect bottom two");
+			bottomLeft.addExtraHallwayConnectionPoint();
+			bottomRight.addExtraHallwayConnectionPoint();
+			hallways.add(new Hallway(bottomLeft.getHallwayConnectionPoints().lastElement(), bottomRight.getHallwayConnectionPoints().lastElement(), roomMap));
 		}
 
 		return hallways;

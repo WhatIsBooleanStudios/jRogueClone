@@ -10,27 +10,10 @@ public class Hallway {
         int LEFT = 2;
         int RIGHT = 3;
 
-        //if(endPosition.equals(new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE))) return;
+        // if(endPosition.equals(new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE))) return;
 
-        System.out.println("start: " + startPosition + " end: " + endPosition);
-
-        for(int i = 0; i < Global.rows; i++) {
-            System.out.print(i + (i <= 9 ? " " : ""));
-            for(int j = 0; j < Global.columns; j++) {
-                if((i == startPosition.getY() && j == startPosition.getX()) || (i == endPosition.getY() && j == endPosition.getX())) {
-                    System.out.print('%');
-                } else {
-                    System.out.print(roomMap[j][i]);
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println("creating hallway...");
-        System.out.flush();
-
-        
-        
+        // Calculate the actual start point of the hallway. This is going to be one away
+        // from the given start point in order to make it stick out from the room itself
         if(startPosition.getY() > 0 && roomMap[startPosition.getX()][startPosition.getY() - 1] == ' ') {
             m_Waypoints.add(new Vector2D(startPosition.getX(), startPosition.getY() - 1));
         } else if(startPosition.getY() < Global.rows - 1 && roomMap[startPosition.getX()][startPosition.getY() + 1] == ' ') {
@@ -40,28 +23,26 @@ public class Hallway {
         } else if(startPosition.getX() < Global.columns - 1 && roomMap[startPosition.getX() + 1][startPosition.getY()] == ' ') {
             m_Waypoints.add(new Vector2D(startPosition.getX() + 1, startPosition.getY()));
         }
+
+        // Calculate the actual end point of the hallway using the same method as above
         Vector2D finalWaypoint = new Vector2D(endPosition);
         if(endPosition.getY() > 0 && roomMap[endPosition.getX()][endPosition.getY() - 1] == ' ') {
             finalWaypoint = (new Vector2D(endPosition.getX(), endPosition.getY() - 1));
-            System.out.println("end above");
         } else if(endPosition.getY() < Global.rows - 1 && roomMap[endPosition.getX()][endPosition.getY() + 1] == ' ') {
             finalWaypoint = (new Vector2D(endPosition.getX(), endPosition.getY() + 1));
-            System.out.println("end below");
         } else if(endPosition.getX() > 0 && roomMap[endPosition.getX() - 1][endPosition.getY()] == ' ') {
             finalWaypoint = (new Vector2D(endPosition.getX() - 1, endPosition.getY()));
-            System.out.println("end left");
         } else if(endPosition.getX() < Global.columns - 1 && roomMap[endPosition.getX() + 1][endPosition.getY()] == ' ') {
             finalWaypoint = (new Vector2D(endPosition.getX() + 1, endPosition.getY()));
-            System.out.println("end right");
         }
 
+        // Calculate which direction we need to travel in to get to the end
         int xDirection = m_Waypoints.get(0).getX() < finalWaypoint.getX() ? RIGHT : LEFT;
         int yDirection = m_Waypoints.get(0).getY() < finalWaypoint.getY() ? DOWN : UP;
 
-        System.out.println(m_Waypoints.get(0) + " to " + finalWaypoint);
-
         Vector2D cursorPos = new Vector2D(m_Waypoints.get(0));
         while(cursorPos.getX() != finalWaypoint.getX() || cursorPos.getY() != finalWaypoint.getY()) {
+            // Move until the x value is equal to that of the waypoint or until we hit a wall
             boolean movedX = false;
             while(!(
                 (cursorPos.getX() == finalWaypoint.getX()) ||
@@ -71,14 +52,17 @@ public class Hallway {
             )) {
                 cursorPos.setX(cursorPos.getX() + (xDirection == LEFT ? -1 : 1));
                 movedX = true;
-                System.out.println("loop x: " + cursorPos);
-                System.out.flush();
             }
             if(movedX) {
                 m_Waypoints.add(new Vector2D(cursorPos));
-                System.out.println("waypointX: " + cursorPos);
+                //continue;
+                //break;
             }
 
+            // Handle the case where our x value equals the end point except our y value does not and
+            // There is a wall in our way from going up or down. This means that we need to deviate from the
+            // target x value until we can move up or down. Afterwards, we recalculate the x and y direction
+            // that we need to move
             if(!cursorPos.equals(finalWaypoint)) {
                 boolean adjustX = false;
                 while(
@@ -88,14 +72,18 @@ public class Hallway {
                     System.out.println("overshoot caseX: " + cursorPos);
                     adjustX = true;
                 }
-                if(adjustX)
+                if(adjustX) {
                     m_Waypoints.add(new Vector2D(cursorPos));
+                    //continue;
+                }
             }
             xDirection = m_Waypoints.lastElement().getX() < finalWaypoint.getX() ? RIGHT : LEFT;
             yDirection = m_Waypoints.lastElement().getY() < finalWaypoint.getY() ? DOWN : UP;
             
             boolean movedY = false;
             while(!(
+                (yDirection == DOWN && cursorPos.getY() == Global.rows - 1) ||
+                (yDirection == UP && cursorPos.getY() == 0) ||
                 (cursorPos.getY() == finalWaypoint.getY()) ||
                 (yDirection == UP && cursorPos.getY() == 0) ||
                 (yDirection == DOWN && cursorPos.getY() == Global.rows - 1) ||
@@ -109,36 +97,55 @@ public class Hallway {
             if(movedY) {
                 m_Waypoints.add(new Vector2D(cursorPos));
                 System.out.println("waypointY: " + cursorPos);
+                //continue;
+                //break;
             }
 
+            // Handle the case where our y value equals the end point except our x value does not and
+            // There is a wall in our way from going left or right. This means that we need to deviate from the
+            // target y value until we can move right or left. Afterwards, we recalculate the x and y direction
+            // that we need to move
             if(!cursorPos.equals(finalWaypoint)) {
                 boolean adjustY = false;
+                if(cursorPos.getY() >= Global.rows - 1) {
+                    yDirection = UP;
+                    cursorPos.setY(Global.rows - 1);
+                } else if(cursorPos.getY() < 0) {
+                    yDirection = DOWN;
+                    cursorPos.setY(0);
+                }
                 while(
-                    (cursorPos.getX() != Global.columns - 1 && xDirection == RIGHT && roomMap[cursorPos.getX() + 1][cursorPos.getY()] == '#') ||
-                    (cursorPos.getX() > 0 && xDirection == LEFT && roomMap[cursorPos.getX() - 1][cursorPos.getY()] == '#')) {
-                    cursorPos.setY(cursorPos.getY() + (yDirection == DOWN ? -1 : 1));
-                    System.out.println("overshoot caseY: " + cursorPos);
+                    (roomMap[cursorPos.getX() + 1][cursorPos.getY()] == '#') ||
+                    (roomMap[cursorPos.getX() - 1][cursorPos.getY()] == '#')) {
+                    if(cursorPos.getY() >= Global.rows - 1) {
+                        yDirection = UP;
+                        cursorPos.setY(Global.rows - 1);
+                    } else if(cursorPos.getY() < 0) {
+                        yDirection = DOWN;
+                        cursorPos.setY(0);
+                    }
+                        cursorPos.setY(cursorPos.getY() + (yDirection == UP ? -1 : 1));
+                        System.out.println("Overshoot y: " + cursorPos);
+                    
                     adjustY = true;
                 }
-                if(adjustY)
+                if(adjustY) {
                     m_Waypoints.add(new Vector2D(cursorPos));
+                    //continue;
+                }
             }
 
         }
-        System.out.println("finished creating hallway");
 
         m_Waypoints.add(new Vector2D(finalWaypoint));
-        m_tempEndPosition = new Vector2D(endPosition);
 
-        // try {
-        //     Thread.sleep(10000000);
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
     }
-    private Vector2D m_tempEndPosition = new Vector2D();
 
     public void draw() {
+        if(m_Waypoints.size() < 1) {
+            System.out.println("less than 0");
+            return;
+        }
         Vector2D cursorPos = new Vector2D(m_Waypoints.get(0));
         for(int i = 0; i < m_Waypoints.size() - 1; i++) {
             while(!cursorPos.equals(m_Waypoints.get(i + 1))) {
@@ -157,9 +164,6 @@ public class Hallway {
         for (Vector2D wp : m_Waypoints) {
             Global.terminalHandler.putChar(wp.getX(), wp.getY(), '*', 255, 233, true, this);
         }
-        System.out.println(m_Waypoints.size());
-        System.out.println(m_Waypoints.lastElement());
-        System.out.println(m_tempEndPosition);
     }
 
     Vector<Vector2D> m_Waypoints = new Vector<Vector2D>();
