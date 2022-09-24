@@ -84,7 +84,7 @@ public class TerminalHandler {
             }
         }
     }
-    private static final String CSI = "\033[";
+    public static final String CSI = "\033[";
 
     /**
      * Check if a key is pressed or not
@@ -233,12 +233,10 @@ public class TerminalHandler {
     }
 
     private void setForegroundColor(int color) {
-        //System.out.println("38;5;" + color + "m");
         System.out.print(CSI + "38;5;" + color + "m");
     }
 
     private void setBackgroundColor(int color) {
-        //System.out.println("48;5;" + color + "m");
         System.out.print(CSI + "48;5;" + color + "m");
     }
 

@@ -15,6 +15,27 @@ public class Room {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
+
+    public void generateHallwayConnectionPoints() {
+        m_HallwayConnections.add(new Vector2D(
+            m_RoomPosition.getX(),
+            m_RoomPosition.getY() + (int)(Math.random() * (m_RoomHeight - 2) + 1)
+        ));
+        m_HallwayConnections.add(new Vector2D(
+            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
+            m_RoomPosition.getY())
+        );
+    }
+
+    public void addExtraHallwayConnectionPoint() {
+        m_HallwayConnections.add(new Vector2D(
+            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
+            m_RoomPosition.getY() + m_RoomHeight - 1)
+        );
+    }
+
+    public Vector<Vector2D> getHallwayConnectionPoints() {
+        return m_HallwayConnections;
     }
 
     public void spawnEntities() {
@@ -71,6 +92,10 @@ public class Room {
                 } else
                     Global.terminalHandler.putChar(j, i, '.', 245, 232, false, null);
             }
+
+            for(Vector2D connection : m_HallwayConnections) {
+                Global.terminalHandler.putChar(connection.getX(), connection.getY(), '╬', 255, 232, false, this);
+            }
         }
     }
 
@@ -125,5 +150,9 @@ public class Room {
     private final int m_RoomWidth, m_RoomHeight;
     private Vector<Item> m_Items = new Vector<Item>();
     private Vector<Entity> m_Entities = new Vector<Entity>();
+
+    private Vector<Entity> m_Monsters = new Vector<Entity>();
+    private Vector<Vector2D> m_HallwayConnections = new Vector<Vector2D>();
+
     private Vector2D m_RoomPosition = new Vector2D(-1, -1);
 }
