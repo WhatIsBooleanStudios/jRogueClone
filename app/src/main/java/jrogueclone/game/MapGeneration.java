@@ -109,7 +109,6 @@ public class MapGeneration {
 
 			}
 		for (Room room : rooms) {
-			room.addStaircase();
 			room.generateHallwayConnectionPoints();
 		}
 

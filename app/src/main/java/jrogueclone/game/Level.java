@@ -3,7 +3,6 @@ package jrogueclone.game;
 import java.util.Vector;
 
 import jrogueclone.entity.Player;
-import jrogueclone.util.Pair;
 
 public class Level implements GameState {
     public Level(Vector<Room> rooms, Vector<Hallway> hallways, Player player) {
@@ -47,7 +46,8 @@ public class Level implements GameState {
     public void initialize() {
         this.m_Player.clearDiscoveredRooms();
         this.m_Player.clearDiscoveredHallways();
-        Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size()));
+        Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size() - 1)),
+                staircaseSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size() - 1));
         m_Player.setPosition(new Vector2D(
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
                 playerSpawnRoom.getRoomPosition().getY() + (int) ((double) playerSpawnRoom.getRoomHeight() / 2)));
@@ -57,6 +57,7 @@ public class Level implements GameState {
             room.spawnItems();
         }
 
+        staircaseSpawnRoom.addStaircase();
         this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
