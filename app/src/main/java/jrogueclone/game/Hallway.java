@@ -2,6 +2,7 @@ package jrogueclone.game;
 
 import java.util.Vector;
 import jrogueclone.Global;
+import jrogueclone.gfx.TerminalHandler;
 
 public class Hallway {
     public Hallway(Vector2D startPosition, Vector2D endPosition, char[][] roomMap) {
@@ -9,6 +10,10 @@ public class Hallway {
         int DOWN = 1;
         int LEFT = 2;
         int RIGHT = 3;
+        if(endPosition.getY() == 23) {
+            System.out.println("at the very bottom");
+            System.exit(1);
+        }
 
         // if(endPosition.equals(new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE))) return;
 
@@ -134,6 +139,27 @@ public class Hallway {
                     //continue;
                 }
             }
+
+            System.out.println("Start position: " + startPosition);
+            System.out.println("End position: " + endPosition);
+            System.out.print(TerminalHandler.CSI + "48;5;232m");
+            for(int i = 0; i < Global.rows; i++) {
+                System.out.print(i + (i >= 10 ? "" : " "));
+                for(int j = 0; j < Global.columns; j++) {
+                    Vector2D currentPosition = new Vector2D(j, i);
+                    if(currentPosition.equals(startPosition)) {
+                        System.out.print('S');
+                    } else if(currentPosition.equals(endPosition)) {
+                        System.out.print("E");
+                    } else if(currentPosition.equals(cursorPos)) {
+                        System.out.print('C');
+                    } else {
+                        System.out.print(roomMap[j][i]);
+                    }
+                }
+                System.out.println();
+            }
+            System.out.println(TerminalHandler.CSI + "0m");
 
         }
 

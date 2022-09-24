@@ -84,7 +84,7 @@ public class TerminalHandler {
             }
         }
     }
-    private static final String CSI = "\033[";
+    public static final String CSI = "\033[";
 
     /**
      * Check if a key is pressed or not
