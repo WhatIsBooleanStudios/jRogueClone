@@ -33,7 +33,6 @@ public class MapGeneration {
 		}
 
 		// Delete random room
-		for (int i = 0; i < 1; i++)
 			rooms.remove((int) (Math.random() * rooms.size()));
 
 		// move them around
@@ -71,8 +70,9 @@ public class MapGeneration {
 						currentPosition.setX(currentPosition.getX() + tgtHorizDirection);
 						rooms.get(i).setRoomPosition(currentPosition);
 						tgtHorizMovement--;
+
 					}
-				}
+
 
 				while (Math.abs(tgtVertMovement) > 0) {
 					boolean collides = false;
@@ -101,9 +101,11 @@ public class MapGeneration {
 						currentPosition.setY(currentPosition.getY() + tgtVertDirection);
 						rooms.get(i).setRoomPosition(currentPosition);
 						tgtVertMovement--;
+
 					}
 
 				}
+
 			}
 
 		for(Room room : rooms) {
@@ -229,5 +231,6 @@ public class MapGeneration {
 		Vector<Room> rooms = generateRooms();
 		// TODO: player should be global
 		return new Level(rooms, generateHallways(rooms), new Player('@'));
+
 	}
 }

@@ -5,8 +5,9 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.entity.Entity;
+import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
-
+import jrogueclone.item.Staircase;
 import jrogueclone.entity.Bat;
 
 public class Room {
@@ -51,13 +52,13 @@ public class Room {
 
     }
 
-    public void removeItem(LootBox lootBox) {
-        this.m_LootBox.remove(lootBox);
+    public void removeItem(Item item) {
+        this.m_Items.remove(item);
     }
 
     public void spawnItems() {
-        if (Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
-            m_LootBox.add(new LootBox('=', 214, new Vector2D(
+        if (Math.round(Math.random() * 99) <= LootBox.m_SpawnChance) {
+            this.m_Items.add(new LootBox('=', 214, new Vector2D(
                     getRoomPosition().getX() + 1,
                     getRoomPosition().getY() + 1)));
         }
@@ -98,6 +99,11 @@ public class Room {
         }
     }
 
+    public void addStaircase() {
+        this.m_Items.add(new Staircase('♯', 255, new Vector2D((int) (getRoomPosition().getX() + m_RoomWidth / 2),
+        (int) getRoomPosition().getY() + m_RoomHeight - 2)));
+    }
+
     public void draw() {
         drawRoomBounds();
 
@@ -105,13 +111,13 @@ public class Room {
             entity.draw();
         }
 
-        for (LootBox lootBox : this.m_LootBox) {
-            lootBox.draw();
+        for (Item item : this.m_Items) {
+            item.draw();
         }
     }
 
     public void update() {
-        if(Global.getGameLoop().updateEntities()) {
+        if (Global.getGameLoop().updateEntities()) {
             for (Entity entity : this.m_Entities)
                 entity.update();
         }
@@ -137,16 +143,12 @@ public class Room {
         return this.m_RoomWidth;
     }
 
-    public Vector<LootBox> getLootBox() {
-        return this.m_LootBox;
-    }
-
     public Vector<Entity> getEntities() {
         return this.m_Entities;
     }
 
     private final int m_RoomWidth, m_RoomHeight;
-    private Vector<LootBox> m_LootBox = new Vector<LootBox>();
+    private Vector<Item> m_Items = new Vector<Item>();
     private Vector<Entity> m_Entities = new Vector<Entity>();
 
     private Vector<Entity> m_Monsters = new Vector<Entity>();
