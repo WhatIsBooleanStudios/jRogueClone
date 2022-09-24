@@ -2,10 +2,11 @@ package jrogueclone.item;
 
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
+import jrogueclone.gfx.ui.Inventory.ItemType;
 
 public class LootBox extends Item {
     public LootBox(char itemCharacter, int itemCharacterColor, Vector2D itemPosition) {
-        this.setItemData(itemCharacter, itemCharacterColor, itemPosition);
+        this.setItemData(itemCharacter, itemCharacterColor, itemPosition, ItemType.LOOTBOX);
     }
 
     @Override
