@@ -7,6 +7,8 @@ import jrogueclone.game.Vector2D;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
+import jrogueclone.game.EmptySpace;
+import jrogueclone.game.Hallway;
 import jrogueclone.game.Room;
 
 public class Player extends Entity {
@@ -44,7 +46,6 @@ public class Player extends Entity {
         this.getHealthController().setHealth(100);
     }
 
-
     private enum MoveDirection {
         UP,
         DOWN,
@@ -58,31 +59,41 @@ public class Player extends Entity {
         switch (moveDirection) {
             case DOWN:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
-                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getY() < Global.rows - 1 && uData == null) {
-                    setPosition(newPosition);
+
+                if (getPosition().getY() < Global.rows - 1) {
+                    uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                    if (uData != null
+                            && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
+                        setPosition(newPosition);
+                    }
                 }
                 break;
             case LEFT:
                 newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getX() > 0 && uData == null) {
+                if (getPosition().getX() > 0 && uData != null
+                        && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                     setPosition(newPosition);
                 }
                 break;
             case RIGHT:
                 newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getX() < Global.columns - 1 && uData == null) {
+                if (getPosition().getX() < Global.columns - 1 && uData != null
+                        && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                     setPosition(newPosition);
                 }
                 break;
             case UP:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
-                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getY() > 0 && uData == null) {
-                    setPosition(newPosition);
+                if (getPosition().getY() > 0) {
+                    uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                    if (uData != null
+                            && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
+                        setPosition(newPosition);
+                    }
                 }
+
                 break;
             default:
                 break;
@@ -103,7 +114,7 @@ public class Player extends Entity {
         }
 
         for (Object object : uData) {
-            if (object.getClass().getName().toLowerCase().indexOf("lootbox") > 0) {
+            if (object.getClass() == LootBox.class) {
                 for (Room room : this.m_DiscoveredRooms) {
                     if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
                         LootBox lootBox = (LootBox) object;
@@ -111,14 +122,14 @@ public class Player extends Entity {
                             lootBox.useItem();
                     }
                 }
-            } else if (object.getClass().getName().toLowerCase().indexOf("staircase") > 0) {
+            } else if (object.getClass() == Staircase.class) {
                 for (Room room : this.m_DiscoveredRooms) {
                     if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
                         Staircase staircase = (Staircase) object;
                         if (staircase.isUseable()) {
                             staircase.useItem();
                         }
-                            
+
                     }
                 }
             }

@@ -136,7 +136,7 @@ public class Hallway {
         Vector2D cursorPos = new Vector2D(m_Waypoints.get(0));
         for(int i = 0; i < m_Waypoints.size() - 1; i++) {
             while(!cursorPos.equals(m_Waypoints.get(i + 1))) {
-                Global.terminalHandler.putChar(cursorPos.getX(), cursorPos.getY(), '#', 255, 233, true, this);
+                Global.terminalHandler.putChar(cursorPos.getX(), cursorPos.getY(), ' ', 0, 234, true, this);
                 if(cursorPos.getX() < m_Waypoints.get(i + 1).getX()) {
                     cursorPos.setX(cursorPos.getX() + 1);
                 } else if(cursorPos.getX() > m_Waypoints.get(i + 1).getX()) {
@@ -149,7 +149,7 @@ public class Hallway {
             }
         }
         for (Vector2D wp : m_Waypoints) {
-            Global.terminalHandler.putChar(wp.getX(), wp.getY(), '*', 255, 233, true, this);
+            Global.terminalHandler.putChar(wp.getX(), wp.getY(), ' ', 0, 234, true, this);
         }
     }
 
