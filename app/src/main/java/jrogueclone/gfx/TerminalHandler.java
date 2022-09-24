@@ -21,8 +21,8 @@ public class TerminalHandler {
         tios.c_lflag &= ~(LibC.ICANON | LibC.ECHO | LibC.ECHONL);
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
 
-        for(int i = 0; i < Global.columns; i++) {
-            for(int j = 0; j < Global.rows; j++) {
+        for (int i = 0; i < Global.columns; i++) {
+            for (int j = 0; j < Global.rows; j++) {
                 renderData[i][j] = new RenderableCharacter(' ', 15, 0, false, null);
             }
         }
@@ -31,7 +31,7 @@ public class TerminalHandler {
         Global.libc.ioctl(LibC.STDIN_FILENO, LibC.TIOCGWINSZ, ws);
         terminalSize = ws;
 
-        if(terminalSize.ws_col < Global.columns && terminalSize.ws_row < Global.rows) {
+        if (terminalSize.ws_col < Global.columns && terminalSize.ws_row < Global.rows) {
             restoreState();
             System.err.println("Terminal too small! Must be at least (" + Global.columns + ", " + Global.rows + ")");
             System.exit(-1);
@@ -40,6 +40,7 @@ public class TerminalHandler {
 
     /**
      * Get the terminal size
+     * 
      * @return the size of the terminal
      */
     public final LibC.winsize getTerminalSize() {
@@ -47,7 +48,8 @@ public class TerminalHandler {
     }
 
     /**
-     * Restore the low-level termios state that the user had before we messed with it
+     * Restore the low-level termios state that the user had before we messed with
+     * it
      */
     public void restoreTios() {
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, initialTios);
@@ -56,8 +58,10 @@ public class TerminalHandler {
     private final boolean[] keyMap = new boolean[257];
 
     /**
-     * Reads all the keypresses from stdin and stores them. This should be called every frame.
+     * Reads all the keypresses from stdin and stores them. This should be called
+     * every frame.
      * To retrieve these keypresses use keyIsPressed(char key)
+     * 
      * @see public void keyIsPressed(char key)
      */
     public void updateKeyPresses() {
@@ -67,32 +71,34 @@ public class TerminalHandler {
         pLen.setValue(0);
 
         int ioctlRet = Global.libc.ioctl(LibC.STDIN_FILENO, LibC.FIONREAD, pLen);
-        if(ioctlRet < 0) {
+        if (ioctlRet < 0) {
             System.err.println("IOCTL error!");
             return;
         }
-        if(pLen.getValue() <= 0) {
+        if (pLen.getValue() <= 0) {
             return;
         }
 
         byte[] buf = new byte[pLen.getValue()];
         Global.libc.read(LibC.STDIN_FILENO, buf, pLen.getValue());
 
-        for(byte b : buf) {
-            if((int)b > 0) {
+        for (byte b : buf) {
+            if ((int) b > 0) {
                 keyMap[b] = true;
             }
         }
     }
+
     public static final String CSI = "\033[";
 
     /**
      * Check if a key is pressed or not
+     * 
      * @param c the key to check for
      * @return true if the key is pressed
      */
     public boolean keyIsPressed(int c) {
-        if(c < 0 || c > 256) {
+        if (c < 0 || c > 256) {
             System.out.println("keyIsPressed: c must be in the range [0, 256]");
             return false;
         }
@@ -100,9 +106,12 @@ public class TerminalHandler {
     }
 
     /**
-     * Uses an xterm standardized escape code to enable the alternate buffer. This means that the terminal
-     * will switch to a black screen for us to render upon and once we exit, the user's original screen will be preserved.
+     * Uses an xterm standardized escape code to enable the alternate buffer. This
+     * means that the terminal
+     * will switch to a black screen for us to render upon and once we exit, the
+     * user's original screen will be preserved.
      * To exit this, call disableAlternateScreen()
+     * 
      * @see public void disableAlternateScreen()
      */
     public void initAlternateScreen() {
@@ -113,6 +122,7 @@ public class TerminalHandler {
     /**
      * Take the terminal out of the alternate screen buffer.
      * This will restore the user's previous screen.
+     * 
      * @see public void initAlternateScreen()
      */
     public void disableAlternateScreen() {
@@ -121,7 +131,7 @@ public class TerminalHandler {
 
     // Note: 1, 1 is the top left corner of the screen
     private void internalMoveCursor(int row, int col) {
-	    System.out.print(CSI + row + ";" + col + "H");
+        System.out.print(CSI + row + ";" + col + "H");
     }
 
     /**
@@ -160,7 +170,6 @@ public class TerminalHandler {
         public boolean bold;
         public Object userData;
 
-
         public RenderableCharacter(char c, int fg, int bg, boolean bold, Object userData) {
             character = c;
             this.fgColor = fg;
@@ -177,8 +186,8 @@ public class TerminalHandler {
      */
     public void begin() {
         // clear render data
-        for(int i = 0; i < Global.columns; i++) {
-            for(int j = 0; j < Global.rows; j++) {
+        for (int i = 0; i < Global.columns; i++) {
+            for (int j = 0; j < Global.rows; j++) {
                 renderData[i][j].character = ' ';
                 renderData[i][j].fgColor = 232;
                 renderData[i][j].bgColor = 232;
@@ -189,11 +198,13 @@ public class TerminalHandler {
     }
 
     /**
-     * Add a character to the renderbuffer. Be sure to call begin before calling this function and end after all rendering
+     * Add a character to the renderbuffer. Be sure to call begin before calling
+     * this function and end after all rendering
      * is complete
+     * 
      * @param col the column to insert the character at
      * @param row the row to insert the character at
-     * @param c the character to insert
+     * @param c   the character to insert
      * @see public void begin()
      * @see public void end()
      */
@@ -202,27 +213,32 @@ public class TerminalHandler {
     }
 
     /**
-     * Add a character to the renderbuffer. Be sure to call begin before calling this function and end after all rendering
+     * Add a character to the renderbuffer. Be sure to call begin before calling
+     * this function and end after all rendering
      * is complete
+     * 
      * @param col the column to insert the character at
      * @param row the row to insert the character at
-     * @param c the character to insert
-     * @param fg the color the character should be
-     * @param bg the background color of the character
+     * @param c   the character to insert
+     * @param fg  the color the character should be
+     * @param bg  the background color of the character
      */
     public void putChar(int col, int row, char c, int fg, int bg, boolean bold) {
         putChar(col, row, c, fg, bg, bold, null);
     }
 
     /**
-     * Add a character to the renderbuffer. Be sure to call begin before calling this function and end after all rendering
+     * Add a character to the renderbuffer. Be sure to call begin before calling
+     * this function and end after all rendering
      * is complete
-     * @param col the column to insert the character at
-     * @param row the row to insert the character at
-     * @param c the character to insert
-     * @param fg the color the character should be
-     * @param bg the background color of the character
-     * @param userData user specified data that can be retrieved from the renderbuffer by the user
+     * 
+     * @param col      the column to insert the character at
+     * @param row      the row to insert the character at
+     * @param c        the character to insert
+     * @param fg       the color the character should be
+     * @param bg       the background color of the character
+     * @param userData user specified data that can be retrieved from the
+     *                 renderbuffer by the user
      */
     public void putChar(int col, int row, char c, int fg, int bg, boolean bold, Object userData) {
         renderData[col][row].userData = userData;
@@ -250,6 +266,7 @@ public class TerminalHandler {
 
     /**
      * Get the current character at the given position in the renderbuffer
+     * 
      * @param col the column of the target character
      * @param row the row of the target character
      * @return the char that occupies the given position
@@ -260,6 +277,7 @@ public class TerminalHandler {
 
     /**
      * Get the forground color at the given position in the renderbuffer
+     * 
      * @param col the column of the target character
      * @param row the row of the target character
      * @return the forground color of the character that occupies the given position
@@ -270,9 +288,11 @@ public class TerminalHandler {
 
     /**
      * Get the background color at the given position in the renderbuffer
+     * 
      * @param col the column of the target character
      * @param row the row of the target character
-     * @return the background color of the character that occupies the given position
+     * @return the background color of the character that occupies the given
+     *         position
      */
     public int getBackgroundColorAt(int col, int row) {
         return renderData[col][row].bgColor;
@@ -280,6 +300,7 @@ public class TerminalHandler {
 
     /**
      * Get the user specified data at the given position in the renderbuffer
+     * 
      * @param col the column of the target character
      * @param row the row of the target character
      * @return the user data at the given position
@@ -295,21 +316,21 @@ public class TerminalHandler {
         int currentFg = Integer.MAX_VALUE;
         int currentBg = Integer.MAX_VALUE;
         boolean boldState = false;
-        for(int i = 0; i < Global.rows; i++) {
+        for (int i = 0; i < Global.rows; i++) {
             for (int j = 0; j < Global.columns; j++) {
-                if(renderData[j][i].fgColor != currentFg) {
+                if (renderData[j][i].fgColor != currentFg) {
                     currentFg = renderData[j][i].fgColor;
                     setForegroundColor(currentFg);
                     System.out.flush();
                 }
-                if(renderData[j][i].bgColor != currentBg) {
+                if (renderData[j][i].bgColor != currentBg) {
                     currentBg = renderData[j][i].bgColor;
                     setBackgroundColor(currentBg);
                     System.out.flush();
                 }
-                if(renderData[j][i].bold != boldState) {
+                if (renderData[j][i].bold != boldState) {
                     boldState = renderData[j][i].bold;
-                    if(boldState) {
+                    if (boldState) {
                         enableBold();
                     } else {
                         disableBold();
@@ -324,7 +345,8 @@ public class TerminalHandler {
     }
 
     /**
-     * Reset terminal state for our users to use after this program is done messing with it
+     * Reset terminal state for our users to use after this program is done messing
+     * with it
      */
     public void restoreState() {
         disableAlternateScreen();

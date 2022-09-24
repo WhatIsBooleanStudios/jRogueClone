@@ -5,7 +5,7 @@ import java.util.Vector;
 import jrogueclone.entity.Player;
 import jrogueclone.util.Pair;
 
-public class Level implements GameState{
+public class Level implements GameState {
     public Level(Vector<Room> rooms, Vector<Hallway> hallways, Player player) {
 
         this.m_Rooms = rooms;
@@ -34,19 +34,19 @@ public class Level implements GameState{
         return this.m_Hallways;
     }
 
-    private void drawLevel() {
+    public void drawLevel() {
         for (Room room : this.m_Player.getDiscoveredRooms()) {
             room.draw();
         }
-        for (Hallway hallway : m_Hallways) {
+        for (Hallway hallway : this.m_Player.getDiscoveredHallways()) {
             hallway.draw();
+        }
     }
-    }
-
 
     @Override
     public void initialize() {
         this.m_Player.clearDiscoveredRooms();
+        this.m_Player.clearDiscoveredHallways();
         Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size()));
         m_Player.setPosition(new Vector2D(
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
@@ -55,14 +55,9 @@ public class Level implements GameState{
         for (Room room : m_Rooms) {
             room.spawnEntities();
             room.spawnItems();
-
-
-            // remove this when playing real game
-            this.m_Player.setRoomDiscovered(room);
         }
 
-        // Uncomment when playing real game
-        // this.m_Player.setRoomDiscovered(playerSpawnRoom);
+        this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
     @Override

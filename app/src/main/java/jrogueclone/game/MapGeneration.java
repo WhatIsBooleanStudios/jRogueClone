@@ -112,6 +112,7 @@ public class MapGeneration {
 			room.addStaircase();
 			room.generateHallwayConnectionPoints();
 		}
+
 		return rooms;
 	}
 
@@ -232,7 +233,6 @@ public class MapGeneration {
 			hallways.add(new Hallway(bottomLeft.getHallwayConnectionPoints().lastElement(),
 					bottomRight.getHallwayConnectionPoints().lastElement(), roomMap));
 		}
-
 		return hallways;
 	}
 

@@ -2,11 +2,11 @@ package jrogueclone.item;
 
 public class Weapon extends Item {
     public Weapon(String weaponName, int weaponDamage, int weaponDamageChance) {
-        this.m_WeaponName = weaponName;    
+        this.m_WeaponName = weaponName;
         this.m_WeaponDamage = weaponDamage;
         this.m_WeaponDamageChance = weaponDamageChance;
     }
-    
+
     public String getWeaponName() {
         return this.m_WeaponName;
     }
@@ -21,15 +21,15 @@ public class Weapon extends Item {
 
     @Override
     public void draw() {
-        if(this.isUseable()) {
+        if (this.isUseable()) {
             // draw it
         }
     }
-    
+
     @Override
     public void useItem() {
         // TODO Auto-generated method stub
-        
+
     }
 
     private String m_WeaponName = "";

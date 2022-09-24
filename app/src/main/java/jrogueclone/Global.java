@@ -7,7 +7,6 @@ import jrogueclone.entity.Player;
 import jrogueclone.game.GameLoop;
 import jrogueclone.game.GameState;
 
-
 // Game Design Doc: https://docs.google.com/document/d/1yalAcBC2sBIdWUnINqwlQOZyY0MLWz4Xha-l0T2WdQA/edit?usp=sharing
 public class Global {
     public static void setGameState(GameStates stateType, GameState gameState) {
@@ -48,10 +47,11 @@ public class Global {
 
     // Game loop related vars/methods
     private final static GameLoop m_GameLoop = new GameLoop();
+
     public final static GameLoop getGameLoop() {
         return m_GameLoop;
     }
-    
+
     // Render vars
     public static final int rows = 24;
     public static final int columns = 80;

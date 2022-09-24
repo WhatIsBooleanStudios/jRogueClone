@@ -16,22 +16,20 @@ public class Room {
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
     }
+
     public void generateHallwayConnectionPoints() {
         m_HallwayConnections.add(new Vector2D(
-            m_RoomPosition.getX(),
-            m_RoomPosition.getY() + (int)(Math.random() * (m_RoomHeight - 2) + 1)
-        ));
+                m_RoomPosition.getX(),
+                m_RoomPosition.getY() + (int) (Math.random() * (m_RoomHeight - 2) + 1)));
         m_HallwayConnections.add(new Vector2D(
-            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
-            m_RoomPosition.getY())
-        );
+                m_RoomPosition.getX() + (int) (Math.random() * (m_RoomWidth - 2) + 1),
+                m_RoomPosition.getY()));
     }
 
     public void addExtraHallwayConnectionPoint() {
         m_HallwayConnections.add(new Vector2D(
-            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
-            m_RoomPosition.getY() + m_RoomHeight - 1)
-        );
+                m_RoomPosition.getX() + (int) (Math.random() * (m_RoomWidth - 2) + 1),
+                m_RoomPosition.getY() + m_RoomHeight - 1));
     }
 
     public Vector<Vector2D> getHallwayConnectionPoints() {
@@ -59,7 +57,7 @@ public class Room {
     public void spawnItems() {
         if (Math.round(Math.random() * 99) <= LootBox.m_SpawnChance) {
             this.m_Items.add(new LootBox('=', 214, new Vector2D(
-                    getRoomPosition().getX() + getRoomWidth()  - 2,
+                    getRoomPosition().getX() + getRoomWidth() - 2,
                     getRoomPosition().getY() + getRoomHeight() / 2)));
         }
     }
@@ -93,15 +91,16 @@ public class Room {
                     Global.terminalHandler.putChar(j, i, '.', 245, 232, false, this.m_EmptySpace);
             }
 
-            for(Vector2D connection : m_HallwayConnections) {
-                Global.terminalHandler.putChar(connection.getX(), connection.getY(), '╬', 255, 232, false, this.m_EmptySpace);
+            for (Vector2D connection : m_HallwayConnections) {
+                Global.terminalHandler.putChar(connection.getX(), connection.getY(), '╬', 255, 232, false,
+                        this.m_EmptySpace);
             }
         }
     }
 
     public void addStaircase() {
         this.m_Items.add(new Staircase('♯', 255, new Vector2D((int) (getRoomPosition().getX() + m_RoomWidth / 2),
-        (int) getRoomPosition().getY() + m_RoomHeight - 2)));
+                (int) getRoomPosition().getY() + m_RoomHeight - 2)));
     }
 
     public void draw() {

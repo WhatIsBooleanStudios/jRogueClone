@@ -43,13 +43,13 @@ public class GameLoop {
             firstFrame = false;
             Global.getGameState().update();
 
-            if(this.m_UpdateLevel) {
+            if (this.m_UpdateLevel) {
                 Global.setGameState(GameStates.GAME, m_CurrentLevel);
                 this.m_UpdateLevel = false;
             }
 
             Global.terminalHandler.end();
-            Global.terminalHandler.resetCursor();    
+            Global.terminalHandler.resetCursor();
         }
     }
 

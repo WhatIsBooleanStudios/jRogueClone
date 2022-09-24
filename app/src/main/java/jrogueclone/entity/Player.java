@@ -46,6 +46,22 @@ public class Player extends Entity {
         this.getHealthController().setHealth(100);
     }
 
+    public void handleDiscovery(Vector2D newPosition) {
+        for (Hallway hallway : Global.getGameLoop().getCurrentLevel().getConnectors()) {
+            if (hallway.contains(newPosition)
+                    && !Global.getGameLoop().getCurrentLevel().getPlayer().getDiscoveredHallways().contains(hallway)) {
+                Global.getGameLoop().getCurrentLevel().getPlayer().setHallwayDiscovered(hallway);
+            }
+        }
+        for (Room room : Global.getGameLoop().getCurrentLevel().getRooms()) {
+            if (room.getRect().contains(newPosition.getX(), newPosition.getY())
+                    && !Global.getGameLoop().getCurrentLevel().getPlayer().getDiscoveredRooms().contains(room)) {
+                Global.getGameLoop().getCurrentLevel().getPlayer().setRoomDiscovered(room);
+            }
+        }
+        Global.getGameLoop().getCurrentLevel().drawLevel();
+    }
+
     private enum MoveDirection {
         UP,
         DOWN,
@@ -59,7 +75,7 @@ public class Player extends Entity {
         switch (moveDirection) {
             case DOWN:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
-
+                handleDiscovery(newPosition);
                 if (getPosition().getY() < Global.rows - 1) {
                     uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
                     if (uData != null
@@ -70,6 +86,8 @@ public class Player extends Entity {
                 break;
             case LEFT:
                 newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
+                handleDiscovery(newPosition);
+
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
                 if (getPosition().getX() > 0 && uData != null
                         && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
@@ -78,6 +96,8 @@ public class Player extends Entity {
                 break;
             case RIGHT:
                 newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
+                handleDiscovery(newPosition);
+
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
                 if (getPosition().getX() < Global.columns - 1 && uData != null
                         && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
@@ -86,6 +106,8 @@ public class Player extends Entity {
                 break;
             case UP:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
+                handleDiscovery(newPosition);
+
                 if (getPosition().getY() > 0) {
                     uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
                     if (uData != null
@@ -168,5 +190,18 @@ public class Player extends Entity {
         this.m_DiscoveredRooms.add(room);
     }
 
+    public void clearDiscoveredHallways() {
+        this.m_DiscoveredHallways.clear();
+    }
+
+    public Vector<Hallway> getDiscoveredHallways() {
+        return this.m_DiscoveredHallways;
+    }
+
+    public void setHallwayDiscovered(Hallway hallway) {
+        this.m_DiscoveredHallways.add(hallway);
+    }
+
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
+    private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();
 }
