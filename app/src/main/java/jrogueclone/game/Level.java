@@ -35,7 +35,7 @@ public class Level implements GameState{
     }
 
     private void drawLevel() {
-        for (Room room : this.m_Player.getDiscoveredRooms())
+        for (Room room : this.m_Player.getDiscoveredRooms()) {
             room.draw();
         }
         for (Hallway hallway : m_Hallways) {

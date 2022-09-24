@@ -9,7 +9,8 @@ public class Inventory {
         WEAPON,
         FOOD,
         POTION,
-        LOOTBOX
+        LOOTBOX,
+        STAIRCASE
     }
 
     public void addItem(Item item) {

@@ -15,7 +15,7 @@ public class Room {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
-
+    }
     public void generateHallwayConnectionPoints() {
         m_HallwayConnections.add(new Vector2D(
             m_RoomPosition.getX(),
