@@ -1,29 +1,25 @@
 package jrogueclone.game;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Vector;
 import java.util.HashSet;
 import java.util.HashMap;
 
-import jrogueclone.util.Pair;
 import jrogueclone.Global;
 import jrogueclone.entity.Player;
 
 import java.awt.Rectangle;
-import java.nio.channels.InterruptedByTimeoutException;
 
 public class MapGeneration {
 	public static Vector<Room> generateRooms() {
 
-		Vector<Room> rooms = new Vector<Room>();
+		Vector<Room> rooms = new Vector<>();
 
 		int minimumRoomHorizontalPadding = 3;
 		int minimumRoomVerticalPadding = 1;
 		int maximumRoomWidth = 15;
 		int maximumRoomHeight = 7;
-		int maximumRoomsHorizontal = (int) ((Global.columns - minimumRoomHorizontalPadding) / (minimumRoomHorizontalPadding + maximumRoomWidth));
-		int maximumRoomsVertical = (int) ((Global.rows - minimumRoomVerticalPadding) / (minimumRoomVerticalPadding + maximumRoomHeight));
+		int maximumRoomsHorizontal = ((Global.columns - minimumRoomHorizontalPadding) / (minimumRoomHorizontalPadding + maximumRoomWidth));
+		int maximumRoomsVertical = ((Global.rows - minimumRoomVerticalPadding) / (minimumRoomVerticalPadding + maximumRoomHeight));
 
 		// Generate rooms
 		for (int i = 0; i < maximumRoomsVertical; i++) {
@@ -59,20 +55,16 @@ public class MapGeneration {
 								rooms.get(i).getRoomPosition().getY() - minimumRoomVerticalPadding,
 								rooms.get(i).getRoomWidth() + minimumRoomHorizontalPadding * 2,
 								rooms.get(i).getRoomHeight() + minimumRoomVerticalPadding * 2);
-						// System.out.println(i + "rect: " + curRectangle);
-						// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
 						Rectangle newRectangle = rooms.get(j).getRect();
 						if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
 								|| (curRectangle.x + curRectangle.width > Global.columns) && tgtHorizDirection == 1
 								|| (curRectangle.x < 0) && (tgtHorizDirection == -1)) {
-							// System.out.println(curRectangle + " collides");
 							collides = true;
 							break;
 						}
 					}
 
 					if (collides) {
-						// System.out.println("collides");
 						break;
 					} else {
 						Vector2D currentPosition = rooms.get(i).getRoomPosition();
@@ -93,40 +85,24 @@ public class MapGeneration {
 								rooms.get(i).getRoomWidth() + minimumRoomHorizontalPadding * 2,
 								rooms.get(i).getRoomHeight() + minimumRoomVerticalPadding * 2);
 
-						 System.out.println(i + "rect: " + curRectangle);
-						// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
 						Rectangle newRectangle = rooms.get(j).getRect();
 						if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
 								|| (curRectangle.y + curRectangle.height > Global.rows) && tgtVertDirection == 1
 								|| (curRectangle.y < 0) && (tgtVertDirection == -1)) {
-							System.out.println(curRectangle + " collides");
 							collides = true;
 							break;
 						}
 					}
 
-					if(rooms.get(i).getRoomPosition().getY() == 23) {
-						System.out.println("23!!!");
-						System.exit(1);
-					}
 					if (collides) {
-
-						System.out.println(i + "ycollides rect: " +
-								new Rectangle(rooms.get(i).getRoomPosition().getX(), rooms.get(i).getRoomPosition().getY(), rooms.get(i).getRoomWidth(), rooms.get(i).getRoomHeight()));
 						break;
 					} else {
 						Vector2D currentPosition = rooms.get(i).getRoomPosition();
 						currentPosition.setY(currentPosition.getY() + tgtVertDirection);
 						rooms.get(i).setRoomPosition(currentPosition);
 						tgtVertMovement--;
-						System.out.println(i + "rect: " +
-								new Rectangle(rooms.get(i).getRoomPosition().getX(), rooms.get(i).getRoomPosition().getY(), rooms.get(i).getRoomWidth(), rooms.get(i).getRoomHeight()));
 					}
 
-					/*if(rooms.get(i).getRoomPosition().getY() + 1 - minimumRoomVerticalPadding <= 0 ||
-					   rooms.get(i).getRoomPosition().getY() <= rooms.get(i).getRoomHeight() - 1) {
-						break;
-					}*/
 				}
 			}
 
@@ -146,7 +122,7 @@ public class MapGeneration {
 			}
 			for(Vector2D connectionPoint : room.getHallwayConnectionPoints()) {
 				if(usedPositions.contains(connectionPoint)) continue;
-				alreadyConnectedRooms.putIfAbsent(parentRoom, new HashSet<Room>());
+				alreadyConnectedRooms.putIfAbsent(parentRoom, new HashSet<>());
 				if(alreadyConnectedRooms.get(parentRoom).contains(room)) continue;
 				double distance = Math.sqrt(
 					Math.pow((connectionPoint.getX() - position.getX()), 2) +
@@ -161,15 +137,9 @@ public class MapGeneration {
 			}
 		}
 
-		/*Global.terminalHandler.disableAlternateScreen();
-		System.out.println(position);
-		System.out.println(closest);
-		Global.terminalHandler.initAlternateScreen();*/
-		//System.out.println("closest: " + closest);
-
-		alreadyConnectedRooms.putIfAbsent(parentRoom, new HashSet<Room>());
+		alreadyConnectedRooms.putIfAbsent(parentRoom, new HashSet<>());
 		alreadyConnectedRooms.get(parentRoom).add(closestRoom);
-		alreadyConnectedRooms.putIfAbsent(closestRoom, new HashSet<Room>());
+		alreadyConnectedRooms.putIfAbsent(closestRoom, new HashSet<>());
 		alreadyConnectedRooms.get(closestRoom).add(parentRoom);
 
 		return closest;
@@ -177,46 +147,38 @@ public class MapGeneration {
 
 	private static Room findRoomInBottomLeftCorner(Vector<Room> rooms) {
 		Vector<Room> sortedRooms = (Vector<Room>)rooms.clone();
-		sortedRooms.sort(new Comparator<Room>() {
-			@Override
-			public int compare(Room a, Room b) {
-				Integer aPosX = (a.getRoomPosition().getX());
-				Integer bPosX = (b.getRoomPosition().getY());
-				Integer aPosY = (a.getRoomPosition().getY());
-				Integer bPosY = (b.getRoomPosition().getY());
-				Integer xComparison = aPosX.compareTo(bPosX);
-				if(xComparison != 0) {
-					return xComparison;
-				} else {
-					return bPosY.compareTo(aPosY);
-				}
+		sortedRooms.sort((a, b) -> {
+			Integer aPosX = (a.getRoomPosition().getX());
+			Integer bPosX = (b.getRoomPosition().getY());
+			Integer aPosY = (a.getRoomPosition().getY());
+			Integer bPosY = (b.getRoomPosition().getY());
+			int xComparison = aPosX.compareTo(bPosX);
+			if(xComparison != 0) {
+				return xComparison;
+			} else {
+				return bPosY.compareTo(aPosY);
 			}
 		});
 		return sortedRooms.get(0);
 	}
 	private static Room findRoomInBottomRightCorner(Vector<Room> rooms) {
 		Vector<Room> sortedRooms = (Vector<Room>)rooms.clone();
-		sortedRooms.sort(new Comparator<Room>() {
-			@Override
-			public int compare(Room a, Room b) {
-				Integer aPosX = (a.getRoomPosition().getX());
-				Integer bPosX = (b.getRoomPosition().getY());
-				Integer aPosY = (a.getRoomPosition().getY());
-				Integer bPosY = (b.getRoomPosition().getY());
-				Integer xComparison = bPosX.compareTo(aPosX);
-				if(xComparison != 0) {
-					return xComparison;
-				} else {
-					return bPosY.compareTo(aPosY);
-				}
+		sortedRooms.sort((a, b) -> {
+			Integer aPosX = (a.getRoomPosition().getX());
+			Integer bPosX = (b.getRoomPosition().getY());
+			Integer aPosY = (a.getRoomPosition().getY());
+			Integer bPosY = (b.getRoomPosition().getY());
+			int xComparison = bPosX.compareTo(aPosX);
+			if(xComparison != 0) {
+				return xComparison;
+			} else {
+				return bPosY.compareTo(aPosY);
 			}
 		});
 		return sortedRooms.get(0);
 	}
 	private static Vector<Hallway> generateHallways(Vector<Room> rooms) {
-		System.out.println("generate hallways");
-		System.out.flush();
-		char roomMap[][] = new char[Global.columns][Global.rows];
+		char[][] roomMap = new char[Global.columns][Global.rows];
 		for(int i = 0; i < Global.columns; i++) {
 			for(int j = 0; j < Global.rows; j++) {
 				roomMap[i][j] = ' ';
@@ -229,10 +191,10 @@ public class MapGeneration {
 				}
 			}
 		}
-		Vector<Hallway> hallways = new Vector<Hallway>();
-		HashSet<Vector2D> usedPositions = new HashSet<Vector2D>();
-		HashMap<Room, HashSet<Room>> alreadyConnectedRooms = new HashMap<Room, HashSet<Room>>();
-		Vector<Vector2D> mustConnectHallways = new Vector<Vector2D>();
+		Vector<Hallway> hallways = new Vector<>();
+		HashSet<Vector2D> usedPositions = new HashSet<>();
+		HashMap<Room, HashSet<Room>> alreadyConnectedRooms = new HashMap<>();
+		Vector<Vector2D> mustConnectHallways = new Vector<>();
 		for(Room room : rooms) {
 			for(Vector2D startPosition : room.getHallwayConnectionPoints()) {
 				if(usedPositions.contains(startPosition)) continue;
@@ -255,7 +217,6 @@ public class MapGeneration {
 		Room bottomRight = findRoomInBottomRightCorner(rooms);
 
 		if(!alreadyConnectedRooms.get(bottomLeft).contains(bottomRight)) {
-			System.out.println("connect bottom two");
 			bottomLeft.addExtraHallwayConnectionPoint();
 			bottomRight.addExtraHallwayConnectionPoint();
 			hallways.add(new Hallway(bottomLeft.getHallwayConnectionPoints().lastElement(), bottomRight.getHallwayConnectionPoints().lastElement(), roomMap));
@@ -266,7 +227,6 @@ public class MapGeneration {
 
 	public static Level generateLevel() {
 		Vector<Room> rooms = generateRooms();
-		Room startRoom = rooms.get((int) (Math.random() * rooms.size()));
 		// TODO: player should be global
 		return new Level(rooms, generateHallways(rooms), new Player('@'));
 	}

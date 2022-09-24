@@ -2,7 +2,6 @@ package jrogueclone.game;
 
 import java.util.Vector;
 import jrogueclone.Global;
-import jrogueclone.gfx.TerminalHandler;
 
 public class Hallway {
     public Hallway(Vector2D startPosition, Vector2D endPosition, char[][] roomMap) {
@@ -10,12 +9,6 @@ public class Hallway {
         int DOWN = 1;
         int LEFT = 2;
         int RIGHT = 3;
-        if(endPosition.getY() == 23) {
-            System.out.println("at the very bottom");
-            System.exit(1);
-        }
-
-        // if(endPosition.equals(new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE))) return;
 
         // Calculate the actual start point of the hallway. This is going to be one away
         // from the given start point in order to make it stick out from the room itself
@@ -60,8 +53,6 @@ public class Hallway {
             }
             if(movedX) {
                 m_Waypoints.add(new Vector2D(cursorPos));
-                //continue;
-                //break;
             }
 
             // Handle the case where our x value equals the end point except our y value does not and
@@ -74,7 +65,6 @@ public class Hallway {
                     (cursorPos.getY() != Global.rows - 1 && yDirection == DOWN && roomMap[cursorPos.getX()][cursorPos.getY() + 1] == '#') ||
                     (cursorPos.getY() > 0 && yDirection == UP && roomMap[cursorPos.getX()][cursorPos.getY() - 1] == '#')) {
                     cursorPos.setX(cursorPos.getX() + (xDirection == LEFT ? -1 : 1));
-                    System.out.println("overshoot caseX: " + cursorPos);
                     adjustX = true;
                 }
                 if(adjustX) {
@@ -94,16 +84,11 @@ public class Hallway {
                 (yDirection == DOWN && cursorPos.getY() == Global.rows - 1) ||
                 (roomMap[cursorPos.getX()][cursorPos.getY() + (yDirection == DOWN ? 1 : -1)] == '#')
             )) {
-                System.out.println("Loop y: " + cursorPos);
-                System.out.flush();
                 cursorPos.setY(cursorPos.getY() + (yDirection == UP ? -1 : 1));
                 movedY = true;
             }
             if(movedY) {
                 m_Waypoints.add(new Vector2D(cursorPos));
-                System.out.println("waypointY: " + cursorPos);
-                //continue;
-                //break;
             }
 
             // Handle the case where our y value equals the end point except our x value does not and
@@ -129,37 +114,14 @@ public class Hallway {
                         yDirection = DOWN;
                         cursorPos.setY(0);
                     }
-                        cursorPos.setY(cursorPos.getY() + (yDirection == UP ? -1 : 1));
-                        System.out.println("Overshoot y: " + cursorPos);
-                    
+                    cursorPos.setY(cursorPos.getY() + (yDirection == UP ? -1 : 1));
+
                     adjustY = true;
                 }
                 if(adjustY) {
                     m_Waypoints.add(new Vector2D(cursorPos));
-                    //continue;
                 }
             }
-
-            System.out.println("Start position: " + startPosition);
-            System.out.println("End position: " + endPosition);
-            System.out.print(TerminalHandler.CSI + "48;5;232m");
-            for(int i = 0; i < Global.rows; i++) {
-                System.out.print(i + (i >= 10 ? "" : " "));
-                for(int j = 0; j < Global.columns; j++) {
-                    Vector2D currentPosition = new Vector2D(j, i);
-                    if(currentPosition.equals(startPosition)) {
-                        System.out.print('S');
-                    } else if(currentPosition.equals(endPosition)) {
-                        System.out.print("E");
-                    } else if(currentPosition.equals(cursorPos)) {
-                        System.out.print('C');
-                    } else {
-                        System.out.print(roomMap[j][i]);
-                    }
-                }
-                System.out.println();
-            }
-            System.out.println(TerminalHandler.CSI + "0m");
 
         }
 
@@ -169,7 +131,6 @@ public class Hallway {
 
     public void draw() {
         if(m_Waypoints.size() < 1) {
-            System.out.println("less than 0");
             return;
         }
         Vector2D cursorPos = new Vector2D(m_Waypoints.get(0));
@@ -192,5 +153,5 @@ public class Hallway {
         }
     }
 
-    Vector<Vector2D> m_Waypoints = new Vector<Vector2D>();
+    Vector<Vector2D> m_Waypoints = new Vector<>();
 }

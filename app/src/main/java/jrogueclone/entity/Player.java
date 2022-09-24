@@ -41,7 +41,6 @@ public class Player extends Entity {
 
     public void tryMoveUp() {
         Vector2D newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
-        //System.out.println(Global.terminalHandler.getUserDataAt(getPosition().getX(), getPosition().getY() - 1).getClass());
         Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
         if (getPosition().getY() > 0 && (uData == null || uData.getClass() != Room.class))
             setPosition(newPosition);
