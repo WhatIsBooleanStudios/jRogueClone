@@ -43,6 +43,7 @@ public class Player extends Entity {
         this.getHealthController().setHealth(100);
     }
 
+
     private enum MoveDirection {
         UP,
         DOWN,
