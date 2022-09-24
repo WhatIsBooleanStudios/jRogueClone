@@ -30,90 +30,96 @@ public class MapGeneration {
 		}
 
 		// Delete random room
-		for(int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 			rooms.remove((int) (Math.random() * rooms.size()));
 
 		// move them around
-		for(int it = 0; it < 3; it++)
-		for (int i = 0; i < rooms.size(); i++) {
-			int tgtHorizMovement = 10;// (int)(Math.random() * 3 + 1);
-			int tgtHorizDirection = (int) (Math.random() * 2) == 1 ? 1 : -1; // -1 = left, +1 = right
-			int tgtVertMovement = 10;// (int)(Math.random() * 2 + 1);
-			int tgtVertDirection = (int) (Math.random() * 2) == 1 ? 1 : -1;
+		for (int it = 0; it < 3; it++)
+			for (int i = 0; i < rooms.size(); i++) {
+				int tgtHorizMovement = 10;// (int)(Math.random() * 3 + 1);
+				int tgtHorizDirection = (int) (Math.random() * 2) == 1 ? 1 : -1; // -1 = left, +1 = right
+				int tgtVertMovement = 10;// (int)(Math.random() * 2 + 1);
+				int tgtVertDirection = (int) (Math.random() * 2) == 1 ? 1 : -1;
 
-			while (Math.abs(tgtHorizMovement) > 0) {
-				boolean collides = false;
-				for (int j = 0; j < rooms.size(); j++) {
-					if (j == i)
-						continue;
-					Rectangle curRectangle = new Rectangle(
-							rooms.get(i).getRoomPosition().getX() - minimumRoomHorizontalPadding + tgtHorizDirection,
-							rooms.get(i).getRoomPosition().getY() - minimumRoomVerticalPadding,
-							rooms.get(i).getRoomWidth() + minimumRoomHorizontalPadding * 2,
-							rooms.get(i).getRoomHeight() + minimumRoomVerticalPadding * 2);
-					// System.out.println(i + "rect: " + curRectangle);
-					// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
-					Rectangle newRectangle = rooms.get(j).getRect();
-					if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
-							|| (curRectangle.x + curRectangle.width > Global.columns) && tgtHorizDirection == 1
-							|| (curRectangle.x < 0) && (tgtHorizDirection == -1)) {
-						// System.out.println(curRectangle + " collides");
-						collides = true;
+				while (Math.abs(tgtHorizMovement) > 0) {
+					boolean collides = false;
+					for (int j = 0; j < rooms.size(); j++) {
+						if (j == i)
+							continue;
+						Rectangle curRectangle = new Rectangle(
+								rooms.get(i).getRoomPosition().getX() - minimumRoomHorizontalPadding
+										+ tgtHorizDirection,
+								rooms.get(i).getRoomPosition().getY() - minimumRoomVerticalPadding,
+								rooms.get(i).getRoomWidth() + minimumRoomHorizontalPadding * 2,
+								rooms.get(i).getRoomHeight() + minimumRoomVerticalPadding * 2);
+						// System.out.println(i + "rect: " + curRectangle);
+						// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
+						Rectangle newRectangle = rooms.get(j).getRect();
+						if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
+								|| (curRectangle.x + curRectangle.width > Global.columns) && tgtHorizDirection == 1
+								|| (curRectangle.x < 0) && (tgtHorizDirection == -1)) {
+							// System.out.println(curRectangle + " collides");
+							collides = true;
+							break;
+						}
+					}
+
+					if (collides) {
+						// System.out.println("collides");
 						break;
+					} else {
+						Vector2D currentPosition = rooms.get(i).getRoomPosition();
+						currentPosition.setX(currentPosition.getX() + tgtHorizDirection);
+						rooms.get(i).setRoomPosition(currentPosition);
+						tgtHorizMovement--;
 					}
 				}
+				while (Math.abs(tgtVertMovement) > 0) {
+					boolean collides = false;
+					for (int j = 0; j < rooms.size(); j++) {
+						if (j == i)
+							continue;
+						Rectangle curRectangle = new Rectangle(
+								rooms.get(i).getRoomPosition().getX() - minimumRoomHorizontalPadding,
+								rooms.get(i).getRoomPosition().getY() - minimumRoomVerticalPadding + tgtVertDirection,
+								rooms.get(i).getRoomWidth() + minimumRoomHorizontalPadding * 2,
+								rooms.get(i).getRoomHeight() + minimumRoomVerticalPadding * 2);
+						// System.out.println(i + "rect: " + curRectangle);
+						// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
+						Rectangle newRectangle = rooms.get(j).getRect();
+						if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
+								|| (curRectangle.y + curRectangle.height > Global.rows) && tgtVertDirection == 1
+								|| (curRectangle.y < 0) && (tgtVertDirection == -1)) {
+							// System.out.println(curRectangle + " collides");
+							collides = true;
+							break;
+						}
+					}
 
-				if (collides) {
-					// System.out.println("collides");
-					break;
-				} else {
-					Vector2D currentPosition = rooms.get(i).getRoomPosition();
-					currentPosition.setX(currentPosition.getX() + tgtHorizDirection);
-					rooms.get(i).setRoomPosition(currentPosition);
-					tgtHorizMovement--;
-				}
-			}
-			while (Math.abs(tgtVertMovement) > 0) {
-				boolean collides = false;
-				for (int j = 0; j < rooms.size(); j++) {
-					if (j == i)
-						continue;
-					Rectangle curRectangle = new Rectangle(
-							rooms.get(i).getRoomPosition().getX() - minimumRoomHorizontalPadding,
-							rooms.get(i).getRoomPosition().getY() - minimumRoomVerticalPadding + tgtVertDirection,
-							rooms.get(i).getRoomWidth() + minimumRoomHorizontalPadding * 2,
-							rooms.get(i).getRoomHeight() + minimumRoomVerticalPadding * 2);
-					// System.out.println(i + "rect: " + curRectangle);
-					// System.out.println("j=" + j + " rect: " + rooms.get(j).getRect());
-					Rectangle newRectangle = rooms.get(j).getRect();
-					if (curRectangle.intersects(newRectangle) || newRectangle.intersects(curRectangle)
-							|| (curRectangle.y + curRectangle.height > Global.rows) && tgtVertDirection == 1
-							|| (curRectangle.y < 0) && (tgtVertDirection == -1)) {
-						// System.out.println(curRectangle + " collides");
-						collides = true;
+					if (collides) {
+
 						break;
+					} else {
+						Vector2D currentPosition = rooms.get(i).getRoomPosition();
+						currentPosition.setY(currentPosition.getY() + tgtVertDirection);
+						rooms.get(i).setRoomPosition(currentPosition);
+						tgtVertMovement--;
 					}
 				}
-
-
-				if(collides) {
-					
-					break;
-				} else {
-					Vector2D currentPosition = rooms.get(i).getRoomPosition();
-					currentPosition.setY(currentPosition.getY() + tgtVertDirection);
-					rooms.get(i).setRoomPosition(currentPosition);
-					tgtVertMovement--;
-				}
 			}
+
+		// make it so a random room has a staircase to the next level
+		for (Room room : rooms) {
+			room.addStaircase();
 		}
-		
+		// rooms.elementAt((int)(Math.random() * (rooms.size() - 1))).addStaircase();
+		return rooms;
+	}
 
-      return rooms;
-   }
-
-   public static Level generateLevel() {
-	  // TODO: player should be global
-      return new Level(generateRooms(), new Vector<Vector2D>(), new Player('@'));
-   }
+	public static Level generateLevel(Player player) {
+		if (player != null) {
+			return new Level(generateRooms(), new Vector<Vector2D>(), player);
+		} else
+			return new Level(generateRooms(), new Vector<Vector2D>(), new Player('@'));
+	}
 }

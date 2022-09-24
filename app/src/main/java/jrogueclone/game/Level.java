@@ -12,6 +12,10 @@ public class Level implements GameState {
         setDifficulty(1);
     }
 
+    public Player getPlayer() {
+        return this.m_Player;
+    }
+
     public void setDifficulty(int levelDifficulty) {
         this.m_LevelDifficuty = levelDifficulty;
     }
@@ -35,6 +39,7 @@ public class Level implements GameState {
 
     @Override
     public void initialize() {
+        this.m_Player.clearDiscoveredRooms();
         Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size()));
         m_Player.setPosition(new Vector2D(
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),

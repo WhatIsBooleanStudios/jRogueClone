@@ -5,6 +5,7 @@ import java.util.Vector;
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.LootBox;
+import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
 import jrogueclone.game.Room;
 
@@ -97,6 +98,16 @@ public class Player extends Entity {
                             lootBox.useItem();
                     }
                 }
+            } else if (object.getClass().getName().toLowerCase().indexOf("staircase") > 0) {
+                for (Room room : this.m_DiscoveredRooms) {
+                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                        Staircase staircase = (Staircase) object;
+                        if (staircase.isUseable()) {
+                            staircase.useItem();
+                        }
+                            
+                    }
+                }
             }
         }
     }
@@ -118,6 +129,10 @@ public class Player extends Entity {
         if (Global.terminalHandler.keyIsPressed('e')) {
             this.tryUse();
         }
+    }
+
+    public void clearDiscoveredRooms() {
+        this.m_DiscoveredRooms.clear();
     }
 
     public Vector<Room> getDiscoveredRooms() {
