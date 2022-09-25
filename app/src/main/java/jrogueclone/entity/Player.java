@@ -128,8 +128,7 @@ public class Player extends Entity {
         Vector<Object> uData = new Vector<Object>();
 
         for (int i = -1; i <= 1; i++) {
-            if (pX + i <= Global.columns && pX + i >= 0 && pY + i <= Global.rows && pY + i >= 0) 
-            {
+            if (pX + i <= Global.columns && pX + i >= 0 && pY + i <= Global.rows && pY + i >= 0) {
                 if (Global.terminalHandler.getUserDataAt(pX + i, pY) != null)
                     uData.add(Global.terminalHandler.getUserDataAt(pX + i, pY));
 
@@ -138,7 +137,7 @@ public class Player extends Entity {
             }
         }
 
-        if(uData != null) {
+        if (uData != null) {
             for (Object object : uData) {
                 if (object.getClass() == LootBox.class) {
                     for (Room room : this.m_DiscoveredRooms) {
@@ -155,7 +154,7 @@ public class Player extends Entity {
                             if (staircase.isUseable()) {
                                 staircase.useItem();
                             }
-    
+
                         }
                     }
                 }
@@ -165,6 +164,11 @@ public class Player extends Entity {
 
     public static void toggleInventoryState() {
         Global.getGameLoop().m_Inventory = !Global.getGameLoop().m_Inventory;
+    }
+
+    @Override
+    public void handleDeath() {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -181,6 +185,9 @@ public class Player extends Entity {
             this.tryUse();
         if (Global.terminalHandler.keyIsPressed('i'))
             toggleInventoryState();
+
+        if (this.getHealthController().getHealth() <= 0)
+            this.handleDeath();
     }
 
     public void clearDiscoveredRooms() {
@@ -207,6 +214,15 @@ public class Player extends Entity {
         this.m_DiscoveredHallways.add(hallway);
     }
 
+    public void setInvisible() {
+        this.m_Invisible = true;
+    }
+
+    public boolean isInvisible() {
+        return this.m_Invisible;
+    }
+
+    private boolean m_Invisible = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();
 }

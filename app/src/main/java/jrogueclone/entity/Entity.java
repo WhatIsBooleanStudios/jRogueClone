@@ -1,6 +1,5 @@
 package jrogueclone.entity;
 
-import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory;
 
@@ -55,9 +54,7 @@ public abstract class Entity {
         this.m_EntityCharacter = entityCharacter;
     }
 
-    public void draw() {
-        Global.terminalHandler.putChar(m_EntityPosition.getX(), m_EntityPosition.getY(), m_EntityCharacter);
-    }
+    public abstract void draw();
 
     public Inventory getInventory() {
         return this.m_Inventory;
@@ -68,6 +65,8 @@ public abstract class Entity {
     public abstract boolean isMonster();
 
     public abstract void update();
+
+    public abstract void handleDeath();
 
     private char m_EntityCharacter;
     private Vector2D m_EntityPosition = new Vector2D();

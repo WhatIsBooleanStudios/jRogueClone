@@ -7,7 +7,6 @@ import jrogueclone.item.Item;
 public class Inventory {
     public enum ItemType {
         WEAPON,
-        FOOD,
         POTION,
         LOOTBOX,
         STAIRCASE
