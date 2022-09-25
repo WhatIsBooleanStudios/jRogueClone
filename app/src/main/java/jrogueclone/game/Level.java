@@ -2,14 +2,14 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
-import jrogueclone.Global;
 import jrogueclone.entity.Player;
-import jrogueclone.item.Item;
+import jrogueclone.util.Pair;
 
-public class Level implements GameState {
-    public Level(Vector<Room> rooms, Vector<Vector2D> connector, Player player) {
+public class Level implements GameState{
+    public Level(Vector<Room> rooms, Vector<Hallway> hallways, Player player) {
+
         this.m_Rooms = rooms;
-        this.m_Connector = connector;
+        this.m_Hallways = hallways;
         this.m_Player = player;
         setDifficulty(1);
     }
@@ -26,14 +26,19 @@ public class Level implements GameState {
         return this.m_Rooms;
     }
 
-    public Vector<Vector2D> getConnectors() {
-        return this.m_Connector;
+    public Vector<Hallway> getConnectors() {
+        return this.m_Hallways;
     }
 
     private void drawLevel() {
         for (Room room : this.m_Player.getDiscoveredRooms())
             room.draw();
+        }
+        for (Hallway hallway : m_Hallways) {
+            hallway.draw();
     }
+    }
+
 
     @Override
     public void initialize() {
@@ -46,6 +51,7 @@ public class Level implements GameState {
             room.spawnEntities();
             room.spawnItems();
 
+
             // remove this when playing real game
             this.m_Player.setRoomDiscovered(room);
         }
@@ -56,26 +62,18 @@ public class Level implements GameState {
 
     @Override
     public void update() {
-        if (Global.terminalHandler.keyIsPressed('i'))
-            m_Player.toggleInventoryState();
-        if(!Global.getGameLoop().getInventoryToggled()) {
-            this.drawLevel();
+        this.drawLevel();
 
-            for (Room room : m_Player.getDiscoveredRooms()) {
-                room.update();
-                room.drawContainedObjects();
-            }
+        m_Player.update();
+        for (Room room : m_Player.getDiscoveredRooms())
+            room.update();
 
-            m_Player.update();
-            m_Player.draw();
-        } else {
-            Global.terminalHandler.clear();
-            m_Player.getInventory().draw();
-        }
+        m_Player.draw();
+        System.out.flush();
     }
 
     private Vector<Room> m_Rooms = new Vector<Room>();
-    private Vector<Vector2D> m_Connector = new Vector<Vector2D>();
+    private Vector<Hallway> m_Hallways = new Vector<Hallway>();
     private Player m_Player;
     private int m_LevelDifficuty;
 }
