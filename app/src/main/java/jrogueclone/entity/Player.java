@@ -128,12 +128,18 @@ public class Player extends Entity {
         Vector<Object> uData = new Vector<Object>();
 
         for (int i = -1; i <= 1; i++) {
-            if (Global.terminalHandler.getUserDataAt(pX + i, pY) != null)
-                uData.add(Global.terminalHandler.getUserDataAt(pX + i, pY));
+            if (pX + i <= Global.columns && pX + i >= 0 && pY + i <= Global.rows && pY + i >= 0) 
+            {
+                if (Global.terminalHandler.getUserDataAt(pX + i, pY) != null)
+                    uData.add(Global.terminalHandler.getUserDataAt(pX + i, pY));
 
-            if (Global.terminalHandler.getUserDataAt(pX, pY + i) != null)
-                uData.add(Global.terminalHandler.getUserDataAt(pX, pY + i));
+                if (Global.terminalHandler.getUserDataAt(pX, pY + i) != null)
+                    uData.add(Global.terminalHandler.getUserDataAt(pX, pY + i));
+            }
         }
+
+        if(uData == null)
+            return;
 
         for (Object object : uData) {
             if (object.getClass() == LootBox.class) {
