@@ -47,6 +47,16 @@ public class Inventory {
                 itemNumberString = itemNumberString + " ";
             }
             String finalString = itemNumberString + itemString;
+            if(finalString.length() >= Global.columns) {
+                System.out.println(finalString);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return;
+            }
             for(int j = 0; j < finalString.length(); j++) {
                 Global.terminalHandler.putChar(j, i, finalString.charAt(j));
             }
