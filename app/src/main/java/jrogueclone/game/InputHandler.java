@@ -13,10 +13,11 @@ public class InputHandler {
     public boolean updateGame() {
         for (char c : m_KeyMap.toCharArray()) {
             if (Global.terminalHandler.keyIsPressed(c)) {
-                if (c == 'e')
+                if (c == 'e' || c == 'i') {
                     Global.getGameLoop().setUpdateEntities(false);
-                else
+                } else {
                     Global.getGameLoop().setUpdateEntities(true);
+                }
                 return true;
             }
 
@@ -25,5 +26,5 @@ public class InputHandler {
         return false;
     }
 
-    public static final String m_KeyMap = "wasde ";
+    public static final String m_KeyMap = "iwasde ";
 }

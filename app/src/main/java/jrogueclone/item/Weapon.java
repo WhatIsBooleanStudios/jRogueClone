@@ -32,6 +32,11 @@ public class Weapon extends Item {
 
     }
 
+    @Override
+    public String toString() {
+        return "\"" + m_WeaponName  + "\"" + " (" + m_WeaponDamage + "dmg, " + m_WeaponDamageChance + "% dmg chance)";
+    }
+
     private String m_WeaponName = "";
     private int m_WeaponDamage = 0;
     private int m_WeaponDamageChance = 0;

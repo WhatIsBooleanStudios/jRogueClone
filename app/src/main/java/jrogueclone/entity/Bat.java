@@ -25,9 +25,6 @@ public class Bat extends Entity {
 
     @Override
     public void draw() {
-        m_AnimationFrame++;
-        m_AnimationFrame %= 2;
-        setEntityCharacter(m_AnimationFrame == 0 ? 'ʌ' : 'v');
         Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), getEntityCharacter(), 255, 232,
                 false, this);
     }
@@ -36,6 +33,11 @@ public class Bat extends Entity {
 
     @Override
     public void update() {
+
+        m_AnimationFrame++;
+        m_AnimationFrame %= 2;
+        setEntityCharacter(m_AnimationFrame == 0 ? 'ʌ' : 'v');
+
         if (this.getHealthController().getHealth() <= 0)
             this.handleDeath();
     }
@@ -43,6 +45,7 @@ public class Bat extends Entity {
     @Override
     public void handleDeath() {
         // TODO Auto-generated method stub
+
 
     }
 }

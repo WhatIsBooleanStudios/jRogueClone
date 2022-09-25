@@ -33,9 +33,11 @@ public class GameLoop {
 
             this.m_InputHandler.update();
             try {
-                if (!firstFrame && !this.m_InputHandler.updateGame()) {
-                    Thread.sleep(100);
-                    continue;
+                if (!this.m_InputHandler.updateGame()) {
+                    if(!firstFrame) {
+                        Thread.sleep(100);
+                        continue;
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -58,9 +60,16 @@ public class GameLoop {
         this.m_EndGame = true;
     }
 
+    public boolean getInventoryToggled() {
+        return m_InventoryToggled;
+    }
+
+    public void setInventoryToggled(boolean toggeled) {
+        m_InventoryToggled = toggeled;
+    }
     private static Level m_CurrentLevel = MapGeneration.generateLevel(null);
     private InputHandler m_InputHandler = new InputHandler();
     private boolean m_EndGame = false, m_UpdateEntities = false, m_UpdateLevel = false;
-    public boolean m_Inventory = false;
+    private boolean m_InventoryToggled = false;
 
 }

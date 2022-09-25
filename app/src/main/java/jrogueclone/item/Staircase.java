@@ -24,4 +24,9 @@ public class Staircase extends Item {
                 this.getItemCharacter(), this.getItemCharacterColor(), 232, false, this);
 
     }
+
+    @Override
+    public String toString() {
+        return "staircase";
+    }
 }

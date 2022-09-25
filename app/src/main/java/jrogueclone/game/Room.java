@@ -41,7 +41,7 @@ public class Room {
 
         switch (levelDifficulty) {
             case 1: {
-                m_Entities.add(new Bat(' ', new Vector2D(
+                m_Entities.add(new Bat('ʌ', new Vector2D(
                         getRoomPosition().getX() + (int) ((double) getRoomWidth() / 2 - 2),
                         getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2))));
                 break;
@@ -105,6 +105,9 @@ public class Room {
 
     public void draw() {
         drawRoomBounds();
+    }
+
+    public void drawContainedObjects() {
 
         for (Entity entity : this.m_Entities) {
             entity.draw();

@@ -60,6 +60,10 @@ public class Player extends Entity {
             }
         }
         Global.getGameLoop().getCurrentLevel().drawLevel();
+
+        for (Room room : getDiscoveredRooms()) {
+            room.drawContainedObjects();
+        }
     }
 
     private enum MoveDirection {
@@ -69,7 +73,7 @@ public class Player extends Entity {
         RIGHT
     }
 
-    private void handleMovment(MoveDirection moveDirection) {
+    private void handleMovement(MoveDirection moveDirection) {
         Vector2D newPosition = null;
         Object uData = null;
         switch (moveDirection) {
@@ -162,8 +166,8 @@ public class Player extends Entity {
         }
     }
 
-    public static void toggleInventoryState() {
-        Global.getGameLoop().m_Inventory = !Global.getGameLoop().m_Inventory;
+    public void toggleInventoryState() {
+        Global.getGameLoop().setInventoryToggled(!Global.getGameLoop().getInventoryToggled());
     }
 
     @Override
@@ -174,20 +178,20 @@ public class Player extends Entity {
     @Override
     public void update() {
         if (Global.terminalHandler.keyIsPressed('w'))
-            this.handleMovment(MoveDirection.UP);
+            this.handleMovement(MoveDirection.UP);
         if (Global.terminalHandler.keyIsPressed('a'))
-            this.handleMovment(MoveDirection.LEFT);
+            this.handleMovement(MoveDirection.LEFT);
         if (Global.terminalHandler.keyIsPressed('s'))
-            this.handleMovment(MoveDirection.DOWN);
+            this.handleMovement(MoveDirection.DOWN);
         if (Global.terminalHandler.keyIsPressed('d'))
-            this.handleMovment(MoveDirection.RIGHT);
+            this.handleMovement(MoveDirection.RIGHT);
         if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
         if (Global.terminalHandler.keyIsPressed('i'))
             toggleInventoryState();
-
         if (this.getHealthController().getHealth() <= 0)
             this.handleDeath();
+
     }
 
     public void clearDiscoveredRooms() {

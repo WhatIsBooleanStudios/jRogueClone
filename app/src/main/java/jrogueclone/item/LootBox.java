@@ -25,6 +25,11 @@ public class LootBox extends Item {
     }
 
     @Override
+    public String toString() {
+        return "LootBox";
+    }
+
+    @Override
     public void useItem() {
         this.m_ItemUsed = true;
         this.setItemCharacter('␣');

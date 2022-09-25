@@ -63,6 +63,10 @@ public class Global {
     public static final int rows = 24;
     public static final int columns = 80;
 
+    public static final int topStatusBarColumns = 1;
+    public static final int bottomStatusBarColumns = 2;
+
+
     // Game items
     public static List<Item> Items = new ArrayList<Item>();
     public static void initializeItems () {
@@ -81,4 +85,5 @@ public class Global {
         Items.add(new Weapon("Sickle", 30, 60));
         Items.add(new Weapon("Trident", 40, 65));
     }
+
 }
