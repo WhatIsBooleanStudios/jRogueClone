@@ -63,6 +63,8 @@ public class Potion extends Item {
         return this.m_PotionName;
     }
 
+    public String toString() { return getPotionName(); }
+
     private String m_PotionName;
     private PotionType m_PotionType;
 }

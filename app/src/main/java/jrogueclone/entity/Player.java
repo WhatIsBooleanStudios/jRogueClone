@@ -147,8 +147,9 @@ public class Player extends Entity {
                     for (Room room : this.m_DiscoveredRooms) {
                         if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
                             LootBox lootBox = (LootBox) object;
-                            if (lootBox.isUseable())
+                            if (lootBox.isUseable()) {
                                 lootBox.useItem();
+                            }
                         }
                     }
                 } else if (object.getClass() == Staircase.class) {
@@ -187,8 +188,6 @@ public class Player extends Entity {
             this.handleMovement(MoveDirection.RIGHT);
         if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
-        if (Global.terminalHandler.keyIsPressed('i'))
-            toggleInventoryState();
         if (this.getHealthController().getHealth() <= 0)
             this.handleDeath();
 
