@@ -1,12 +1,8 @@
 package jrogueclone.entity;
 
-import java.io.InvalidClassException;
-import java.util.Vector;
-
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory;
-import jrogueclone.item.Weapon;
 
 public abstract class Entity {
 

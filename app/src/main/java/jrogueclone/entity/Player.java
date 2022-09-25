@@ -138,26 +138,25 @@ public class Player extends Entity {
             }
         }
 
-        if(uData == null)
-            return;
-
-        for (Object object : uData) {
-            if (object.getClass() == LootBox.class) {
-                for (Room room : this.m_DiscoveredRooms) {
-                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
-                        LootBox lootBox = (LootBox) object;
-                        if (lootBox.isUseable())
-                            lootBox.useItem();
-                    }
-                }
-            } else if (object.getClass() == Staircase.class) {
-                for (Room room : this.m_DiscoveredRooms) {
-                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
-                        Staircase staircase = (Staircase) object;
-                        if (staircase.isUseable()) {
-                            staircase.useItem();
+        if(uData != null) {
+            for (Object object : uData) {
+                if (object.getClass() == LootBox.class) {
+                    for (Room room : this.m_DiscoveredRooms) {
+                        if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                            LootBox lootBox = (LootBox) object;
+                            if (lootBox.isUseable())
+                                lootBox.useItem();
                         }
-
+                    }
+                } else if (object.getClass() == Staircase.class) {
+                    for (Room room : this.m_DiscoveredRooms) {
+                        if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                            Staircase staircase = (Staircase) object;
+                            if (staircase.isUseable()) {
+                                staircase.useItem();
+                            }
+    
+                        }
                     }
                 }
             }

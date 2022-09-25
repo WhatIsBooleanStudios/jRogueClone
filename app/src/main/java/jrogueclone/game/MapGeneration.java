@@ -151,7 +151,7 @@ public class MapGeneration {
 	}
 
 	private static Room findRoomInBottomLeftCorner(Vector<Room> rooms) {
-		Vector<Room> sortedRooms = (Vector<Room>) rooms.clone();
+		Vector<Room> sortedRooms = rooms;
 		sortedRooms.sort((a, b) -> {
 			Integer aPosX = (a.getRoomPosition().getX());
 			Integer bPosX = (b.getRoomPosition().getY());
@@ -168,7 +168,7 @@ public class MapGeneration {
 	}
 
 	private static Room findRoomInBottomRightCorner(Vector<Room> rooms) {
-		Vector<Room> sortedRooms = (Vector<Room>) rooms.clone();
+		Vector<Room> sortedRooms = rooms;
 		sortedRooms.sort((a, b) -> {
 			Integer aPosX = (a.getRoomPosition().getX());
 			Integer bPosX = (b.getRoomPosition().getY());

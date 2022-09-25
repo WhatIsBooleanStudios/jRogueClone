@@ -1,7 +1,5 @@
 package jrogueclone.game;
 
-import java.util.Vector;
-
 public class Vector2D {
 
     public Vector2D() {
