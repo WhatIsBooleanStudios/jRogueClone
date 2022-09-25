@@ -3,7 +3,6 @@ package jrogueclone;
 import jrogueclone.gfx.TerminalHandler;
 import com.sun.jna.Native;
 
-import jrogueclone.entity.Player;
 import jrogueclone.game.GameLoop;
 import jrogueclone.game.GameState;
 

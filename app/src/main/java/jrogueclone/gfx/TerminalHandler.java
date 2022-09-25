@@ -306,7 +306,10 @@ public class TerminalHandler {
      * @return the user data at the given position
      */
     public Object getUserDataAt(int col, int row) {
-        return renderData[col][row].userData;
+        if ((col >= 0 && col <= Global.columns) && (row >= 0 && row <= Global.rows))
+            return renderData[col][row].userData;
+        else
+            return null;
     }
 
     /**

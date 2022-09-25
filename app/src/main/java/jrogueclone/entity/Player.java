@@ -132,30 +132,35 @@ public class Player extends Entity {
         Vector<Object> uData = new Vector<Object>();
 
         for (int i = -1; i <= 1; i++) {
-            if (Global.terminalHandler.getUserDataAt(pX + i, pY) != null)
-                uData.add(Global.terminalHandler.getUserDataAt(pX + i, pY));
+            if (pX + i <= Global.columns && pX + i >= 0 && pY + i <= Global.rows && pY + i >= 0) 
+            {
+                if (Global.terminalHandler.getUserDataAt(pX + i, pY) != null)
+                    uData.add(Global.terminalHandler.getUserDataAt(pX + i, pY));
 
-            if (Global.terminalHandler.getUserDataAt(pX, pY + i) != null)
-                uData.add(Global.terminalHandler.getUserDataAt(pX, pY + i));
+                if (Global.terminalHandler.getUserDataAt(pX, pY + i) != null)
+                    uData.add(Global.terminalHandler.getUserDataAt(pX, pY + i));
+            }
         }
 
-        for (Object object : uData) {
-            if (object.getClass() == LootBox.class) {
-                for (Room room : this.m_DiscoveredRooms) {
-                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
-                        LootBox lootBox = (LootBox) object;
-                        if (lootBox.isUseable())
-                            lootBox.useItem();
-                    }
-                }
-            } else if (object.getClass() == Staircase.class) {
-                for (Room room : this.m_DiscoveredRooms) {
-                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
-                        Staircase staircase = (Staircase) object;
-                        if (staircase.isUseable()) {
-                            staircase.useItem();
+        if(uData != null) {
+            for (Object object : uData) {
+                if (object.getClass() == LootBox.class) {
+                    for (Room room : this.m_DiscoveredRooms) {
+                        if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                            LootBox lootBox = (LootBox) object;
+                            if (lootBox.isUseable())
+                                lootBox.useItem();
                         }
-
+                    }
+                } else if (object.getClass() == Staircase.class) {
+                    for (Room room : this.m_DiscoveredRooms) {
+                        if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                            Staircase staircase = (Staircase) object;
+                            if (staircase.isUseable()) {
+                                staircase.useItem();
+                            }
+    
+                        }
                     }
                 }
             }
