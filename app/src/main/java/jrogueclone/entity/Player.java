@@ -187,8 +187,6 @@ public class Player extends Entity {
             this.handleMovement(MoveDirection.RIGHT);
         if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
-        if (Global.terminalHandler.keyIsPressed('i'))
-            toggleInventoryState();
         if (this.getHealthController().getHealth() <= 0)
             this.handleDeath();
 
