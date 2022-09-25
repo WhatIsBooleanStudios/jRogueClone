@@ -36,6 +36,13 @@ public class Bat extends Entity {
 
     @Override
     public void update() {
+        if (this.getHealthController().getHealth() <= 0)
+            this.handleDeath();
+    }
+
+    @Override
+    public void handleDeath() {
+        // TODO Auto-generated method stub
 
     }
 }
