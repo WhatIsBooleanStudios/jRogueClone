@@ -11,16 +11,16 @@ public class LootBox extends Item {
 
     @Override
     public void draw() {
-        if(this.m_ItemPosition != new Vector2D(-1, -1)) {
+        if (this.m_ItemPosition != new Vector2D(-1, -1)) {
 
             Global.terminalHandler.putChar(
-                getItemPosition().getX(),
-                getItemPosition().getY(),
-                this.getItemCharacter(),
-                m_ItemCharacterColor,
-                Global.terminalHandler.getBackgroundColorAt(getItemPosition().getX(), getItemPosition().getY()),
-                true,
-                this);
+                    getItemPosition().getX(),
+                    getItemPosition().getY(),
+                    this.getItemCharacter(),
+                    m_ItemCharacterColor,
+                    Global.terminalHandler.getBackgroundColorAt(getItemPosition().getX(), getItemPosition().getY()),
+                    true,
+                    this);
         }
     }
 
@@ -36,5 +36,6 @@ public class LootBox extends Item {
         this.draw();
     }
 
-    public final static int m_SpawnChance = 100;
+    public final static int m_SpawnChance = 
+    40;
 }

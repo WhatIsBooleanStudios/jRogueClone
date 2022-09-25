@@ -21,7 +21,6 @@ package jrogueclone;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Structure;
-import com.sun.jna.NativeLong;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,11 +30,17 @@ import java.util.List;
  */
 public interface LibC extends Library {
     public int getchar();
+
     public int tcgetattr(int fd, termios termios_p);
+
     public int tcsetattr(int fd, int optional_actions, termios termios_p);
+
     int ioctl(int __fd, int __request, Object... varargs);
+
     int ioctl(int __fd, int __request, winsize ws);
+
     public sig_t signal(int sig, sig_t fn);
+
     public int read(int fd, byte[] buffer, int len);
 
     // Constants
@@ -43,9 +48,8 @@ public interface LibC extends Library {
     public int STDOUT_FILENO = 1;
     public int TCSANOW = 0;
     public int NCCS = 32;
-    public static final int TIOCOUTQ = (int)0x5411;
-    public static final int FIONREAD = (int)0x541B;
-    
+    public static final int TIOCOUTQ = (int) 0x5411;
+    public static final int FIONREAD = (int) 0x541B;
 
     // Constants for c_lflag (beware of octal numbers below!!)
     @SuppressWarnings("OctalInteger")
@@ -68,14 +72,14 @@ public interface LibC extends Library {
     }
 
     public class termios extends Structure {
-        public int c_iflag;           // input mode flags
-        public int c_oflag;           // output mode flags
-        public int c_cflag;           // control mode flags
-        public int c_lflag;           // local mode flags
-        public byte c_line;           // line discipline
-        public byte c_cc[];           // control characters
-        public int c_ispeed;          // input speed
-        public int c_ospeed;          // output speed
+        public int c_iflag; // input mode flags
+        public int c_oflag; // output mode flags
+        public int c_cflag; // control mode flags
+        public int c_lflag; // local mode flags
+        public byte c_line; // line discipline
+        public byte c_cc[]; // control characters
+        public int c_ispeed; // input speed
+        public int c_ospeed; // output speed
 
         public termios() {
             c_cc = new byte[NCCS];
@@ -90,8 +94,7 @@ public interface LibC extends Library {
                     "c_line",
                     "c_cc",
                     "c_ispeed",
-                    "c_ospeed"
-            );
+                    "c_ospeed");
         }
 
         @Override
@@ -109,8 +112,7 @@ public interface LibC extends Library {
         }
     }
 
-    public class winsize extends Structure
-    {
+    public class winsize extends Structure {
         public short ws_row;
         public short ws_col;
         public short ws_xpixel;

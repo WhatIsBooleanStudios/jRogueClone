@@ -5,7 +5,10 @@ import java.util.Vector;
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.LootBox;
+import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
+import jrogueclone.game.EmptySpace;
+import jrogueclone.game.Hallway;
 import jrogueclone.game.Room;
 
 public class Player extends Entity {
@@ -43,6 +46,25 @@ public class Player extends Entity {
         this.getHealthController().setHealth(100);
     }
 
+    public void handleDiscovery(Vector2D newPosition) {
+        for (Hallway hallway : Global.getGameLoop().getCurrentLevel().getConnectors()) {
+            if (hallway.contains(newPosition)
+                    && !Global.getGameLoop().getCurrentLevel().getPlayer().getDiscoveredHallways().contains(hallway)) {
+                Global.getGameLoop().getCurrentLevel().getPlayer().setHallwayDiscovered(hallway);
+            }
+        }
+        for (Room room : Global.getGameLoop().getCurrentLevel().getRooms()) {
+            if (room.getRect().contains(newPosition.getX(), newPosition.getY())
+                    && !Global.getGameLoop().getCurrentLevel().getPlayer().getDiscoveredRooms().contains(room)) {
+                Global.getGameLoop().getCurrentLevel().getPlayer().setRoomDiscovered(room);
+            }
+        }
+        Global.getGameLoop().getCurrentLevel().drawLevel();
+
+        for (Room room : getDiscoveredRooms()) {
+            room.drawContainedObjects();
+        }
+    }
 
     private enum MoveDirection {
         UP,
@@ -57,31 +79,47 @@ public class Player extends Entity {
         switch (moveDirection) {
             case DOWN:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() + 1);
-                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getY() < Global.rows - 1 && uData == null) {
-                    setPosition(newPosition);
+                handleDiscovery(newPosition);
+                if (getPosition().getY() < Global.rows - 1) {
+                    uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                    if (uData != null
+                            && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
+                        setPosition(newPosition);
+                    }
                 }
                 break;
             case LEFT:
                 newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
+                handleDiscovery(newPosition);
+
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getX() > 0 && uData == null) {
+                if (getPosition().getX() > 0 && uData != null
+                        && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                     setPosition(newPosition);
                 }
                 break;
             case RIGHT:
                 newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
+                handleDiscovery(newPosition);
+
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getX() < Global.columns - 1 && uData == null) {
+                if (getPosition().getX() < Global.columns - 1 && uData != null
+                        && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                     setPosition(newPosition);
                 }
                 break;
             case UP:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
-                uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (getPosition().getY() > 0 && uData == null) {
-                    setPosition(newPosition);
+                handleDiscovery(newPosition);
+
+                if (getPosition().getY() > 0) {
+                    uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                    if (uData != null
+                            && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
+                        setPosition(newPosition);
+                    }
                 }
+
                 break;
             default:
                 break;
@@ -110,6 +148,16 @@ public class Player extends Entity {
                             lootBox.useItem();
                     }
                 }
+            } else if (object.getClass() == Staircase.class) {
+                for (Room room : this.m_DiscoveredRooms) {
+                    if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
+                        Staircase staircase = (Staircase) object;
+                        if (staircase.isUseable()) {
+                            staircase.useItem();
+                        }
+
+                    }
+                }
             }
         }
     }
@@ -132,6 +180,10 @@ public class Player extends Entity {
             this.tryUse();
     }
 
+    public void clearDiscoveredRooms() {
+        this.m_DiscoveredRooms.clear();
+    }
+
     public Vector<Room> getDiscoveredRooms() {
         return this.m_DiscoveredRooms;
     }
@@ -140,5 +192,18 @@ public class Player extends Entity {
         this.m_DiscoveredRooms.add(room);
     }
 
+    public void clearDiscoveredHallways() {
+        this.m_DiscoveredHallways.clear();
+    }
+
+    public Vector<Hallway> getDiscoveredHallways() {
+        return this.m_DiscoveredHallways;
+    }
+
+    public void setHallwayDiscovered(Hallway hallway) {
+        this.m_DiscoveredHallways.add(hallway);
+    }
+
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
+    private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();
 }

@@ -2,16 +2,20 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
+import jrogueclone.Global;
 import jrogueclone.entity.Player;
-import jrogueclone.util.Pair;
 
-public class Level implements GameState{
+public class Level implements GameState {
     public Level(Vector<Room> rooms, Vector<Hallway> hallways, Player player) {
 
         this.m_Rooms = rooms;
         this.m_Hallways = hallways;
         this.m_Player = player;
         setDifficulty(1);
+    }
+
+    public Player getPlayer() {
+        return this.m_Player;
     }
 
     public void setDifficulty(int levelDifficulty) {
@@ -30,19 +34,21 @@ public class Level implements GameState{
         return this.m_Hallways;
     }
 
-    private void drawLevel() {
-        for (Room room : this.m_Player.getDiscoveredRooms())
+    public void drawLevel() {
+        for (Room room : this.m_Player.getDiscoveredRooms()) {
             room.draw();
         }
-        for (Hallway hallway : m_Hallways) {
+        for (Hallway hallway : this.m_Player.getDiscoveredHallways()) {
             hallway.draw();
+        }
     }
-    }
-
 
     @Override
     public void initialize() {
-        Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size()));
+        this.m_Player.clearDiscoveredRooms();
+        this.m_Player.clearDiscoveredHallways();
+        Room playerSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size() - 1)),
+                staircaseSpawnRoom = m_Rooms.get((int) (Math.random() * m_Rooms.size() - 1));
         m_Player.setPosition(new Vector2D(
                 playerSpawnRoom.getRoomPosition().getX() + (int) ((double) playerSpawnRoom.getRoomWidth() / 2),
                 playerSpawnRoom.getRoomPosition().getY() + (int) ((double) playerSpawnRoom.getRoomHeight() / 2)));
@@ -50,26 +56,31 @@ public class Level implements GameState{
         for (Room room : m_Rooms) {
             room.spawnEntities();
             room.spawnItems();
-
-
-            // remove this when playing real game
-            this.m_Player.setRoomDiscovered(room);
         }
 
-        // Uncomment when playing real game
-        // this.m_Player.setRoomDiscovered(playerSpawnRoom);
+        staircaseSpawnRoom.addStaircase();
+        this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
     @Override
     public void update() {
-        this.drawLevel();
+        if(Global.terminalHandler.keyIsPressed('i'))  {
+            m_Player.toggleInventoryState();
+        }
+        if(!Global.getGameLoop().getInventoryToggled()) {
+            this.drawLevel();
 
-        m_Player.update();
-        for (Room room : m_Player.getDiscoveredRooms())
-            room.update();
+            for (Room room : m_Player.getDiscoveredRooms()) {
+                room.update();
+                room.drawContainedObjects();
+            }
 
-        m_Player.draw();
-        System.out.flush();
+            m_Player.update();
+            m_Player.draw();
+        } else {
+            Global.terminalHandler.clear();
+            m_Player.getInventory().draw();
+        }
     }
 
     private Vector<Room> m_Rooms = new Vector<Room>();

@@ -4,11 +4,14 @@ import java.util.Vector;
 
 public class Vector2D {
 
-    public Vector2D() {}
+    public Vector2D() {
+    }
+
     public Vector2D(int X, int Y) {
         this.m_X = X;
         this.m_Y = Y;
     }
+
     public Vector2D(Vector2D vector) {
         this.m_X = vector.getX();
         this.m_Y = vector.getY();
@@ -16,11 +19,13 @@ public class Vector2D {
 
     @Override
     public boolean equals(Object o) {
-        return equals((Vector2D)o);
+        return equals((Vector2D) o);
     }
+
     public boolean equals(Vector2D vector) {
         return m_X == vector.m_X && m_Y == vector.m_Y;
     }
+
     public boolean Equals(Vector2D vector) {
         return equals(vector);
     }
@@ -44,6 +49,6 @@ public class Vector2D {
     public String toString() {
         return "(" + m_X + "," + m_Y + ")";
     }
-    
+
     private int m_X, m_Y;
 }

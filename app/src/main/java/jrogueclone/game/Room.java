@@ -5,8 +5,9 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.entity.Entity;
+import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
-
+import jrogueclone.item.Staircase;
 import jrogueclone.entity.Bat;
 
 public class Room {
@@ -14,23 +15,21 @@ public class Room {
         this.m_RoomWidth = roomWidth;
         this.m_RoomHeight = roomHeight;
         this.m_RoomPosition = position;
+    }
 
     public void generateHallwayConnectionPoints() {
         m_HallwayConnections.add(new Vector2D(
-            m_RoomPosition.getX(),
-            m_RoomPosition.getY() + (int)(Math.random() * (m_RoomHeight - 2) + 1)
-        ));
+                m_RoomPosition.getX(),
+                m_RoomPosition.getY() + (int) (Math.random() * (m_RoomHeight - 2) + 1)));
         m_HallwayConnections.add(new Vector2D(
-            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
-            m_RoomPosition.getY())
-        );
+                m_RoomPosition.getX() + (int) (Math.random() * (m_RoomWidth - 2) + 1),
+                m_RoomPosition.getY()));
     }
 
     public void addExtraHallwayConnectionPoint() {
         m_HallwayConnections.add(new Vector2D(
-            m_RoomPosition.getX() + (int)(Math.random() * (m_RoomWidth - 2) + 1),
-            m_RoomPosition.getY() + m_RoomHeight - 1)
-        );
+                m_RoomPosition.getX() + (int) (Math.random() * (m_RoomWidth - 2) + 1),
+                m_RoomPosition.getY() + m_RoomHeight - 1));
     }
 
     public Vector<Vector2D> getHallwayConnectionPoints() {
@@ -51,15 +50,15 @@ public class Room {
 
     }
 
-    public void removeItem(LootBox lootBox) {
-        this.m_LootBox.remove(lootBox);
+    public void removeItem(Item item) {
+        this.m_Items.remove(item);
     }
 
     public void spawnItems() {
-        if (Math.round(Math.random() * 99) + 1 <= LootBox.m_SpawnChance) {
-            m_LootBox.add(new LootBox('=', 214, new Vector2D(
-                    getRoomPosition().getX() + 1,
-                    getRoomPosition().getY() + 1)));
+        if (Math.round(Math.random() * 99) <= LootBox.m_SpawnChance) {
+            this.m_Items.add(new LootBox('=', 214, new Vector2D(
+                    getRoomPosition().getX() + getRoomWidth() - 2,
+                    getRoomPosition().getY() + getRoomHeight() / 2)));
         }
     }
 
@@ -89,13 +88,19 @@ public class Room {
                         Global.terminalHandler.putChar(j, i, '═', 255, 232, false, this);
                     }
                 } else
-                    Global.terminalHandler.putChar(j, i, '.', 245, 232, false, null);
+                    Global.terminalHandler.putChar(j, i, '.', 245, 232, false, this.m_EmptySpace);
             }
 
-            for(Vector2D connection : m_HallwayConnections) {
-                Global.terminalHandler.putChar(connection.getX(), connection.getY(), '╬', 255, 232, false, this);
+            for (Vector2D connection : m_HallwayConnections) {
+                Global.terminalHandler.putChar(connection.getX(), connection.getY(), '╬', 255, 232, false,
+                        this.m_EmptySpace);
             }
         }
+    }
+
+    public void addStaircase() {
+        this.m_Items.add(new Staircase('♯', 255, new Vector2D((int) (getRoomPosition().getX() + m_RoomWidth / 2),
+                (int) getRoomPosition().getY() + m_RoomHeight - 2)));
     }
 
     public void draw() {
@@ -108,13 +113,13 @@ public class Room {
             entity.draw();
         }
 
-        for (LootBox lootBox : this.m_LootBox) {
-            lootBox.draw();
+        for (Item item : this.m_Items) {
+            item.draw();
         }
     }
 
     public void update() {
-        if(Global.getGameLoop().updateEntities()) {
+        if (Global.getGameLoop().updateEntities()) {
             for (Entity entity : this.m_Entities)
                 entity.update();
         }
@@ -140,20 +145,14 @@ public class Room {
         return this.m_RoomWidth;
     }
 
-    public Vector<LootBox> getLootBox() {
-        return this.m_LootBox;
-    }
-
     public Vector<Entity> getEntities() {
         return this.m_Entities;
     }
 
     private final int m_RoomWidth, m_RoomHeight;
-    private Vector<LootBox> m_LootBox = new Vector<LootBox>();
+    private Vector<Item> m_Items = new Vector<Item>();
     private Vector<Entity> m_Entities = new Vector<Entity>();
-
-    private Vector<Entity> m_Monsters = new Vector<Entity>();
     private Vector<Vector2D> m_HallwayConnections = new Vector<Vector2D>();
-
+    private EmptySpace m_EmptySpace = new EmptySpace();
     private Vector2D m_RoomPosition = new Vector2D(-1, -1);
 }
