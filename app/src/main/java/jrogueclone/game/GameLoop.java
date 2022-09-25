@@ -47,6 +47,7 @@ public class GameLoop {
 
             if (this.m_UpdateLevel) {
                 Global.setGameState(GameStates.GAME, m_CurrentLevel);
+                firstFrame = true;
                 this.m_UpdateLevel = false;
             }
 
