@@ -22,10 +22,17 @@ public abstract class Entity {
     public class HealthController {
         public void setHealth(int healthPoints) {
             this.m_HealthPoints = healthPoints;
+            if(m_StartingHealth == Integer.MIN_VALUE) {
+                m_StartingHealth = healthPoints;
+            }
         }
 
         public int getHealth() {
             return this.m_HealthPoints;
+        }
+
+        public int getStartingHealth() {
+            return m_StartingHealth;
         }
 
         public void deductHealth(int healthDeduction) {
@@ -33,6 +40,7 @@ public abstract class Entity {
         }
 
         private int m_HealthPoints = 0;
+        private int m_StartingHealth = Integer.MIN_VALUE;
     }
 
     public HealthController getHealthController() {

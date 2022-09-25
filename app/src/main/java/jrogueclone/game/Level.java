@@ -78,6 +78,24 @@ public class Level implements GameState {
 
             m_Player.update();
             m_Player.draw();
+
+            // draw health bar
+            int margin = 1;
+            String statusBarStr = "Health: (" + m_Player.getHealthController().getHealth() + "/" + m_Player.getHealthController().getStartingHealth() + ") |" + "▆".repeat(20) + "|";
+            Global.terminalHandler.putBottomStatusBarString(
+                    margin,
+                    statusBarStr,
+                    9,
+                    232,
+                    true
+            );
+            Global.terminalHandler.putBottomStatusBarString(
+                    margin + statusBarStr.indexOf('▆'),
+                     "▆".repeat((int)Math.ceil(20 * (double)m_Player.getHealthController().getHealth() / m_Player.getHealthController().getStartingHealth())),
+                    34,
+                    232,
+                    true
+            );
         } else {
             Global.terminalHandler.putBottomStatusBarString(1, "Welcome to the inventory", 255, 232, true);
             Global.terminalHandler.clear();
