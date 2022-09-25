@@ -2,7 +2,9 @@ package jrogueclone.game;
 
 import java.util.Vector;
 
+import jrogueclone.Global;
 import jrogueclone.entity.Player;
+import jrogueclone.item.Item;
 
 public class Level implements GameState {
     public Level(Vector<Room> rooms, Vector<Vector2D> connector, Player player) {
@@ -54,13 +56,22 @@ public class Level implements GameState {
 
     @Override
     public void update() {
-        this.drawLevel();
+        if (Global.terminalHandler.keyIsPressed('i'))
+            m_Player.toggleInventoryState();
+        if(!Global.getGameLoop().getInventoryToggled()) {
+            this.drawLevel();
 
-        m_Player.update();
-        for (Room room : m_Player.getDiscoveredRooms())
-            room.update();
+            for (Room room : m_Player.getDiscoveredRooms()) {
+                room.update();
+                room.drawContainedObjects();
+            }
 
-        m_Player.draw();
+            m_Player.update();
+            m_Player.draw();
+        } else {
+            Global.terminalHandler.clear();
+            m_Player.getInventory().draw();
+        }
     }
 
     private Vector<Room> m_Rooms = new Vector<Room>();

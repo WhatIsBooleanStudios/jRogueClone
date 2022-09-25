@@ -50,7 +50,7 @@ public class Player extends Entity {
         RIGHT
     }
 
-    private void handleMovment(MoveDirection moveDirection) {
+    private void handleMovement(MoveDirection moveDirection) {
         Vector2D newPosition = null;
         Object uData = null;
         switch (moveDirection) {
@@ -101,7 +101,7 @@ public class Player extends Entity {
         }
 
         for (Object object : uData) {
-            if (object.getClass().getName().toLowerCase().indexOf("lootbox") > 0) {
+            if (object.getClass() == LootBox.class) {
                 for (Room room : this.m_DiscoveredRooms) {
                     if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
                         LootBox lootBox = (LootBox) object;
@@ -113,24 +113,22 @@ public class Player extends Entity {
         }
     }
 
-    public static void toggleInventoryState() {
-        Global.getGameLoop().m_Inventory = !Global.getGameLoop().m_Inventory;
+    public void toggleInventoryState() {
+        Global.getGameLoop().setInventoryToggled(!Global.getGameLoop().getInventoryToggled());
     }
 
     @Override
     public void update() {
         if (Global.terminalHandler.keyIsPressed('w'))
-            this.handleMovment(MoveDirection.UP);
+            this.handleMovement(MoveDirection.UP);
         if (Global.terminalHandler.keyIsPressed('a'))
-            this.handleMovment(MoveDirection.LEFT);
+            this.handleMovement(MoveDirection.LEFT);
         if (Global.terminalHandler.keyIsPressed('s'))
-            this.handleMovment(MoveDirection.DOWN);
+            this.handleMovement(MoveDirection.DOWN);
         if (Global.terminalHandler.keyIsPressed('d'))
-            this.handleMovment(MoveDirection.RIGHT);
+            this.handleMovement(MoveDirection.RIGHT);
         if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
-        if (Global.terminalHandler.keyIsPressed('i'))
-            toggleInventoryState();
     }
 
     public Vector<Room> getDiscoveredRooms() {

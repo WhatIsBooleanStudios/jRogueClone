@@ -198,7 +198,7 @@ public class TerminalHandler {
      * @see public void end()
      */
     public void putChar(int col, int row, char c) {
-        putChar(col, row, c, 15, 0, false);
+        putChar(col, row, c, 255, 232, false);
     }
 
     /**

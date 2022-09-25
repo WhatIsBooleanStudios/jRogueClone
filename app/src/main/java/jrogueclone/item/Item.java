@@ -16,6 +16,8 @@ public abstract class Item {
         this.m_CharacterAttributes.add(CharacterAttributes.BOLD);
     }
 
+    public abstract String toString();
+
     public ItemType getItemType() {
         return this.m_ItemType;
     }
