@@ -68,7 +68,6 @@ public class Level implements GameState {
             m_Player.toggleInventoryState();
         }
         if(!Global.getGameLoop().getInventoryToggled()) {
-            Global.terminalHandler.putTopStatusBarString(1, "Currently playing the game", 255, 232, false);
             this.drawLevel();
 
             for (Room room : m_Player.getDiscoveredRooms()) {
@@ -79,7 +78,6 @@ public class Level implements GameState {
             m_Player.update();
             m_Player.draw();
         } else {
-            Global.terminalHandler.putBottomStatusBarString(1, "Welcome to the inventory", 255, 232, true);
             Global.terminalHandler.clear();
             m_Player.getInventory().draw();
         }

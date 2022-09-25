@@ -1,12 +1,14 @@
 package jrogueclone.entity;
 
 import jrogueclone.Global;
+import jrogueclone.game.EmptySpace;
+import jrogueclone.game.Room;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.Weapon;
 
 public class Bat extends Entity {
-    public Bat(char entityCharacter, Vector2D entityPosition) {
-        super(entityCharacter, entityPosition);
+    public Bat(char entityCharacter, Vector2D entityPosition, Room spawnRoom) {
+        super(entityCharacter, entityPosition, spawnRoom);
     }
 
     @Override
@@ -40,12 +42,31 @@ public class Bat extends Entity {
 
         if (this.getHealthController().getHealth() <= 0)
             this.handleDeath();
+
+        Vector2D playerPosition = Global.getGameLoop().getCurrentLevel().getPlayer().getPosition(),
+                newPosition = this.getPosition();
+
+        if (playerPosition.getY() > this.getPosition().getY()) {
+            newPosition.setY(newPosition.getY() + 1);
+        } else if (playerPosition.getY() < this.getPosition().getY()) {
+            newPosition.setY(newPosition.getY() - 1);
+        } else if (playerPosition.getX() > this.getPosition().getX()) {
+            newPosition.setX(newPosition.getX() + 1);
+        } else {
+            newPosition.setX(newPosition.getX() - 1);
+        }
+
+        if (!newPosition.equals(playerPosition)
+                && this.m_SpawnRoom.getRect().contains(newPosition.getX(), newPosition.getY())) {
+            Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+            if (uData.getClass() == EmptySpace.class)
+                this.setPosition(newPosition);
+        }
     }
 
     @Override
     public void handleDeath() {
         // TODO Auto-generated method stub
-
 
     }
 }

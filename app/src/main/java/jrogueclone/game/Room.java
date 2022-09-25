@@ -43,7 +43,7 @@ public class Room {
             case 1: {
                 m_Entities.add(new Bat('ʌ', new Vector2D(
                         getRoomPosition().getX() + (int) ((double) getRoomWidth() / 2 - 2),
-                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2))));
+                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2)), this));
                 break;
             }
         }

@@ -1,5 +1,6 @@
 package jrogueclone.entity;
 
+import jrogueclone.game.Room;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory;
 
@@ -13,6 +14,13 @@ public abstract class Entity {
 
     public Entity(char entityCharacter, Vector2D entityPosition) {
 
+        this.m_EntityCharacter = entityCharacter;
+        this.m_EntityPosition = entityPosition;
+        handleEntitySpawn();
+    }
+
+    public Entity(char entityCharacter, Vector2D entityPosition, Room spawnRoom) {
+        this.m_SpawnRoom = spawnRoom;
         this.m_EntityCharacter = entityCharacter;
         this.m_EntityPosition = entityPosition;
         handleEntitySpawn();
@@ -72,4 +80,5 @@ public abstract class Entity {
     private Vector2D m_EntityPosition = new Vector2D();
     private HealthController m_HealthController = new HealthController();
     private Inventory m_Inventory = new Inventory();
+    protected Room m_SpawnRoom;
 }
