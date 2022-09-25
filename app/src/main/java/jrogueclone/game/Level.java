@@ -71,8 +71,8 @@ public class Level implements GameState {
             this.drawLevel();
 
             for (Room room : m_Player.getDiscoveredRooms()) {
-                room.update();
                 room.drawContainedObjects();
+                room.update();
             }
 
             m_Player.update();

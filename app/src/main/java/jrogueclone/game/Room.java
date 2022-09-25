@@ -10,6 +10,7 @@ import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
 import jrogueclone.entity.Bat;
 
+
 public class Room {
     public Room(Vector2D position, int roomWidth, int roomHeight) {
         this.m_RoomWidth = roomWidth;
@@ -108,13 +109,12 @@ public class Room {
     }
 
     public void drawContainedObjects() {
-
-        for (Entity entity : this.m_Entities) {
-            entity.draw();
-        }
-
         for (Item item : this.m_Items) {
             item.draw();
+        }
+        
+        for (Entity entity : this.m_Entities) {
+            entity.draw();
         }
     }
 

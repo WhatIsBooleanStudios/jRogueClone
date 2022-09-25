@@ -1,5 +1,7 @@
 package jrogueclone.entity;
 
+import jrogueclone.Global;
+import jrogueclone.game.EmptySpace;
 import jrogueclone.game.Room;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory;
@@ -66,6 +68,34 @@ public abstract class Entity {
 
     public Inventory getInventory() {
         return this.m_Inventory;
+    }
+
+    protected void handleMovment() {
+        if(!this.isMonster())
+            return;
+            
+        Vector2D playerPosition = Global.getGameLoop().getCurrentLevel().getPlayer().getPosition(),
+                newPosition = new Vector2D(this.getPosition());
+
+        if (playerPosition.getY() > this.getPosition().getY()) {
+            newPosition.setY(newPosition.getY() + 1);
+        } else if (playerPosition.getY() < this.getPosition().getY()) {
+            newPosition.setY(newPosition.getY() - 1);
+        } else if (playerPosition.getX() > this.getPosition().getX()) {
+            newPosition.setX(newPosition.getX() + 1);
+        } else {
+            newPosition.setX(newPosition.getX() - 1);
+        }
+
+        if (this.m_SpawnRoom.getRect().contains(playerPosition.getX(), playerPosition.getY())
+                && this.m_SpawnRoom.getRect().contains(newPosition.getX(), newPosition.getY())
+                && !newPosition.Equals(playerPosition)) {
+            Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+            if (uData.getClass() == EmptySpace.class) {
+
+                this.setPosition(newPosition);
+            }
+        }
     }
 
     public abstract void handleEntitySpawn();
