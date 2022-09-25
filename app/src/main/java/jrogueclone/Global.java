@@ -1,6 +1,14 @@
 package jrogueclone;
 
 import jrogueclone.gfx.TerminalHandler;
+import jrogueclone.item.Item;
+import jrogueclone.item.Potion;
+import jrogueclone.item.Weapon;
+import jrogueclone.item.Potion.PotionType;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.jna.Native;
 
 import jrogueclone.game.GameLoop;
@@ -54,6 +62,28 @@ public class Global {
     // Render vars
     public static final int rows = 24;
     public static final int columns = 80;
+
     public static final int topStatusBarColumns = 1;
     public static final int bottomStatusBarColumns = 2;
+
+
+    // Game items
+    public static List<Item> Items = new ArrayList<Item>();
+    public static void initializeItems () {
+
+        // Add potions to the list of items
+        Items.add(new Potion(PotionType.HEALTH));
+        Items.add(new Potion(PotionType.INVISIBILTY));
+        Items.add(new Potion(PotionType.MYSTERY));
+
+        // Add weapons to the list of items
+        Items.add(new Weapon("Damaged Wooden Spear", 20, 60));
+        Items.add(new Weapon("Sharp Steel Spear", 45, 80));
+        Items.add(new Weapon("Weathered Wood Knife", 15, 30));
+        Items.add(new Weapon("Unparalleled Steel Scythe", 50, 70));
+        Items.add(new Weapon("Steel Ace", 35,80));
+        Items.add(new Weapon("Sickle", 30, 60));
+        Items.add(new Weapon("Trident", 40, 65));
+    }
+
 }
