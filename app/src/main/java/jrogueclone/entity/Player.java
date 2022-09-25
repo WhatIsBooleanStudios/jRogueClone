@@ -224,7 +224,7 @@ public class Player extends Entity {
         return this.m_Invisible;
     }
 
-    private boolean m_Invisible = true;
+    private boolean m_Invisible = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();
 }
