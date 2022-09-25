@@ -1,7 +1,10 @@
 package jrogueclone.item;
 
+import jrogueclone.gfx.ui.Inventory.ItemType;
+
 public class Weapon extends Item {
     public Weapon(String weaponName, int weaponDamage, int weaponDamageChance) {
+        this.m_ItemType = ItemType.WEAPON; 
         this.m_WeaponName = weaponName;
         this.m_WeaponDamage = weaponDamage;
         this.m_WeaponDamageChance = weaponDamageChance;

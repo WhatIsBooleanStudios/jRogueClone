@@ -104,7 +104,7 @@ public abstract class Entity {
 
     public abstract void update();
 
-    public abstract void handleDeath();
+    public abstract String toString();
 
     private char m_EntityCharacter;
     private Vector2D m_EntityPosition = new Vector2D();

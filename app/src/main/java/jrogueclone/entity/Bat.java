@@ -39,15 +39,11 @@ public class Bat extends Entity {
         m_AnimationFrame %= 2;
         setEntityCharacter(m_AnimationFrame == 0 ? 'ʌ' : 'v');
 
-        if (this.getHealthController().getHealth() <= 0)
-            this.handleDeath();
-    
         handleMovment();
     }
 
     @Override
-    public void handleDeath() {
-        // TODO Auto-generated method stub
-
+    public String toString() {
+        return "Bat";
     }
 }
