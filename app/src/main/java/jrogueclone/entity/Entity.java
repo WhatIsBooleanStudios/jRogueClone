@@ -71,7 +71,7 @@ public abstract class Entity {
     }
 
     protected void handleMovment() {
-        if(!this.isMonster())
+        if(!this.isMonster() || Global.getGameLoop().getCurrentLevel().getPlayer().isInvisible())
             return;
             
         Vector2D playerPosition = Global.getGameLoop().getCurrentLevel().getPlayer().getPosition(),
