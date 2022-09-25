@@ -29,11 +29,6 @@ public class Potion extends Item {
     }
 
     @Override
-    public String toString() {
-      return "potion";
-    }
-
-    @Override
     public void useItem() {
         switch (this.m_PotionType) {
             case HEALTH:
