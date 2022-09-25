@@ -21,17 +21,25 @@ public class TerminalHandler {
         tios.c_lflag &= ~(LibC.ICANON | LibC.ECHO | LibC.ECHONL);
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
 
+        for(int i = 0; i < Global.columns; i++) {
+            topStatusBarRenderData[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
+        }
+
         for (int i = 0; i < Global.columns; i++) {
             for (int j = 0; j < Global.rows; j++) {
                 renderData[i][j] = new RenderableCharacter(' ', 15, 0, false, null);
             }
         }
 
+        for(int i = 0; i < Global.columns; i++) {
+            bottomStatusBarRenderData[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
+        }
+
         LibC.winsize ws = new LibC.winsize();
         Global.libc.ioctl(LibC.STDIN_FILENO, LibC.TIOCGWINSZ, ws);
         terminalSize = ws;
 
-        if (terminalSize.ws_col < Global.columns && terminalSize.ws_row < Global.rows) {
+        if (terminalSize.ws_col < (Global.columns + Global.bottomStatusBarColumns + Global.topStatusBarColumns) && terminalSize.ws_row < Global.rows) {
             restoreState();
             System.err.println("Terminal too small! Must be at least (" + Global.columns + ", " + Global.rows + ")");
             System.exit(-1);
@@ -179,13 +187,23 @@ public class TerminalHandler {
         }
     }
 
+    RenderableCharacter[][] topStatusBarRenderData = new RenderableCharacter[Global.columns][1];
     RenderableCharacter[][] renderData = new RenderableCharacter[Global.columns][Global.rows];
+    RenderableCharacter[][] bottomStatusBarRenderData = new RenderableCharacter[Global.columns][1];
 
     /**
      * Begin rendering. This will clear the renderbuffer
      */
     public void begin() {
         // clear render data
+        for(int i = 0; i < Global.columns; i++) {
+            topStatusBarRenderData[i][0].character = ' ';
+            topStatusBarRenderData[i][0].fgColor = 232;
+            topStatusBarRenderData[i][0].bgColor = 232;
+            topStatusBarRenderData[i][0].bold = false;
+            topStatusBarRenderData[i][0].userData = null;
+        }
+
         for (int i = 0; i < Global.columns; i++) {
             for (int j = 0; j < Global.rows; j++) {
                 renderData[i][j].character = ' ';
@@ -194,6 +212,14 @@ public class TerminalHandler {
                 renderData[i][j].bold = false;
                 renderData[i][j].userData = null;
             }
+        }
+
+        for(int i = 0; i < Global.columns; i++) {
+            bottomStatusBarRenderData[i][0].character = ' ';
+            bottomStatusBarRenderData[i][0].fgColor = 232;
+            bottomStatusBarRenderData[i][0].bgColor = 232;
+            bottomStatusBarRenderData[i][0].bold = false;
+            bottomStatusBarRenderData[i][0].userData = null;
         }
     }
 
@@ -247,6 +273,35 @@ public class TerminalHandler {
         renderData[col][row].bold = bold;
         renderData[col][row].character = c;
     }
+
+    public void putTopStatusBarChar(int col, char c, int fg, int bg, boolean bold) {
+        topStatusBarRenderData[col][0].userData = null;
+        topStatusBarRenderData[col][0].fgColor = fg;
+        topStatusBarRenderData[col][0].bgColor = bg;
+        topStatusBarRenderData[col][0].bold = bold;
+        topStatusBarRenderData[col][0].character = c;
+    }
+
+    public void putTopStatusBarString(int col, String s, int fg, int bg, boolean bold) {
+        for(int i = 0; i < s.length(); i++) {
+            putTopStatusBarChar(col + i, s.charAt(i), fg, bg, bold);
+        }
+    }
+
+    public void putBottomStatusBarChar(int col, char c, int fg, int bg, boolean bold) {
+        bottomStatusBarRenderData[col][0].userData = null;
+        bottomStatusBarRenderData[col][0].fgColor = fg;
+        bottomStatusBarRenderData[col][0].bgColor = bg;
+        bottomStatusBarRenderData[col][0].bold = bold;
+        bottomStatusBarRenderData[col][0].character = c;
+    }
+
+    public void putBottomStatusBarString(int col, String s, int fg, int bg, boolean bold) {
+        for(int i = 0; i < s.length(); i++) {
+            putBottomStatusBarChar(col + i, s.charAt(i), fg, bg, bold);
+        }
+    }
+
 
     private void setForegroundColor(int color) {
         System.out.print(CSI + "38;5;" + color + "m");
@@ -312,15 +367,12 @@ public class TerminalHandler {
             return null;
     }
 
-    /**
-     * Flush the renderBuffer to stdout
-     */
-    public void end() {
+    private void drawRenderData(RenderableCharacter[][] renderData) {
         int currentFg = Integer.MAX_VALUE;
         int currentBg = Integer.MAX_VALUE;
         boolean boldState = false;
-        for (int i = 0; i < Global.rows; i++) {
-            for (int j = 0; j < Global.columns; j++) {
+        for (int i = 0; i < renderData[0].length; i++) {
+            for (int j = 0; j < renderData.length; j++) {
                 if (renderData[j][i].fgColor != currentFg) {
                     currentFg = renderData[j][i].fgColor;
                     setForegroundColor(currentFg);
@@ -345,6 +397,15 @@ public class TerminalHandler {
         }
         System.out.flush();
         resetTextAttributes();
+    }
+
+    /**
+     * Flush the renderBuffer to stdout
+     */
+    public void end() {
+        drawRenderData(this.topStatusBarRenderData);
+        drawRenderData(this.renderData);
+        drawRenderData(this.bottomStatusBarRenderData);
     }
 
     /**
