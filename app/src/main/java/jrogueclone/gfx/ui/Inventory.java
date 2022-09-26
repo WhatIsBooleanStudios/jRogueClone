@@ -3,7 +3,10 @@ package jrogueclone.gfx.ui;
 import java.util.Vector;
 
 import jrogueclone.Global;
+import jrogueclone.entity.Entity.HealthController;
 import jrogueclone.item.Item;
+import jrogueclone.item.Potion;
+import jrogueclone.item.Potion.PotionType;
 
 public class Inventory {
     public enum ItemType {
@@ -22,9 +25,17 @@ public class Inventory {
     }
 
     Vector<Item> m_RemoveQueue = new Vector<>();
+
     public void equipItem(Item newItem) {
         for (Item item : this.m_EquippedItems) {
-            if(newItem.getItemType() == ItemType.POTION) {
+            if (newItem.getItemType() == ItemType.POTION) {
+                HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
+                Potion potion = (Potion)newItem;
+                if (hc.getMaxHealth() == hc.getHealth() && potion.getPotionType() == PotionType.HEALTH) {
+                    Global.terminalHandler.putTopStatusBarString(1, "HP is allready full!", 255, 233, false);
+                    return;
+                }
+                    
                 Global.terminalHandler.putTopStatusBarString(1, "Drank " + newItem.toString(), 255, 233, false);
                 newItem.useItem();
                 m_RemoveQueue.add(newItem);
@@ -35,9 +46,9 @@ public class Inventory {
             }
         }
         this.m_EquippedItems.add(newItem);
-        for(Item item : m_RemoveQueue) {
+        for (Item item : m_RemoveQueue) {
             m_EquippedItems.remove(item);
-            if(item.getItemType() == ItemType.POTION)
+            if (item.getItemType() == ItemType.POTION)
                 m_Items.remove(item);
         }
         m_RemoveQueue.clear();
@@ -55,16 +66,16 @@ public class Inventory {
     private int cursorPos = 0;
 
     public void updateUI() {
-        if(Global.terminalHandler.keyIsPressed('w') && cursorPos > 0) {
+        if (Global.terminalHandler.keyIsPressed('w') && cursorPos > 0) {
             cursorPos--;
         }
-        if(Global.terminalHandler.keyIsPressed('s') && cursorPos < getItems().size() - 1) {
+        if (Global.terminalHandler.keyIsPressed('s') && cursorPos < getItems().size() - 1) {
             cursorPos++;
         }
-        if(Global.terminalHandler.keyIsPressed('\n')) {
+        if (Global.terminalHandler.keyIsPressed('\n')) {
             Item item = getItems().get(cursorPos);
             equipItem(getItems().get(cursorPos));
-            if(cursorPos >= getItems().size() || item != getItems().get(cursorPos)) {
+            if (cursorPos >= getItems().size() || item != getItems().get(cursorPos)) {
                 cursorPos--;
             }
         }
@@ -72,10 +83,10 @@ public class Inventory {
 
     public void draw() {
         int i = 0;
-        for(Item item : m_Items) {
+        for (Item item : m_Items) {
             String itemString = item.toString();
             String itemNumberString = String.valueOf(i) + ")";
-            for(int it = itemNumberString.length(); it < 4; it++) {
+            for (int it = itemNumberString.length(); it < 4; it++) {
                 itemNumberString = itemNumberString + " ";
             }
             String finalString = itemNumberString + itemString;
@@ -83,7 +94,7 @@ public class Inventory {
 
             int bg = (i == cursorPos ? 255 : 232);
             int fg = (i == cursorPos ? 232 : 255);
-            if(finalString.length() > Global.columns) {
+            if (finalString.length() > Global.columns) {
                 System.out.println(finalString);
                 try {
                     Thread.sleep(10000);
@@ -93,10 +104,10 @@ public class Inventory {
                 }
                 return;
             }
-            for(int j = 0; j < finalString.length(); j++) {
+            for (int j = 0; j < finalString.length(); j++) {
                 Global.terminalHandler.putChar(j, i, finalString.charAt(j), fg, bg, false);
             }
-            if(getEquippedItem(item.getItemType()) == item) {
+            if (getEquippedItem(item.getItemType()) == item) {
                 Global.terminalHandler.putChar(Global.columns - 1 - 2, i, '✓', fg, bg, true);
             }
             i++;

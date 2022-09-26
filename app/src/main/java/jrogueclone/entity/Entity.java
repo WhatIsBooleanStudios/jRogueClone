@@ -31,27 +31,32 @@ public abstract class Entity {
     }
 
     public class HealthController {
-        public void setHealth(int healthPoints) {
-            this.m_HealthPoints = healthPoints;
-            if(m_StartingHealth == Integer.MIN_VALUE) {
-                m_StartingHealth = healthPoints;
-            }
+
+        public void addHealth(int healthPoints) {
+            this.m_HealthPoints += healthPoints;
+        }
+
+        public void setHealthMax() {
+            this.m_HealthPoints = this.m_MaxHealth;
         }
 
         public int getHealth() {
             return this.m_HealthPoints;
         }
 
-        public int getStartingHealth() {
-            return m_StartingHealth;
+        public void setHealthCapacity(int maxHealth) {
+            this.m_MaxHealth = maxHealth;
+        }
+
+        public int getMaxHealth() {
+            return this.m_MaxHealth;
         }
 
         public void deductHealth(int healthDeduction) {
             this.m_HealthPoints -= healthDeduction;
         }
 
-        private int m_HealthPoints = 0;
-        private int m_StartingHealth = Integer.MIN_VALUE;
+        private int m_HealthPoints = 0, m_MaxHealth = 0;
     }
 
     public HealthController getHealthController() {
@@ -88,7 +93,7 @@ public abstract class Entity {
 
         if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
             HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-            hc.setHealth(hc.getHealth() - activeWeapon.getWeaponDamage());
+            hc.addHealth(-activeWeapon.getWeaponDamage());
             Global.terminalHandler.putTopStatusBarString(0,
                     this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you", 255, 235, false);
         } else

@@ -9,6 +9,7 @@ import jrogueclone.item.LootBox;
 import jrogueclone.item.Potion;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
+import jrogueclone.item.Potion.PotionType;
 import jrogueclone.game.EmptySpace;
 import jrogueclone.game.Hallway;
 import jrogueclone.game.Room;
@@ -38,12 +39,13 @@ public class Player extends Entity {
     @Override
     public void handleEntitySpawn() {
 
-        // Give the player a weapon with a 70% chance to inflict 34 damage
         this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-        34, 70));
+        20, 70));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
+        this.getHealthController().setHealthCapacity(100);
+        this.getHealthController().setHealthMax();
 
-        this.getHealthController().setHealth(100);
+        this.getInventory().addItem(new Potion(PotionType.INVISIBILTY));
     }
 
     public void handleDiscovery(Vector2D newPosition) {
@@ -85,11 +87,11 @@ public class Player extends Entity {
         if (activeWeapon == null)
             return;
 
-        this.toggleInvisible();
+        this.setInvisible(false);
 
         if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
             HealthController hc = entity.getHealthController();
-            hc.setHealth(hc.getHealth() - activeWeapon.getWeaponDamage());
+            hc.addHealth(-activeWeapon.getWeaponDamage());
             Global.terminalHandler.putTopStatusBarString(0,
                     "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString(), 255, 235, false);
         } else
@@ -253,8 +255,8 @@ public class Player extends Entity {
         this.m_DiscoveredHallways.add(hallway);
     }
 
-    public void toggleInvisible() {
-        this.m_Invisible = !this.m_Invisible;
+    public void setInvisible(boolean invisible) {
+        this.m_Invisible = invisible;
     }
 
     public boolean isInvisible() {

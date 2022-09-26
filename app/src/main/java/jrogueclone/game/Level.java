@@ -81,7 +81,7 @@ public class Level implements GameState {
 
             // draw health bar
             int margin = 1;
-            String statusBarStr = "Health: (" + m_Player.getHealthController().getHealth() + "/" + m_Player.getHealthController().getStartingHealth() + ") |" + "▆".repeat(20) + "|";
+            String statusBarStr = "Health: (" + m_Player.getHealthController().getHealth() + "/" + m_Player.getHealthController().getMaxHealth() + ") |" + "▆".repeat(20) + "|";
             Global.terminalHandler.putBottomStatusBarString(
                     margin,
                     statusBarStr,
@@ -91,7 +91,7 @@ public class Level implements GameState {
             );
             Global.terminalHandler.putBottomStatusBarString(
                     margin + statusBarStr.indexOf('▆'),
-                     "▆".repeat((int)Math.ceil(20 * (double)m_Player.getHealthController().getHealth() / m_Player.getHealthController().getStartingHealth())),
+                     "▆".repeat((int)Math.ceil(20 * (double)m_Player.getHealthController().getHealth() / m_Player.getHealthController().getMaxHealth())),
                     34,
                     232,
                     true

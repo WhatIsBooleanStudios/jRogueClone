@@ -33,29 +33,32 @@ public class Potion extends Item {
         switch (this.m_PotionType) {
             case HEALTH: {
                 HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                if (hc.getHealth() <= 60) // heal 40 damage
-                    hc.setHealth(hc.getHealth() + 40);
+                if (hc.getHealth() + 40 <= hc.getMaxHealth())
+                    hc.addHealth(40);
                 else
-                    hc.setHealth(100);
+                    hc.setHealthMax();
                 break;
             }
             case INVISIBILTY: {
-                Global.getGameLoop().getCurrentLevel().getPlayer().toggleInvisible();
+                Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
                 break;
             }
             case MYSTERY: {
                 int randomEffect = (int) Math.round(Math.random() * 2 + 1);
+                
                 if (randomEffect == 1) {
 
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                    if (hc.getHealth() <= 60) // heal 40 damage
-                        hc.setHealth(hc.getHealth() + 40);
+                    if (hc.getHealth() + 40 <= hc.getMaxHealth())
+                        hc.addHealth(40);
+                    else
+                        hc.setHealthMax();
 
                 } else if (randomEffect == 2) {
-                    Global.getGameLoop().getCurrentLevel().getPlayer().toggleInvisible();
+                    Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
                 } else {
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                    hc.setHealth(hc.getHealth() - 40);
+                    hc.addHealth(-40);
                 }
                 break;
             }
@@ -86,6 +89,10 @@ public class Potion extends Item {
 
     public String getPotionName() {
         return this.m_PotionName;
+    }
+
+    public PotionType getPotionType() {
+        return this.m_PotionType;
     }
 
     private String m_PotionName;

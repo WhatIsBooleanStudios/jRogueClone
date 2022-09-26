@@ -23,7 +23,8 @@ public class Skeleton extends Entity {
         this.getInventory().addItem(new Weapon("Rusty Sword",
                 25, 35));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
-        this.getHealthController().setHealth(30);
+        this.getHealthController().setHealthCapacity(30);
+        this.getHealthController().setHealthMax();
     }
 
     @Override

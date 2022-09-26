@@ -21,7 +21,8 @@ public class Bat extends Entity {
         this.getInventory().addItem(new Weapon("Fangs",
                 12, 50));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
-        this.getHealthController().setHealth(20);
+        this.getHealthController().setHealthCapacity(20);
+        this.getHealthController().setHealthMax();
     }
 
     @Override

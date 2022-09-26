@@ -17,6 +17,7 @@ public class Staircase extends Item {
         Player curPlayer = Global.getGameLoop().getCurrentLevel().getPlayer();
         Global.getGameLoop().setCurentLevel(MapGeneration.generateLevel(curPlayer));
         Global.getGameLoop().getCurrentLevel().setDifficulty(Global.getGameLoop().getCurrentLevel().getDifficulty() + 1);
+        curPlayer.getHealthController().setHealthCapacity(curPlayer.getHealthController().getMaxHealth() + 50);
     }
 
     @Override
