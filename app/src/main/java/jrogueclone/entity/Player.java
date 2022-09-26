@@ -90,11 +90,17 @@ public class Player extends Entity {
         if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
             HealthController hc = entity.getHealthController();
             hc.addHealth(-activeWeapon.getWeaponDamage());
+            String toPrint = "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString();
+            toPrint += " ".repeat(Global.columns - toPrint.length());
             Global.terminalHandler.putTopStatusBarString(0,
-                    "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString(), 255, 235, false);
-        } else
+                    toPrint, 255, 232, false);
+        } else {
+            String toDisplay = "You missed the " + entity.toString();
+            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+
             Global.terminalHandler.putTopStatusBarString(0,
-                    "You missed the " + entity.toString(), 255, 235, false);
+                    toDisplay, 255, 232, false);
+        }
     }
 
     private void handleMovement(MoveDirection moveDirection) {
