@@ -5,6 +5,7 @@ import java.util.Vector;
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.LootBox;
+import jrogueclone.item.Potion;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
 import jrogueclone.game.EmptySpace;
@@ -40,8 +41,11 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         // Give the player a weapon with a 70% chance to inflict 34 damage
-        this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-                34, 70));
+        Weapon startingWeapon = new Weapon("Damaged Wooden Sword",
+                34, 70);
+        this.getInventory().addItem(startingWeapon);
+        this.getInventory().addItem(new Potion(Potion.PotionType.INVISIBILTY));
+        this.getInventory().equipItem(startingWeapon);
 
         this.getHealthController().setHealth(100);
     }

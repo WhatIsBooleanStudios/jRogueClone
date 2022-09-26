@@ -11,20 +11,32 @@ public class InputHandler {
     }
 
     public boolean updateGame() {
-        for (char c : m_KeyMap.toCharArray()) {
-            if (Global.terminalHandler.keyIsPressed(c)) {
-                if (c == 'e' || c == 'i') {
-                    Global.getGameLoop().setUpdateEntities(false);
-                } else {
-                    Global.getGameLoop().setUpdateEntities(true);
+        if(!Global.getGameLoop().getInventoryToggled()) {
+            for (char c : m_KeyMap.toCharArray()) {
+                if (Global.terminalHandler.keyIsPressed(c)) {
+                    if (c == 'e' || c == 'i') {
+                        Global.getGameLoop().setUpdateEntities(false);
+                    } else {
+                        Global.getGameLoop().setUpdateEntities(true);
+                    }
+                    return true;
                 }
-                return true;
-            }
 
+            }
+        } else {
+            for (char c : m_InventoryKeyMap.toCharArray()) {
+                if (Global.terminalHandler.keyIsPressed(c)) {
+                    Global.getGameLoop().setUpdateEntities(false);
+                    return true;
+                }
+
+            }
         }
 
         return false;
     }
 
     public static final String m_KeyMap = "iwasde ";
+
+    public static final String m_InventoryKeyMap = "wasd\ni";
 }

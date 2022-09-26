@@ -98,6 +98,7 @@ public class Level implements GameState {
         } else {
             Global.terminalHandler.putBottomStatusBarString(1, "Welcome to the inventory", 255, 232, true);
             Global.terminalHandler.clear();
+            m_Player.getInventory().updateUI();
             m_Player.getInventory().draw();
         }
     }
