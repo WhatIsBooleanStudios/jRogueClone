@@ -70,7 +70,7 @@ public class Player extends Entity {
         LEFT,
         RIGHT
     }
-    
+
     private void handleCombat(Object object) {
 
         if (object.getClass().toString().toLowerCase().indexOf("entity") == -1)
@@ -217,7 +217,9 @@ public class Player extends Entity {
         if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
         if (this.getHealthController().getHealth() <= 0) {
-            // TODO: Handle death
+            Global.terminalHandler.restoreState();
+            System.out.println("Game Over! You died a tragic death");
+            System.exit(0);
         }
 
     }
