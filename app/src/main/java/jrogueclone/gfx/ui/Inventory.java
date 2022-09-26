@@ -97,9 +97,31 @@ public class Inventory {
                 cursorPos--;
             }
         }
+        if(Global.terminalHandler.keyIsPressed('x')) {
+            Item itemUnderCursor = getItems().get(cursorPos + currentPage * Global.rows);
+            Global.terminalHandler.putTopStatusBarString(1, "Delete " + itemUnderCursor, 255, 233, false);
+            m_Items.remove(itemUnderCursor);
+            if(getEquippedItem(itemUnderCursor.getItemType()) == itemUnderCursor) {
+                boolean foundEquippedItem = false;
+                for(int i = 0; i < m_Items.size(); i++) {
+                    if(m_Items.get(i).getItemType() == itemUnderCursor.getItemType()) {
+                        equipItem(m_Items.get(i));
+                        foundEquippedItem = true;
+                        break;
+                    }
+                }
+                if(!foundEquippedItem) {
+                    m_EquippedItems.remove(itemUnderCursor);
+                }
+            }
+            if(currentPage == Math.ceil((double)m_Items.size() / Global.rows) - 1 && cursorPos > (m_Items.size() % Global.rows - 1)) {
+                cursorPos--;
+            }
+        }
         if(currentPage > Math.ceil((double)m_Items.size() / Global.rows) - 1) {
             currentPage = (int)Math.ceil((double)m_Items.size() / Global.rows) - 1;
             cursorPos = 23;
+            if(currentPage < 0) {currentPage = 0; cursorPos = 0;}
         }
         if(cursorPos < 0 && currentPage > 0) {
             currentPage--;
@@ -108,27 +130,29 @@ public class Inventory {
     }
 
     public void draw() {
-        for(int i = currentPage * Global.rows; i < (currentPage + 1) * Global.rows; i++) {
-            if(i > m_Items.size() - 1) {
-                break;
-            }
-            Item item = getItems().get(i);
-            String itemString = item.toString();
-            String itemNumberString = String.valueOf(i) + ")";
-            for (int it = itemNumberString.length(); it < 4; it++) {
-                itemNumberString = itemNumberString + " ";
-            }
-            String finalString = itemNumberString + itemString;
-            finalString += " ".repeat(Global.columns - finalString.length());
+        if(m_Items.size() > 0) {
+            for(int i = currentPage * Global.rows; i < (currentPage + 1) * Global.rows; i++) {
+                if(i > m_Items.size() - 1) {
+                    break;
+                }
+                Item item = getItems().get(i);
+                String itemString = item.toString();
+                String itemNumberString = String.valueOf(i) + ")";
+                for (int it = itemNumberString.length(); it < 4; it++) {
+                    itemNumberString = itemNumberString + " ";
+                }
+                String finalString = itemNumberString + itemString;
+                finalString += " ".repeat(Global.columns - finalString.length());
 
-            int bg = (i % Global.rows == cursorPos ? 255 : 232);
-            int fg = (i % Global.rows == cursorPos ? 232 : 255);
+                int bg = (i % Global.rows == cursorPos ? 255 : 232);
+                int fg = (i % Global.rows == cursorPos ? 232 : 255);
 
-            for(int j = 0; j < finalString.length(); j++) {
-                Global.terminalHandler.putChar(j, i % Global.rows, finalString.charAt(j), fg, bg, false);
-            }
-            if(getEquippedItem(item.getItemType()) == item) {
-                Global.terminalHandler.putChar(Global.columns - 1 - 2, i % 24, '✓', fg, bg, true);
+                for(int j = 0; j < finalString.length(); j++) {
+                    Global.terminalHandler.putChar(j, i % Global.rows, finalString.charAt(j), fg, bg, false);
+                }
+                if(getEquippedItem(item.getItemType()) == item) {
+                    Global.terminalHandler.putChar(Global.columns - 1 - 2, i % 24, '✓', fg, bg, true);
+                }
             }
         }
 
