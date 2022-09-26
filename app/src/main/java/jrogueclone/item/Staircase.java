@@ -15,10 +15,12 @@ public class Staircase extends Item {
     public void useItem() {
         this.m_ItemUsed = true;
         Player curPlayer = Global.getGameLoop().getCurrentLevel().getPlayer();
+        int previousDifficulty = Global.getGameLoop().getCurrentLevel().getDifficulty();
         Global.getGameLoop().setCurentLevel(MapGeneration.generateLevel(curPlayer));
-        Global.getGameLoop().getCurrentLevel().setDifficulty(Global.getGameLoop().getCurrentLevel().getDifficulty() + 1);
+        Global.getGameLoop().getCurrentLevel().setDifficulty(previousDifficulty);
         curPlayer.getHealthController().setHealthCapacity(curPlayer.getHealthController().getMaxHealth() + 50);
         curPlayer.getHealthController().setHealthMax();
+        curPlayer.setInvisible(false);
     }
 
     @Override

@@ -51,18 +51,12 @@ public class Room {
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 break;
             }
-            // TODO: This
-            /* 
             case 2: {
-                System.out.println("2");
-
                 int positionElement = (int)(Math.random() * spawnPositions.size());
                 m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
                 break;
             }
             case 3: {
-                System.out.println("3");
-
                 int usedPositions = 1, positionElement = (int)(Math.random() * spawnPositions.size() - usedPositions);
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 spawnPositions.remove(positionElement);
@@ -75,17 +69,18 @@ public class Room {
                 usedPositions++;
                 break;
             }
-            case 4: {
-                System.out.println("4");
+            default: {
 
                 int usedPositions = 0, positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
                 for(int i = 1; i < levelDifficulty; i++) {
-                    positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
-                    m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
-                    usedPositions++;
+                    if(this.getRect().contains(spawnPositions.elementAt(positionElement).getX(), spawnPositions.elementAt(positionElement).getY())) {
+                        positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
+                        m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                        usedPositions++;
+                    }
                 }
                 break;
-            }*/
+            }
         }
 
     }

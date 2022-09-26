@@ -11,15 +11,14 @@ public class Level implements GameState {
         this.m_Rooms = rooms;
         this.m_Hallways = hallways;
         this.m_Player = player;
-        setDifficulty(1);
     }
 
     public Player getPlayer() {
         return this.m_Player;
     }
 
-    public void setDifficulty(int levelDifficulty) {
-        this.m_LevelDifficuty = levelDifficulty;
+    public void setDifficulty(int previousDifficulty) {
+        this.m_LevelDifficuty = previousDifficulty + 1;
     }
 
     public int getDifficulty() {
@@ -79,11 +78,9 @@ public class Level implements GameState {
             m_Player.update();
             m_Player.draw();
 
-            // draw health bar
             int margin = 1;
-            String statusBarStr = "Health: (" + m_Player.getHealthController().getHealth() + "/"
+            String statusBarStr = "Level: " + getDifficulty() + " | Invisible: " + this.m_Player.isInvisible() + " | Health: (" + m_Player.getHealthController().getHealth() + "/"
                     + m_Player.getHealthController().getMaxHealth() + ") |" + "▆".repeat(20) + "|";
-                    statusBarStr = "Invisible: " + this.m_Player.isInvisible() + " | " + statusBarStr;
             Global.terminalHandler.putBottomStatusBarString(
                     margin,
                     statusBarStr,
@@ -107,5 +104,5 @@ public class Level implements GameState {
     private Vector<Room> m_Rooms = new Vector<Room>();
     private Vector<Hallway> m_Hallways = new Vector<Hallway>();
     private Player m_Player;
-    private int m_LevelDifficuty;
+    private int m_LevelDifficuty = 1;
 }
