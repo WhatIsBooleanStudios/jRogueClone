@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.entity.Entity;
+import jrogueclone.entity.Orc;
 import jrogueclone.entity.Skeleton;
 import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
@@ -75,7 +76,21 @@ public class Room {
                 for(int i = 1; i < levelDifficulty; i++) {
                     if(this.getRect().contains(spawnPositions.elementAt(positionElement).getX(), spawnPositions.elementAt(positionElement).getY())) {
                         positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
-                        m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                        int mobIndex = (int)(Math.random() * 3);
+                        switch(mobIndex) {
+                            case 0: {
+                                m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
+                                break;
+                            }
+                            case 1: {
+                                m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                                break;
+                            }
+                            case 2: {
+                                m_Entities.add(new Orc('᧠', spawnPositions.elementAt(positionElement), this));
+                                break;
+                            }
+                        }
                         usedPositions++;
                     }
                 }
