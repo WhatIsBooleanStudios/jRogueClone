@@ -5,6 +5,19 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+System.out.println("""
+    
+
+
+░░░░░██╗██████╗░░█████╗░░██████╗░██╗░░░██╗███████╗
+░░░░░██║██╔══██╗██╔══██╗██╔════╝░██║░░░██║██╔════╝
+░░░░░██║██████╔╝██║░░██║██║░░██╗░██║░░░██║█████╗░░
+██╗░░██║██╔══██╗██║░░██║██║░░╚██╗██║░░░██║██╔══╝░░
+╚█████╔╝██║░░██║╚█████╔╝╚██████╔╝╚██████╔╝███████╗
+░╚════╝░╚═╝░░╚═╝░╚════╝░░╚═════╝░░╚═════╝░╚══════╝
+       By Samuel Wiseman and Aiden Lambert
+            (WHAT IS BOOLEAN STUDIOS)
+        """);
         System.out.print("Do you want to play another text adventure(y/n): ");
         String in = sc.nextLine();
         if(in.length() > 0 && in.charAt(0) == 'y') {
