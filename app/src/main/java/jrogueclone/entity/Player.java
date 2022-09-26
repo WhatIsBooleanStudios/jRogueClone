@@ -70,7 +70,7 @@ public class Player extends Entity {
         LEFT,
         RIGHT
     }
-
+    
     private void handleCombat(Object object) {
 
         if (object.getClass().toString().toLowerCase().indexOf("entity") == -1)
