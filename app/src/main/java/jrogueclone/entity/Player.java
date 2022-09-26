@@ -88,7 +88,9 @@ public class Player extends Entity {
             hc.setHealth(hc.getHealth() - activeWeapon.getWeaponDamage());
             Global.terminalHandler.putTopStatusBarString(0,
                     "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString(), 255, 235, false);
-        }
+        } else
+        Global.terminalHandler.putTopStatusBarString(0,
+                    "You missed the " + entity.toString(), 255, 235, false);
     }
 
     private void handleMovement(MoveDirection moveDirection) {
