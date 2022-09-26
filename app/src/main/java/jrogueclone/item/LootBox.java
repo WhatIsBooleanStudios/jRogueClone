@@ -43,7 +43,7 @@ public class LootBox extends Item {
         }
         Global.terminalHandler.putTopStatusBarString(
                 1,
-                "Player recieved " + Global.getGameLoop().getCurrentLevel().getPlayer().getInventory().getItems().lastElement(),
+                "Player got " + Global.getGameLoop().getCurrentLevel().getPlayer().getInventory().getItems().lastElement(),
                 255,
                 232,
                 false);

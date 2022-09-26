@@ -56,15 +56,10 @@ public class Level implements GameState {
         for (Room room : m_Rooms) {
             room.spawnEntities();
             room.spawnItems();
-
-            // TODO: Remove this after debug
-            this.m_Player.setRoomDiscovered(room);
         }
 
-        // TODO: Remove this and uncomment lines below
-        playerSpawnRoom.addStaircase();
-        //staircaseSpawnRoom.addStaircase();
-        //this.m_Player.setRoomDiscovered(playerSpawnRoom);
+        staircaseSpawnRoom.addStaircase();
+        this.m_Player.setRoomDiscovered(playerSpawnRoom);
     }
 
     @Override

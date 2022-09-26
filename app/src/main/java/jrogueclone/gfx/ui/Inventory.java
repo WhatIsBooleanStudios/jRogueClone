@@ -97,7 +97,7 @@ public class Inventory {
                 Global.terminalHandler.putChar(j, i, finalString.charAt(j), fg, bg, false);
             }
             if(getEquippedItem(item.getItemType()) == item) {
-                Global.terminalHandler.putChar(Global.columns - 1 - 2, 0, '✓', fg, bg, true);
+                Global.terminalHandler.putChar(Global.columns - 1 - 2, i, '✓', fg, bg, true);
             }
             i++;
         }

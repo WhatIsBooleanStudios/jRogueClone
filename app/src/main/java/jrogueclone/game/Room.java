@@ -47,7 +47,6 @@ public class Room {
         }
         switch (levelDifficulty) {
             case 1: {
-                System.out.println("1");
                 int positionElement = (int)(Math.random() * spawnPositions.size());
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 break;

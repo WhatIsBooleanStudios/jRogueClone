@@ -31,11 +31,19 @@ public class Potion extends Item {
     @Override
     public void useItem() {
         switch (this.m_PotionType) {
-            case HEALTH:
+            case HEALTH: {
+                HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
+                if (hc.getHealth() <= 60) // heal 40 damage
+                    hc.setHealth(hc.getHealth() + 40);
+                else
+                    hc.setHealth(100);
                 break;
-            case INVISIBILTY:
+            }
+            case INVISIBILTY: {
+                Global.getGameLoop().getCurrentLevel().getPlayer().toggleInvisible();
                 break;
-            case MYSTERY:
+            }
+            case MYSTERY: {
                 int randomEffect = (int) Math.round(Math.random() * 2 + 1);
                 if (randomEffect == 1) {
 
@@ -44,13 +52,13 @@ public class Potion extends Item {
                         hc.setHealth(hc.getHealth() + 40);
 
                 } else if (randomEffect == 2) {
-                    Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible();
+                    Global.getGameLoop().getCurrentLevel().getPlayer().toggleInvisible();
                 } else {
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
                     hc.setHealth(hc.getHealth() - 40);
                 }
                 break;
-
+            }
         }
 
     }
@@ -59,16 +67,16 @@ public class Potion extends Item {
     public String toString() {
         switch (m_PotionType) {
             case HEALTH:
-                return "\"" + m_PotionName  + "\"" + " (Heals 40HP)";
+                return "\"" + m_PotionName + "\"" + " (Heals 40HP)";
 
             case INVISIBILTY:
-                return "\"" + m_PotionName  + "\"" + " (Makes you invisible until you attack)";
+                return "\"" + m_PotionName + "\"" + " (Makes you invisible until you attack)";
 
             case MYSTERY:
-                return "\"" + m_PotionName  + "\"" + " (A Mystery potion! Could be bad, could be good)";
+                return "\"" + m_PotionName + "\"" + " (A Mystery potion! Could be bad, could be good)";
 
             default:
-            return "error";
+                return "error";
         }
     }
 
@@ -83,5 +91,4 @@ public class Potion extends Item {
     private String m_PotionName;
     private PotionType m_PotionType;
 
-    
 }
