@@ -40,7 +40,7 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-        20, 70));
+                20, 70));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(100);
         this.getHealthController().setHealthMax();
@@ -267,6 +267,15 @@ public class Player extends Entity {
         return this.m_Invisible;
     }
 
+    public int getKillCount() {
+        return this.m_KillCount;
+    }
+
+    public void incrementKillCount() {
+        this.m_KillCount++;
+    }
+
+    private int m_KillCount = 0;
     private boolean m_Invisible = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();

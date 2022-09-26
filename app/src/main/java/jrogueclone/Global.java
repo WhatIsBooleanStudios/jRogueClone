@@ -85,6 +85,9 @@ public class Global {
         Items.add(new Weapon("Steel Axe", 35,80));
         Items.add(new Weapon("Sickle", 30, 60));
         Items.add(new Weapon("Trident", 40, 65));
+        Items.add(new Weapon("Long Sword", 45, 85));
+        Items.add(new Weapon("Short Sword", 35, 60));
+        Items.add(new Weapon("Rusty Dagger", 45, 40));
     }
 
 }
