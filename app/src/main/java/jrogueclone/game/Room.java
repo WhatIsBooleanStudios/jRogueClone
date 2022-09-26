@@ -152,6 +152,7 @@ public class Room {
         if (Global.getGameLoop().updateEntities()) {
             for (Entity entity : this.m_Entities) {
                 if (entity.getHealthController().getHealth() <= 0) {
+                    Global.getGameLoop().getCurrentLevel().getPlayer().incrementKillCount();
                     m_EntityRemoveQue.add(entity);
                     continue;
                 }

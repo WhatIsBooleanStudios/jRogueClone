@@ -19,7 +19,7 @@ public class Skeleton extends Entity {
 
     @Override
     public void handleEntitySpawn() {
-        // Give the bat a weapon with a 50% chance to enflict 12 damage
+
         this.getInventory().addItem(new Weapon("Rusty Sword",
                 25, 35));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
