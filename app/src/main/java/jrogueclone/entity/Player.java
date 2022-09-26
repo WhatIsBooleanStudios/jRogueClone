@@ -39,11 +39,9 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         // Give the player a weapon with a 70% chance to inflict 34 damage
-        Weapon startingWeapon = new Weapon("Damaged Wooden Sword",
-                34, 70);
-        this.getInventory().addItem(startingWeapon);
-        this.getInventory().addItem(new Potion(Potion.PotionType.INVISIBILTY));
-        this.getInventory().equipItem(startingWeapon);
+        this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
+        34, 70));
+        this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
 
         this.getHealthController().setHealth(100);
     }
@@ -83,17 +81,19 @@ public class Player extends Entity {
         Entity entity = (Entity) object;
 
         Weapon activeWeapon = (Weapon) this.getInventory().getEquippedItem(ItemType.WEAPON);
-        
+
         if (activeWeapon == null)
             return;
-        
+
+        this.toggleInvisible();
+
         if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
             HealthController hc = entity.getHealthController();
             hc.setHealth(hc.getHealth() - activeWeapon.getWeaponDamage());
             Global.terminalHandler.putTopStatusBarString(0,
                     "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString(), 255, 235, false);
         } else
-        Global.terminalHandler.putTopStatusBarString(0,
+            Global.terminalHandler.putTopStatusBarString(0,
                     "You missed the " + entity.toString(), 255, 235, false);
     }
 
@@ -253,8 +253,8 @@ public class Player extends Entity {
         this.m_DiscoveredHallways.add(hallway);
     }
 
-    public void setInvisible() {
-        this.m_Invisible = true;
+    public void toggleInvisible() {
+        this.m_Invisible = !this.m_Invisible;
     }
 
     public boolean isInvisible() {

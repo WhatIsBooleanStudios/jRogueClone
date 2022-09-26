@@ -1,0 +1,43 @@
+package jrogueclone.entity;
+
+import jrogueclone.Global;
+import jrogueclone.game.Room;
+import jrogueclone.game.Vector2D;
+import jrogueclone.item.Weapon;
+
+public class Skeleton extends Entity {
+
+    public Skeleton(char entityCharacter, Vector2D entityPosition, Room spawnRoom) {
+        super(entityCharacter, entityPosition, spawnRoom);
+    }
+
+    @Override
+    public void draw() {
+        Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), getEntityCharacter(), 255, 232,
+                false, this);
+    }
+
+    @Override
+    public void handleEntitySpawn() {
+        // Give the bat a weapon with a 50% chance to enflict 12 damage
+        this.getInventory().addItem(new Weapon("Rusty Sword",
+                25, 35));
+        this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
+        this.getHealthController().setHealth(30);
+    }
+
+    @Override
+    public boolean isMonster() {
+        return true;
+    }
+
+    @Override
+    public void update() {
+        handleMovment();
+    }
+
+    @Override
+    public String toString() {
+        return "Skeleton";
+    }
+}

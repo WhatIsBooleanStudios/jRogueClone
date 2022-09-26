@@ -13,10 +13,6 @@ public class GameLoop {
         return m_CurrentLevel;
     }
 
-    public static int getLevelDifficulty() {
-        return m_CurrentLevel.getDifficulty();
-    }
-
     public boolean updateEntities() {
         return this.m_UpdateEntities;
     }
