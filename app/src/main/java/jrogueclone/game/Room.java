@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.entity.Entity;
+import jrogueclone.entity.Skeleton;
 import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
@@ -37,15 +38,55 @@ public class Room {
     }
 
     public void spawnEntities() {
-        int levelDifficulty = GameLoop.getLevelDifficulty();
-
+        int levelDifficulty = Global.getGameLoop().getCurrentLevel().getDifficulty();
+        Vector<Vector2D> spawnPositions = new Vector<>();
+        for (int x = 2; x < 10; x++) {
+            for (int y = 1; y < 3; y++) {
+                spawnPositions.add(new Vector2D(getRoomPosition().getX() + x, getRoomPosition().getY() + y));
+            }
+        }
         switch (levelDifficulty) {
             case 1: {
-                m_Entities.add(new Bat('ʌ', new Vector2D(
-                        getRoomPosition().getX() + (int) ((double) getRoomWidth() / 2 - 2),
-                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2)), this));
+                System.out.println("1");
+                int positionElement = (int)(Math.random() * spawnPositions.size());
+                m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 break;
             }
+            // TODO: This
+            /* 
+            case 2: {
+                System.out.println("2");
+
+                int positionElement = (int)(Math.random() * spawnPositions.size());
+                m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                break;
+            }
+            case 3: {
+                System.out.println("3");
+
+                int usedPositions = 1, positionElement = (int)(Math.random() * spawnPositions.size() - usedPositions);
+                m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
+                spawnPositions.remove(positionElement);
+                usedPositions++;
+
+                positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions)) ;
+
+                m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                spawnPositions.remove(positionElement);
+                usedPositions++;
+                break;
+            }
+            case 4: {
+                System.out.println("4");
+
+                int usedPositions = 0, positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
+                for(int i = 1; i < levelDifficulty; i++) {
+                    positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
+                    m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                    usedPositions++;
+                }
+                break;
+            }*/
         }
 
     }
@@ -123,7 +164,7 @@ public class Room {
                 entity.update();
             }
 
-            for(Entity entity : this.m_EntityRemoveQue) {
+            for (Entity entity : this.m_EntityRemoveQue) {
                 this.m_Entities.remove(entity);
             }
 
