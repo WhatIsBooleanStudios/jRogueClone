@@ -6,6 +6,7 @@ import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory.ItemType;
 import jrogueclone.item.LootBox;
+import jrogueclone.item.Potion;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
 import jrogueclone.game.EmptySpace;
@@ -37,10 +38,13 @@ public class Player extends Entity {
     @Override
     public void handleEntitySpawn() {
 
-        // Give the player a weapon with a 70% chance to enflict 34 damage
-        this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-                34, 70));
-        this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
+        // Give the player a weapon with a 70% chance to inflict 34 damage
+        Weapon startingWeapon = new Weapon("Damaged Wooden Sword",
+                34, 70);
+        this.getInventory().addItem(startingWeapon);
+        this.getInventory().addItem(new Potion(Potion.PotionType.INVISIBILTY));
+        this.getInventory().equipItem(startingWeapon);
+
         this.getHealthController().setHealth(100);
     }
 
@@ -181,8 +185,9 @@ public class Player extends Entity {
                     for (Room room : this.m_DiscoveredRooms) {
                         if (room.getRect().contains(this.getPosition().getX(), this.getPosition().getY())) {
                             LootBox lootBox = (LootBox) object;
-                            if (lootBox.isUseable())
+                            if (lootBox.isUseable()) {
                                 lootBox.useItem();
+                            }
                         }
                     }
                 } else if (object.getClass() == Staircase.class) {

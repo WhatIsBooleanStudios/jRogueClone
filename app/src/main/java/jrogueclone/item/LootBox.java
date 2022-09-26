@@ -41,6 +41,12 @@ public class LootBox extends Item {
             Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
                     .addItem(Global.Items.get((int) (Math.random() * (Global.Items.size() - 3)) + 3));
         }
+        Global.terminalHandler.putTopStatusBarString(
+                1,
+                "Player recieved " + Global.getGameLoop().getCurrentLevel().getPlayer().getInventory().getItems().lastElement(),
+                255,
+                232,
+                false);
 
     }
 

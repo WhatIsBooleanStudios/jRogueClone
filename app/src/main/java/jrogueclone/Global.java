@@ -42,6 +42,7 @@ public class Global {
 
     public enum GameStates {
         STARTMENU,
+        INVENTORY,
         GAME
     }
 
