@@ -64,11 +64,11 @@ public class Level implements GameState {
 
     @Override
     public void update() {
-        
-        if(Global.terminalHandler.keyIsPressed('i'))
+
+        if (Global.terminalHandler.keyIsPressed('i'))
             m_Player.toggleInventoryState();
-        
-        if(!Global.getGameLoop().getInventoryToggled()) {
+
+        if (!Global.getGameLoop().getInventoryToggled()) {
             this.drawLevel();
 
             for (Room room : m_Player.getDiscoveredRooms()) {
@@ -81,21 +81,22 @@ public class Level implements GameState {
 
             // draw health bar
             int margin = 1;
-            String statusBarStr = "Health: (" + m_Player.getHealthController().getHealth() + "/" + m_Player.getHealthController().getMaxHealth() + ") |" + "▆".repeat(20) + "|";
+            String statusBarStr = "Health: (" + m_Player.getHealthController().getHealth() + "/"
+                    + m_Player.getHealthController().getMaxHealth() + ") |" + "▆".repeat(20) + "|";
+                    statusBarStr = "Invisible: " + this.m_Player.isInvisible() + " | " + statusBarStr;
             Global.terminalHandler.putBottomStatusBarString(
                     margin,
                     statusBarStr,
                     9,
                     232,
-                    true
-            );
+                    true);
             Global.terminalHandler.putBottomStatusBarString(
                     margin + statusBarStr.indexOf('▆'),
-                     "▆".repeat((int)Math.ceil(20 * (double)m_Player.getHealthController().getHealth() / m_Player.getHealthController().getMaxHealth())),
+                    "▆".repeat((int) Math.ceil(20 * (double) m_Player.getHealthController().getHealth()
+                            / m_Player.getHealthController().getMaxHealth())),
                     34,
                     232,
-                    true
-            );
+                    true);
         } else {
             Global.terminalHandler.clear();
             m_Player.getInventory().updateUI();
