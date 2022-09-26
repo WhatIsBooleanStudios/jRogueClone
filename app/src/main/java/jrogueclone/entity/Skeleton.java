@@ -13,7 +13,7 @@ public class Skeleton extends Entity {
 
     @Override
     public void draw() {
-        Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), getEntityCharacter(), 255, 232,
+        Global.terminalHandler.putChar(getPosition().getX(), getPosition().getY(), getEntityCharacter(), 230, 232,
                 false, this);
     }
 
