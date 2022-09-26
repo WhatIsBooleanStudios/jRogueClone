@@ -79,7 +79,9 @@ public class Level implements GameState {
             m_Player.draw();
 
             int margin = 1;
-            String statusBarStr = "Kills: " + this.getPlayer().getKillCount() + " Level: " + getDifficulty() + " | Invisible: " + this.m_Player.isInvisible() + " | Health: (" + m_Player.getHealthController().getHealth() + "/"
+            String statusBarStr = "Kills: " + this.getPlayer().getKillCount() + " Level: " + getDifficulty()
+                    + " | Visible: " + !this.m_Player.isInvisible() + " | Health: ("
+                    + m_Player.getHealthController().getHealth() + "/"
                     + m_Player.getHealthController().getMaxHealth() + ") |" + "▆".repeat(20) + "|";
             Global.terminalHandler.putBottomStatusBarString(
                     margin,
