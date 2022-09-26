@@ -40,7 +40,37 @@ public class Potion extends Item {
                 break;
             }
             case INVISIBILTY: {
-                Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
+                boolean worked = false;
+                boolean deltDamage = false;
+                // 75 percent chance of working
+                if(Math.random() < 0.75) {
+                    Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
+                    worked = true;
+                }
+                // 50% chance of taking 25% of health off from player
+                if(Math.random() < 0.5) {
+                    HealthController healthController = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
+                    healthController.deductHealth((int)Math.round(0.25 * (double)healthController.getHealth()));
+                    deltDamage = true;
+                }
+
+                if(!worked && !deltDamage) {
+                    String message = "The invis potion failed";
+                    message += " ".repeat(Global.columns - message.length() - 1);
+                    Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
+                } else if(!worked && deltDamage) {
+                    String message = "The invis potion failed and took 25% of your health!";
+                    message += " ".repeat(Global.columns - message.length() - 1);
+                    Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
+                } else if(worked && deltDamage) {
+                    String message = "The invis potion worked but took 25% of your health!";
+                    message += " ".repeat(Global.columns - message.length() - 1);
+                    Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
+                } else if(worked && !deltDamage) {
+                    String message = "The invis potion worked!";
+                    message += " ".repeat(Global.columns - message.length() - 1);
+                    Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
+                }
                 break;
             }
             case MYSTERY: {
