@@ -44,8 +44,6 @@ public class Player extends Entity {
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(100);
         this.getHealthController().setHealthMax();
-
-        this.getInventory().addItem(new Potion(PotionType.INVISIBILTY));
     }
 
     public void handleDiscovery(Vector2D newPosition) {
