@@ -82,7 +82,7 @@ public class Global {
         Items.add(new Weapon("Sharp Steel Spear", 45, 80));
         Items.add(new Weapon("Weathered Wood Knife", 15, 30));
         Items.add(new Weapon("Unparalleled Steel Scythe", 50, 70));
-        Items.add(new Weapon("Steel Ace", 35,80));
+        Items.add(new Weapon("Steel Axe", 35,80));
         Items.add(new Weapon("Sickle", 30, 60));
         Items.add(new Weapon("Trident", 40, 65));
     }

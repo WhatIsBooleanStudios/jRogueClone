@@ -67,6 +67,7 @@ public class GameLoop {
     public void setInventoryToggled(boolean toggeled) {
         m_InventoryToggled = toggeled;
     }
+    
     private static Level m_CurrentLevel = MapGeneration.generateLevel(null);
     private InputHandler m_InputHandler = new InputHandler();
     private boolean m_EndGame = false, m_UpdateEntities = false, m_UpdateLevel = false;

@@ -56,6 +56,23 @@ public class Potion extends Item {
     }
 
     @Override
+    public String toString() {
+        switch (m_PotionType) {
+            case HEALTH:
+                return "\"" + m_PotionName  + "\"" + " (Heals 40HP)";
+
+            case INVISIBILTY:
+                return "\"" + m_PotionName  + "\"" + " (Makes you invisible until you attack)";
+
+            case MYSTERY:
+                return "\"" + m_PotionName  + "\"" + " (A Mystery potion! Could be bad, could be good)";
+
+            default:
+            return "error";
+        }
+    }
+
+    @Override
     public void draw() {
     }
 
@@ -63,8 +80,8 @@ public class Potion extends Item {
         return this.m_PotionName;
     }
 
-    public String toString() { return getPotionName(); }
-
     private String m_PotionName;
     private PotionType m_PotionType;
+
+    
 }
