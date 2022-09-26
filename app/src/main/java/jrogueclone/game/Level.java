@@ -36,7 +36,7 @@ public class Level implements GameState {
 
     public void drawLevel() {
         for (Room room : this.m_Player.getDiscoveredRooms()) {
-            room.draw();
+            room.drawRoomBounds();
         }
         for (Hallway hallway : this.m_Player.getDiscoveredHallways()) {
             hallway.draw();
@@ -64,22 +64,21 @@ public class Level implements GameState {
 
     @Override
     public void update() {
-        if(Global.terminalHandler.keyIsPressed('i'))  {
+        
+        if(Global.terminalHandler.keyIsPressed('i'))
             m_Player.toggleInventoryState();
-        }
+        
         if(!Global.getGameLoop().getInventoryToggled()) {
-            Global.terminalHandler.putTopStatusBarString(1, "Currently playing the game", 255, 232, false);
             this.drawLevel();
 
             for (Room room : m_Player.getDiscoveredRooms()) {
-                room.update();
                 room.drawContainedObjects();
+                room.update();
             }
 
             m_Player.update();
             m_Player.draw();
         } else {
-            Global.terminalHandler.putBottomStatusBarString(1, "Welcome to the inventory", 255, 232, true);
             Global.terminalHandler.clear();
             m_Player.getInventory().draw();
         }

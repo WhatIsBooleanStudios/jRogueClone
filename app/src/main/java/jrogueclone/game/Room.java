@@ -43,7 +43,7 @@ public class Room {
             case 1: {
                 m_Entities.add(new Bat('ʌ', new Vector2D(
                         getRoomPosition().getX() + (int) ((double) getRoomWidth() / 2 - 2),
-                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2))));
+                        getRoomPosition().getY() + (int) ((double) getRoomHeight() / 2)), this));
                 break;
             }
         }
@@ -62,7 +62,7 @@ public class Room {
         }
     }
 
-    private void drawRoomBounds() {
+    public void drawRoomBounds() {
         for (int i = this.getRoomPosition().getY(); i < this.getRoomPosition().getY() + this.getRoomHeight(); i++) {
             for (int j = this.getRoomPosition().getX(); j < this.getRoomPosition().getX() + this.getRoomWidth(); j++) {
                 if (j == this.getRoomPosition().getX() || j == this.getRoomPosition().getX() + this.getRoomWidth() - 1
@@ -103,25 +103,31 @@ public class Room {
                 (int) getRoomPosition().getY() + m_RoomHeight - 2)));
     }
 
-    public void draw() {
-        drawRoomBounds();
-    }
-
     public void drawContainedObjects() {
+        for (Item item : this.m_Items) {
+            item.draw();
+        }
 
         for (Entity entity : this.m_Entities) {
             entity.draw();
-        }
-
-        for (Item item : this.m_Items) {
-            item.draw();
         }
     }
 
     public void update() {
         if (Global.getGameLoop().updateEntities()) {
-            for (Entity entity : this.m_Entities)
+            for (Entity entity : this.m_Entities) {
+                if (entity.getHealthController().getHealth() <= 0) {
+                    m_EntityRemoveQue.add(entity);
+                    continue;
+                }
                 entity.update();
+            }
+
+            for(Entity entity : this.m_EntityRemoveQue) {
+                this.m_Entities.remove(entity);
+            }
+
+            m_EntityRemoveQue.clear();
         }
     }
 
@@ -149,9 +155,13 @@ public class Room {
         return this.m_Entities;
     }
 
+    public void removeEntity(Entity entity) {
+        this.m_Entities.remove(entity);
+    }
+
     private final int m_RoomWidth, m_RoomHeight;
     private Vector<Item> m_Items = new Vector<Item>();
-    private Vector<Entity> m_Entities = new Vector<Entity>();
+    private Vector<Entity> m_Entities = new Vector<Entity>(), m_EntityRemoveQue = new Vector<Entity>();
     private Vector<Vector2D> m_HallwayConnections = new Vector<Vector2D>();
     private EmptySpace m_EmptySpace = new EmptySpace();
     private Vector2D m_RoomPosition = new Vector2D(-1, -1);

@@ -63,5 +63,5 @@ public abstract class Item {
     private char m_ItemCharacter;
     protected int m_ItemCharacterColor;
     private Vector<CharacterAttributes> m_CharacterAttributes = new Vector<>();
-    private ItemType m_ItemType;
+    protected ItemType m_ItemType;
 }

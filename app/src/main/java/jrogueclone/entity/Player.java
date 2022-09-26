@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
+import jrogueclone.gfx.ui.Inventory.ItemType;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
@@ -14,10 +15,7 @@ import jrogueclone.game.Room;
 public class Player extends Entity {
     public Player(char entityCharacter) {
         super(entityCharacter);
-    }
 
-    public Player(char entityCharacter, Vector2D entityPosition) {
-        super(entityCharacter, entityPosition);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class Player extends Entity {
         // Give the player a weapon with a 70% chance to enflict 34 damage
         this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
                 34, 70));
-
+        this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealth(100);
     }
 
@@ -73,6 +71,28 @@ public class Player extends Entity {
         RIGHT
     }
 
+    private void handleCombat(Object object) {
+
+        if (object.getClass().toString().toLowerCase().indexOf("entity") == -1)
+            return;
+
+        Entity entity = (Entity) object;
+
+        Weapon activeWeapon = (Weapon) this.getInventory().getEquippedItem(ItemType.WEAPON);
+        
+        if (activeWeapon == null)
+            return;
+        
+        if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
+            HealthController hc = entity.getHealthController();
+            hc.setHealth(hc.getHealth() - activeWeapon.getWeaponDamage());
+            Global.terminalHandler.putTopStatusBarString(0,
+                    "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString(), 255, 235, false);
+        } else
+        Global.terminalHandler.putTopStatusBarString(0,
+                    "You missed the " + entity.toString(), 255, 235, false);
+    }
+
     private void handleMovement(MoveDirection moveDirection) {
         Vector2D newPosition = null;
         Object uData = null;
@@ -82,6 +102,9 @@ public class Player extends Entity {
                 handleDiscovery(newPosition);
                 if (getPosition().getY() < Global.rows - 1) {
                     uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                    if (uData != null)
+                        handleCombat(uData);
+
                     if (uData != null
                             && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                         setPosition(newPosition);
@@ -91,8 +114,10 @@ public class Player extends Entity {
             case LEFT:
                 newPosition = new Vector2D(getPosition().getX() - 1, getPosition().getY());
                 handleDiscovery(newPosition);
-
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                if (uData != null)
+                    handleCombat(uData);
+
                 if (getPosition().getX() > 0 && uData != null
                         && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                     setPosition(newPosition);
@@ -101,8 +126,10 @@ public class Player extends Entity {
             case RIGHT:
                 newPosition = new Vector2D(getPosition().getX() + 1, getPosition().getY());
                 handleDiscovery(newPosition);
-
                 uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                if (uData != null)
+                    handleCombat(uData);
+
                 if (getPosition().getX() < Global.columns - 1 && uData != null
                         && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                     setPosition(newPosition);
@@ -111,9 +138,11 @@ public class Player extends Entity {
             case UP:
                 newPosition = new Vector2D(getPosition().getX(), getPosition().getY() - 1);
                 handleDiscovery(newPosition);
-
                 if (getPosition().getY() > 0) {
                     uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
+                    if (uData != null)
+                        handleCombat(uData);
+
                     if (uData != null
                             && (uData.getClass() == EmptySpace.class || uData.getClass() == Hallway.class)) {
                         setPosition(newPosition);
@@ -125,6 +154,11 @@ public class Player extends Entity {
                 break;
 
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Player";
     }
 
     private void tryUse() {
@@ -171,11 +205,6 @@ public class Player extends Entity {
     }
 
     @Override
-    public void handleDeath() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void update() {
         if (Global.terminalHandler.keyIsPressed('w'))
             this.handleMovement(MoveDirection.UP);
@@ -187,8 +216,11 @@ public class Player extends Entity {
             this.handleMovement(MoveDirection.RIGHT);
         if (Global.terminalHandler.keyIsPressed('e'))
             this.tryUse();
-        if (this.getHealthController().getHealth() <= 0)
-            this.handleDeath();
+        if (this.getHealthController().getHealth() <= 0) {
+            Global.terminalHandler.restoreState();
+            System.out.println("Game Over! You died a tragic death");
+            System.exit(0);
+        }
 
     }
 
