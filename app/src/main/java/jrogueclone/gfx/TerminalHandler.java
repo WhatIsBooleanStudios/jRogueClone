@@ -42,6 +42,7 @@ public class TerminalHandler {
         if (terminalSize.ws_col < (Global.columns + Global.bottomStatusBarColumns + Global.topStatusBarColumns) && terminalSize.ws_row < Global.rows) {
             restoreState();
             System.err.println("Terminal too small! Must be at least (" + Global.columns + ", " + Global.rows + ")");
+            System.out.println("width: " + ws.ws_col + " height: " + ws.ws_row);
             System.exit(-1);
         }
     }
