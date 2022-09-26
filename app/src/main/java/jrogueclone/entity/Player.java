@@ -229,7 +229,7 @@ public class Player extends Entity {
             this.tryUse();
         if (this.getHealthController().getHealth() <= 0) {
             Global.terminalHandler.restoreState();
-            System.out.println("Game Over! You died a tragic death");
+            System.out.println("Game Over! You died a tragic death\nScore: " + this.getKillCount());
             System.exit(0);
         }
 
