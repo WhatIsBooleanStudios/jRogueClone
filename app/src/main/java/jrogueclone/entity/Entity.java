@@ -94,11 +94,18 @@ public abstract class Entity {
         if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
             HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
             hc.addHealth(-activeWeapon.getWeaponDamage());
+            String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you";
+            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+
             Global.terminalHandler.putTopStatusBarString(0,
-                    this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you", 255, 235, false);
-        } else
+                    toDisplay, 255, 232, false);
+        } else {
+            String toDisplay = this.toString() + " missed";
+            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+
             Global.terminalHandler.putTopStatusBarString(0,
-                    this.toString() + " missed", 255, 235, false);
+                    toDisplay, 255, 232, false);
+        }
     }
 
     protected void handleMovment() {

@@ -50,5 +50,5 @@ public class LootBox extends Item {
 
     }
 
-    public final static int m_SpawnChance = 100;
+    public final static int m_SpawnChance = 40;
 }
