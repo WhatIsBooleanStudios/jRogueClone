@@ -87,7 +87,7 @@ public class Player extends Entity {
 
         this.setInvisible(false);
 
-        if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
+        if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
             HealthController hc = entity.getHealthController();
             hc.addHealth(-activeWeapon.getWeaponDamage());
             String toPrint = "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString();
