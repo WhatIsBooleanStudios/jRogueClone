@@ -34,7 +34,7 @@ public class Orc extends Entity {
 
     @Override
     public void update() {
-        handleMovment();
+        handleMovement();
     }
 
     @Override

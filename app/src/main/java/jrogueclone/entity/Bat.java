@@ -40,7 +40,7 @@ public class Bat extends Entity {
         m_AnimationFrame %= 2;
         setEntityCharacter(m_AnimationFrame == 0 ? 'ʌ' : 'v');
 
-        handleMovment();
+        handleMovement();
     }
 
     @Override

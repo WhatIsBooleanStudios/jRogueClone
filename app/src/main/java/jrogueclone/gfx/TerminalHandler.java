@@ -295,7 +295,7 @@ public class TerminalHandler {
                 if(!(s.length() + i + 1 > Global.columns))
                     putTopStatusBarString(i + 1, s, fg, bg, bold);
                 else
-                    putTopStatusBarString(0, s + " ".repeat(Global.columns - s.length()), fg, bg, bold)
+                    putTopStatusBarString(0, s + " ".repeat(Global.columns - s.length()), fg, bg, bold);
                 return;
             }
         }

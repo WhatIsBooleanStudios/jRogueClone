@@ -108,7 +108,7 @@ public abstract class Entity {
         }
     }
 
-    protected void handleMovment() {
+    protected void handleMovement() {
         if (!this.isMonster() || Global.getGameLoop().getCurrentLevel().getPlayer().isInvisible())
             return;
 
