@@ -19,7 +19,7 @@ public class Bat extends Entity {
     public void handleEntitySpawn() {
         // Give the bat a weapon with a 50% chance to enflict 12 damage
         this.getInventory().addItem(new Weapon("Fangs",
-                12, 50));
+                12, 50, Integer.MAX_VALUE));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(20);
         this.getHealthController().setHealthMax();

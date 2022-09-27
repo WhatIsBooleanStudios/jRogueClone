@@ -78,16 +78,16 @@ public class Global {
         Items.add(new Potion(PotionType.MYSTERY));
 
         // Add weapons to the list of items
-        Items.add(new Weapon("Damaged Wooden Spear", 20, 60));
-        Items.add(new Weapon("Sharp Steel Spear", 45, 80));
-        Items.add(new Weapon("Weathered Wood Knife", 15, 30));
-        Items.add(new Weapon("Unparalleled Steel Scythe", 50, 70));
-        Items.add(new Weapon("Steel Axe", 35,80));
-        Items.add(new Weapon("Sickle", 30, 60));
-        Items.add(new Weapon("Trident", 40, 65));
-        Items.add(new Weapon("Long Sword", 45, 85));
-        Items.add(new Weapon("Short Sword", 35, 60));
-        Items.add(new Weapon("Rusty Dagger", 45, 40));
+        Items.add(new Weapon("Damaged Wooden Spear", 20, 60, 5));
+        Items.add(new Weapon("Sharp Steel Spear", 45, 80, 10));
+        Items.add(new Weapon("Weathered Wood Knife", 15, 30, 5));
+        Items.add(new Weapon("Unparalleled Steel Scythe", 50, 70, 15));
+        Items.add(new Weapon("Steel Axe", 35,80, 10));
+        Items.add(new Weapon("Sickle", 30, 60, 7));
+        Items.add(new Weapon("Trident", 40, 65, 15));
+        Items.add(new Weapon("Long Sword", 45, 85, 10));
+        Items.add(new Weapon("Short Sword", 35, 60, 10));
+        Items.add(new Weapon("Rusty Dagger", 45, 40, 3));
     }
 
 }

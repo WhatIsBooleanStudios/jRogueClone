@@ -21,7 +21,7 @@ public class SnowMan extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Snow Balls",
-                35, 35));
+                35, 35, Integer.MAX_VALUE));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(40);
         this.getHealthController().setHealthMax();

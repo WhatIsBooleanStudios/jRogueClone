@@ -2,9 +2,12 @@ package jrogueclone.entity;
 
 import java.util.Vector;
 
+import org.checkerframework.common.reflection.qual.NewInstance;
+
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory.ItemType;
+import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Potion;
 import jrogueclone.item.Staircase;
@@ -40,7 +43,7 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-                20, 70));
+                20, 70, 5));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(100);
         this.getHealthController().setHealthMax();
@@ -98,6 +101,25 @@ public class Player extends Entity {
                     toPrint += ". ";
                 }
                 //toPrint += " ".repeat(Global.columns - toPrint.length());
+                
+                activeWeapon.setDurability(activeWeapon.getDurability() - 1);
+                if(activeWeapon.getDurability() <= 0) {
+                    toPrint += "Your weapon broke! ";
+                    getInventory().getItems().remove(activeWeapon);
+                    Weapon newWeapon = null;
+                    for(Item w : getInventory().getItems()) {
+                        if(w.getClass() == Weapon.class) {
+                            newWeapon = (Weapon)w;
+                            break;
+                        }
+                    }
+                    if(newWeapon == null) {
+                        toPrint += "No weapons to equip! ";
+                    } else {
+                        getInventory().equipItem(newWeapon);
+                    }
+                }
+
                 Global.terminalHandler.appendTopStatusBarString(
                         toPrint, 255, 232, false);
             } else {
