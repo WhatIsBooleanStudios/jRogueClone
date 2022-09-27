@@ -85,7 +85,7 @@ public abstract class Entity {
         return this.m_Inventory;
     }
 
-    private void handleCombat() {
+    protected void handleCombat() {
         Weapon activeWeapon = (Weapon) this.getInventory().getEquippedItem(ItemType.WEAPON);
 
         if (activeWeapon == null)
@@ -94,16 +94,16 @@ public abstract class Entity {
         if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
             HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
             hc.addHealth(-activeWeapon.getWeaponDamage());
-            String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you";
-            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+            String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you. ";
+            //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
-            Global.terminalHandler.putTopStatusBarString(0,
+            Global.terminalHandler.appendTopStatusBarString(
                     toDisplay, 255, 232, false);
         } else {
-            String toDisplay = this.toString() + " missed";
-            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+            String toDisplay = this.toString() + " missed. ";
+            //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
-            Global.terminalHandler.putTopStatusBarString(0,
+            Global.terminalHandler.appendTopStatusBarString(
                     toDisplay, 255, 232, false);
         }
     }

@@ -7,6 +7,7 @@ import jrogueclone.Global;
 import jrogueclone.entity.Entity;
 import jrogueclone.entity.Orc;
 import jrogueclone.entity.Skeleton;
+import jrogueclone.entity.SnowMan;
 import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
@@ -76,7 +77,7 @@ public class Room {
                 for(int i = 1; i < levelDifficulty; i++) {
                     if(this.getRect().contains(spawnPositions.elementAt(positionElement).getX(), spawnPositions.elementAt(positionElement).getY())) {
                         positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
-                        int mobIndex = (int)(Math.random() * 3);
+                        int mobIndex = (int)(Math.random() * 4);
                         switch(mobIndex) {
                             case 0: {
                                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
@@ -89,6 +90,8 @@ public class Room {
                             case 2: {
                                 m_Entities.add(new Orc('᧠', spawnPositions.elementAt(positionElement), this));
                                 break;
+                            } case 3: {
+                                m_Entities.add(new SnowMan('☃', spawnPositions.elementAt(positionElement), this));
                             }
                         }
                         usedPositions++;
