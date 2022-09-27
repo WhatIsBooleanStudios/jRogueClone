@@ -27,6 +27,10 @@ public class Potion extends Item {
                 break;
         }
     }
+    
+    public Potion(Potion p) {
+        this(p.getPotionType());
+    }
 
     @Override
     public void useItem() {

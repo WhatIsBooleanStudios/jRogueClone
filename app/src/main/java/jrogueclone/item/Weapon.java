@@ -9,6 +9,13 @@ public class Weapon extends Item {
         this.m_WeaponDamage = weaponDamage;
         this.m_WeaponDamageChance = weaponDamageChance;
     }
+    
+    public Weapon(Weapon weapon) {
+        this.m_ItemType = weapon.m_ItemType;
+        this.m_WeaponName = weapon.m_WeaponName;
+        this.m_WeaponDamage = weapon.m_WeaponDamage;
+        this.m_WeaponDamageChance = weapon.m_WeaponDamageChance;
+    }
 
     public String getWeaponName() {
         return this.m_WeaponName;

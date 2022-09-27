@@ -36,10 +36,10 @@ public class LootBox extends Item {
         this.draw();
         if (Math.random() * 100 <= 50) { // potion
             Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
-                    .addItem(Global.Items.get((int)(Math.random() * 2)));
+                    .addItem(new Potion((Potion)Global.Items.get((int)(Math.random() * 3))));
         } else { // weapon
             Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
-                    .addItem(Global.Items.get((int) (Math.random() * (Global.Items.size() - 3)) + 3));
+                    .addItem(new Weapon((Weapon)Global.Items.get((int) (Math.random() * (Global.Items.size() - 3)) + 3)));
         }
         Global.terminalHandler.putTopStatusBarString(
                 1,
