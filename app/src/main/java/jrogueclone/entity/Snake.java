@@ -5,9 +5,9 @@ import jrogueclone.game.Room;
 import jrogueclone.game.Vector2D;
 import jrogueclone.item.Weapon;
 
-public class Skeleton extends Entity {
+public class Snake extends Entity {
 
-    public Skeleton(char entityCharacter, Vector2D entityPosition, Room spawnRoom) {
+    public Snake(char entityCharacter, Vector2D entityPosition, Room spawnRoom) {
         super(entityCharacter, entityPosition, spawnRoom);
     }
 
@@ -20,10 +20,10 @@ public class Skeleton extends Entity {
     @Override
     public void handleEntitySpawn() {
 
-        this.getInventory().addItem(new Weapon("Rusty Sword",
-                25, 35));
+        this.getInventory().addItem(new Weapon("Fangs",
+                10, 50));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
-        this.getHealthController().setHealthCapacity(30);
+        this.getHealthController().setHealthCapacity(10);
         this.getHealthController().setHealthMax();
     }
 
@@ -39,6 +39,17 @@ public class Skeleton extends Entity {
 
     @Override
     public String toString() {
-        return "Skeleton";
+        return "Snake";
+    }
+        
+    @Override
+    public void handleMovement() {
+        super.handleMovement();
+        Vector2D playerPosition = Global.getGameLoop().getCurrentLevel().getPlayer().getPosition();
+        if (playerPosition.getX() > this.getPosition().getX()) {
+            setEntityCharacter('S');
+        } else {
+            setEntityCharacter('Ƨ');
+        }
     }
 }

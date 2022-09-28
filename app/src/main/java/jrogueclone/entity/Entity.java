@@ -85,30 +85,30 @@ public abstract class Entity {
         return this.m_Inventory;
     }
 
-    private void handleCombat() {
+    protected void handleCombat() {
         Weapon activeWeapon = (Weapon) this.getInventory().getEquippedItem(ItemType.WEAPON);
 
         if (activeWeapon == null)
             return;
 
-        if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
+        if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
             HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-            hc.addHealth(-activeWeapon.getWeaponDamage());
-            String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you";
-            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+            hc.deductHealth(activeWeapon.getWeaponDamage());
+            String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you. ";
+            //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
-            Global.terminalHandler.putTopStatusBarString(0,
+            Global.terminalHandler.appendTopStatusBarString(
                     toDisplay, 255, 232, false);
         } else {
-            String toDisplay = this.toString() + " missed";
-            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+            String toDisplay = this.toString() + " missed. ";
+            //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
-            Global.terminalHandler.putTopStatusBarString(0,
+            Global.terminalHandler.appendTopStatusBarString(
                     toDisplay, 255, 232, false);
         }
     }
 
-    protected void handleMovment() {
+    protected void handleMovement() {
         if (!this.isMonster() || Global.getGameLoop().getCurrentLevel().getPlayer().isInvisible())
             return;
 
@@ -130,10 +130,11 @@ public abstract class Entity {
 
             if (!newPosition.Equals(playerPosition)) {
                 Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (uData.getClass() == EmptySpace.class) {
-
+                if (uData != null && uData.getClass() == EmptySpace.class) {
+                    this.m_SpawnRoom.drawContainedObjects();
                     this.setPosition(newPosition);
                 }
+                    
             } else
                 handleCombat();
 

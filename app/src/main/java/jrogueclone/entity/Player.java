@@ -27,7 +27,7 @@ public class Player extends Entity {
                 getPosition().getY(),
                 getEntityCharacter(),
                 9,
-                Global.terminalHandler.getBackgroundColorAt(getPosition().getX(), getPosition().getY()),
+                m_FrozenDuration == 0 ? Global.terminalHandler.getBackgroundColorAt(getPosition().getX(), getPosition().getY()) : 75,
                 true);
     }
 
@@ -87,19 +87,26 @@ public class Player extends Entity {
 
         this.setInvisible(false);
 
-        if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
-            HealthController hc = entity.getHealthController();
-            hc.addHealth(-activeWeapon.getWeaponDamage());
-            String toPrint = "Dealt " + activeWeapon.getWeaponDamage() + "dm to " + entity.toString();
-            toPrint += " ".repeat(Global.columns - toPrint.length());
-            Global.terminalHandler.putTopStatusBarString(0,
-                    toPrint, 255, 232, false);
-        } else {
-            String toDisplay = "You missed the " + entity.toString();
-            toDisplay += " ".repeat(Global.columns - toDisplay.length());
+        if(getFrozenDuration() <= 0) {
+            if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
+                HealthController hc = entity.getHealthController();
+                hc.addHealth(-activeWeapon.getWeaponDamage());
+                String toPrint = " You dealt " + activeWeapon.getWeaponDamage() + "dmg to " + entity.toString();
+                if(hc.getHealth() <= 0) {
+                    toPrint += " and killed it! ";
+                } else {
+                    toPrint += ". ";
+                }
+                //toPrint += " ".repeat(Global.columns - toPrint.length());
+                Global.terminalHandler.appendTopStatusBarString(
+                        toPrint, 255, 232, false);
+            } else {
+                String toDisplay = " You missed the " + entity.toString();
+                //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
-            Global.terminalHandler.putTopStatusBarString(0,
-                    toDisplay, 255, 232, false);
+                Global.terminalHandler.appendTopStatusBarString(
+                        toDisplay, 255, 232, false);
+            }
         }
     }
 
@@ -217,16 +224,23 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (Global.terminalHandler.keyIsPressed('w'))
-            this.handleMovement(MoveDirection.UP);
-        if (Global.terminalHandler.keyIsPressed('a'))
-            this.handleMovement(MoveDirection.LEFT);
-        if (Global.terminalHandler.keyIsPressed('s'))
-            this.handleMovement(MoveDirection.DOWN);
-        if (Global.terminalHandler.keyIsPressed('d'))
-            this.handleMovement(MoveDirection.RIGHT);
-        if (Global.terminalHandler.keyIsPressed('e'))
-            this.tryUse();
+        if(m_FrozenDuration <= 0) {
+            m_FrozenDuration = 0;
+            if (Global.terminalHandler.keyIsPressed('w'))
+                this.handleMovement(MoveDirection.UP);
+            if (Global.terminalHandler.keyIsPressed('a'))
+                this.handleMovement(MoveDirection.LEFT);
+            if (Global.terminalHandler.keyIsPressed('s'))
+                this.handleMovement(MoveDirection.DOWN);
+            if (Global.terminalHandler.keyIsPressed('d'))
+                this.handleMovement(MoveDirection.RIGHT);
+            if (Global.terminalHandler.keyIsPressed('e'))
+                this.tryUse();
+        } else {
+            m_FrozenDuration--;
+            if(m_FrozenDuration > 0)
+                Global.terminalHandler.appendTopStatusBarString(" Frozen " + m_FrozenDuration + " more turns!", 255, 233, false);
+        }
         if (this.getHealthController().getHealth() <= 0) {
             Global.terminalHandler.restoreState();
             System.out.println("Game Over! You died a tragic death\nFinal Score: "
@@ -275,8 +289,17 @@ public class Player extends Entity {
     public void incrementKillCount() {
         this.m_KillCount++;
     }
+    
+    public void setFrozenDuration(int duration) {
+        m_FrozenDuration = duration;
+    }
+    
+    public int getFrozenDuration() {
+        return m_FrozenDuration;
+    }
 
     private int m_KillCount = 0;
+    private int m_FrozenDuration = 0;
     private boolean m_Invisible = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();

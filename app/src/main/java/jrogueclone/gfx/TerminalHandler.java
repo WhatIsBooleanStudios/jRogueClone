@@ -288,6 +288,19 @@ public class TerminalHandler {
             putTopStatusBarChar(col + i, s.charAt(i), fg, bg, bold);
         }
     }
+    
+    public void appendTopStatusBarString(String s, int fg, int bg, boolean bold) {
+        for(int i = Global.columns - 1; i >=0; i--) {
+            if(topStatusBarRenderData[i][0].character != ' ') {
+                if(!(s.length() + i + 1 > Global.columns))
+                    putTopStatusBarString(i + 1, s, fg, bg, bold);
+                else
+                    putTopStatusBarString(0, s + " ".repeat(Global.columns - s.length()), fg, bg, bold);
+                return;
+            }
+        }
+        putTopStatusBarString(0, s, fg, bg, bold);
+    }
 
     public void putBottomStatusBarChar(int col, char c, int fg, int bg, boolean bold) {
         bottomStatusBarRenderData[col][0].userData = null;

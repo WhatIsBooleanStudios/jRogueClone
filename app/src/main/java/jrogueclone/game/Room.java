@@ -5,7 +5,11 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.entity.Entity;
+import jrogueclone.entity.Eye;
+import jrogueclone.entity.Orc;
 import jrogueclone.entity.Skeleton;
+import jrogueclone.entity.Snake;
+import jrogueclone.entity.SnowMan;
 import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
@@ -57,26 +61,41 @@ public class Room {
                 break;
             }
             case 3: {
-                int usedPositions = 1, positionElement = (int)(Math.random() * spawnPositions.size() - usedPositions);
+                int positionElement = (int)(Math.random() * spawnPositions.size() - 1);
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 spawnPositions.remove(positionElement);
-                usedPositions++;
 
-                positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions)) ;
-
+                positionElement = (int)(Math.random() * (spawnPositions.size() - 1));
                 m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
-                spawnPositions.remove(positionElement);
-                usedPositions++;
                 break;
             }
             default: {
-
-                int usedPositions = 0, positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
+                int positionElement = (int)(Math.random() * (spawnPositions.size()));
                 for(int i = 1; i < levelDifficulty; i++) {
                     if(this.getRect().contains(spawnPositions.elementAt(positionElement).getX(), spawnPositions.elementAt(positionElement).getY())) {
-                        positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
-                        m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
-                        usedPositions++;
+                        positionElement = (int)(Math.random() * (spawnPositions.size() - 1));
+                        int mobIndex = (int)(Math.random() * 6);
+                        switch(mobIndex) {
+                            case 0: {
+                                m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
+                                break;
+                            }
+                            case 1: {
+                                m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
+                                break;
+                            }
+                            case 2: {
+                                m_Entities.add(new Orc('᧠', spawnPositions.elementAt(positionElement), this));
+                                break;
+                            } case 3: {
+                                m_Entities.add(new SnowMan('☃', spawnPositions.elementAt(positionElement), this));
+                            } case 4: {
+                                m_Entities.add(new Eye('⊙', spawnPositions.elementAt(positionElement), this));
+                            } case 5: {
+                                m_Entities.add(new Snake('S', spawnPositions.elementAt(positionElement), this));
+                            }
+                        }
+                        spawnPositions.removeElementAt(positionElement);
                     }
                 }
                 break;
