@@ -52,4 +52,9 @@ public class SnowMan extends Entity {
             Global.getGameLoop().getCurrentLevel().getPlayer().setFrozenDuration((int)(Math.random() * 3 + 1));
         }
     }
+    
+    @Override
+    public int getExperienceReward() {
+        return 12;
+    }
 }

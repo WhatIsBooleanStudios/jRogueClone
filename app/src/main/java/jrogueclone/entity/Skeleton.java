@@ -41,4 +41,9 @@ public class Skeleton extends Entity {
     public String toString() {
         return "Skeleton";
     }
+    
+    @Override
+    public int getExperienceReward() {
+        return 6;
+    }
 }

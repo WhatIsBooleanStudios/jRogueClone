@@ -41,4 +41,9 @@ public class Eye extends Entity {
     public String toString() {
         return "Eye";
     }
+    
+    @Override
+    public int getExperienceReward() {
+        return 5;
+    }
 }

@@ -52,4 +52,9 @@ public class Snake extends Entity {
             setEntityCharacter('Ƨ');
         }
     }
+    
+    @Override
+    public int getExperienceReward() {
+        return 2;
+    }
 }
