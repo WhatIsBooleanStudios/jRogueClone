@@ -63,6 +63,10 @@ public class Inventory {
         }
         return null;
     }
+    
+    public Vector<Item> getEquippedItems() {
+        return m_EquippedItems;
+    }
 
     private int cursorPos = 0;
     private int currentPage = 0;

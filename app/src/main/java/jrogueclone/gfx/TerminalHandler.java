@@ -292,25 +292,27 @@ public class TerminalHandler {
     }
 
     public void putTopStatusBarString(int col, String s, int fg, int bg, boolean bold) {
+        int modCol = col;
         for(int i = 0; i < s.length(); i++) {
-            putTopStatusBarChar(col + i, s.charAt(i), fg, bg, bold);
+            if(col + i >= Global.columns) {
+                s = s.substring(i);
+                i = 0;
+                currentTopStatusBarLine++;
+                topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
+                for(int j = 0; j < Global.columns; j++) {
+                    RenderableCharacter[][] c = topStatusBarRenderData.lastElement();
+                    c[j][0] = new RenderableCharacter(' ', 255, 232, false, null);
+                }
+                modCol = 0;
+            }
+            putTopStatusBarChar(modCol + i, s.charAt(i), fg, bg, bold);
         }
     }
     
     public void appendTopStatusBarString(String s, int fg, int bg, boolean bold) {
         for(int i = Global.columns - 1; i >=0; i--) {
             if(topStatusBarRenderData.get(currentTopStatusBarLine)[i][0].character != ' ') {
-                if(!(s.length() + i + 1 > Global.columns))
-                    putTopStatusBarString(i + 1, s, fg, bg, bold);
-                else {
-                    currentTopStatusBarLine++;
-                    topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
-                    for(int j = 0; j < Global.columns; j++) {
-                        RenderableCharacter[][] c = topStatusBarRenderData.lastElement();
-                        c[j][0] = new RenderableCharacter(' ', 255, 232, false, null);
-                    }
-                    putTopStatusBarString(0, s + " ".repeat(Global.columns - s.length()), fg, bg, bold);
-                }
+                putTopStatusBarString(i + 1, s, fg, bg, bold);
                 return;
             }
         }

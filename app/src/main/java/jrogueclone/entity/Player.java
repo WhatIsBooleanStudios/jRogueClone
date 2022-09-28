@@ -119,6 +119,7 @@ public class Player extends Entity {
                 if(activeWeapon.getDurability() <= 0) {
                     toPrint += "Your weapon broke! ";
                     getInventory().getItems().remove(activeWeapon);
+                    getInventory().getEquippedItems().remove(activeWeapon);
                     Weapon newWeapon = null;
                     for(Item w : getInventory().getItems()) {
                         if(w.getClass() == Weapon.class) {
@@ -349,7 +350,7 @@ public class Player extends Entity {
 
     private int m_KillCount = 0;
     private int m_FrozenDuration = 0;
-    private int m_Level = 0;
+    private int m_Level = 1;
     private int m_XP = 0;
     private int m_TargetXP = 10;
     private boolean m_Invisible = false;
