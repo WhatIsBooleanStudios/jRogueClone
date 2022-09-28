@@ -95,13 +95,11 @@ public abstract class Entity {
             HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
             hc.deductHealth(activeWeapon.getWeaponDamage());
             String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you. ";
-            //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
             Global.terminalHandler.appendTopStatusBarString(
                     toDisplay, 255, 232, false);
         } else {
             String toDisplay = this.toString() + " missed. ";
-            //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
             Global.terminalHandler.appendTopStatusBarString(
                     toDisplay, 255, 232, false);
@@ -130,7 +128,7 @@ public abstract class Entity {
 
             if (!newPosition.Equals(playerPosition)) {
                 Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (uData != null && uData.getClass() == EmptySpace.class) {
+                if (uData != null && uData.getClass() == EmptySpace.class && uData.getClass() != Entity.class) {
                     this.m_SpawnRoom.drawContainedObjects();
                     this.setPosition(newPosition);
                 }

@@ -81,21 +81,33 @@ public class Level implements GameState {
             m_Player.draw();
 
             int margin = 1;
-            String statusBarStr = "KILLS: " + this.getPlayer().getKillCount()
-                    + " LVL: " + getDifficulty()
-                    + " PLR_LVL: " + m_Player.getLevel()
-                    + " XP: (" + m_Player.getXP() + "/" + m_Player.getTargetXP() + ")"
+            String statusBarStr = "XP: (" + m_Player.getXP() + "/" + m_Player.getTargetXP() + ")"
                     + " | HP: ("
                     + m_Player.getHealthController().getHealth() + "/"
-                    + m_Player.getHealthController().getMaxHealth() + ") |" + "▆".repeat(20) + "|";
+                    + m_Player.getHealthController().getMaxHealth() + ") " + "▆".repeat(20),
+                    statusbarStr2 = "KILLS: " + this.getPlayer().getKillCount()
+                            + " LVL: " + getDifficulty()
+                            + " PLR_LVL: " + m_Player.getLevel();
+             
+            Global.terminalHandler.putBottomStatusBarString(
+                    1,
+                    0,
+                    statusbarStr2,
+                    9,
+                    232,
+                    true);
+            
             Global.terminalHandler.putBottomStatusBarString(
                     margin,
+                    1,
                     statusBarStr,
                     9,
                     232,
                     true);
+
             Global.terminalHandler.putBottomStatusBarString(
                     margin + statusBarStr.indexOf('▆'),
+                    1,
                     "▆".repeat((int) Math.ceil(20 * (double) m_Player.getHealthController().getHealth()
                             / m_Player.getHealthController().getMaxHealth())),
                     34,

@@ -34,7 +34,9 @@ public class TerminalHandler {
         }
 
         for(int i = 0; i < Global.columns; i++) {
-            bottomStatusBarRenderData[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
+            for(int j = 0; j < Global.bottomStatusBarColumns; j++) {
+                bottomStatusBarRenderData[i][j] = new RenderableCharacter(' ', 232, 232, false, null);
+            }
         }
 
         LibC.winsize ws = new LibC.winsize();
@@ -193,7 +195,7 @@ public class TerminalHandler {
     Vector<RenderableCharacter[][]> topStatusBarRenderData = new Vector<RenderableCharacter[][]>();
     int currentTopStatusBarLine = 0;
     RenderableCharacter[][] renderData = new RenderableCharacter[Global.columns][Global.rows];
-    RenderableCharacter[][] bottomStatusBarRenderData = new RenderableCharacter[Global.columns][1];
+    RenderableCharacter[][] bottomStatusBarRenderData = new RenderableCharacter[Global.columns][Global.bottomStatusBarColumns];
 
     /**
      * Begin rendering. This will clear the renderbuffer
@@ -224,11 +226,13 @@ public class TerminalHandler {
         }
 
         for(int i = 0; i < Global.columns; i++) {
-            bottomStatusBarRenderData[i][0].character = ' ';
-            bottomStatusBarRenderData[i][0].fgColor = 232;
-            bottomStatusBarRenderData[i][0].bgColor = 232;
-            bottomStatusBarRenderData[i][0].bold = false;
-            bottomStatusBarRenderData[i][0].userData = null;
+            for(int j = 0; j < Global.bottomStatusBarColumns; j++) {
+            bottomStatusBarRenderData[i][j].character = ' ';
+            bottomStatusBarRenderData[i][j].fgColor = 232;
+            bottomStatusBarRenderData[i][j].bgColor = 232;
+            bottomStatusBarRenderData[i][j].bold = false;
+            bottomStatusBarRenderData[i][j].userData = null;
+            }
         }
     }
 
@@ -319,17 +323,17 @@ public class TerminalHandler {
         putTopStatusBarString(0, s, fg, bg, bold);
     }
 
-    public void putBottomStatusBarChar(int col, char c, int fg, int bg, boolean bold) {
-        bottomStatusBarRenderData[col][0].userData = null;
-        bottomStatusBarRenderData[col][0].fgColor = fg;
-        bottomStatusBarRenderData[col][0].bgColor = bg;
-        bottomStatusBarRenderData[col][0].bold = bold;
-        bottomStatusBarRenderData[col][0].character = c;
+    public void putBottomStatusBarChar(int col, int row, char c, int fg, int bg, boolean bold) {
+        bottomStatusBarRenderData[col][row].userData = null;
+        bottomStatusBarRenderData[col][row].fgColor = fg;
+        bottomStatusBarRenderData[col][row].bgColor = bg;
+        bottomStatusBarRenderData[col][row].bold = bold;
+        bottomStatusBarRenderData[col][row].character = c;
     }
 
-    public void putBottomStatusBarString(int col, String s, int fg, int bg, boolean bold) {
+    public void putBottomStatusBarString(int col,int row, String s, int fg, int bg, boolean bold) {
         for(int i = 0; i < s.length(); i++) {
-            putBottomStatusBarChar(col + i, s.charAt(i), fg, bg, bold);
+            putBottomStatusBarChar(col + i,row,  s.charAt(i), fg, bg, bold);
         }
     }
 

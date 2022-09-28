@@ -34,7 +34,7 @@ public class LootBox extends Item {
         this.m_ItemUsed = true;
         this.setItemCharacter('␣');
         this.draw();
-        if (Math.random() * 100 <= 50) { // potion
+        if (Math.random() * 100 <= 50) {
             Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
                     .addItem(new Potion((Potion)Global.Items.get((int)(Math.random() * 3))));
         } else { // weapon

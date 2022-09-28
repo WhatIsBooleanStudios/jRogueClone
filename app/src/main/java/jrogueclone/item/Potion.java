@@ -51,8 +51,8 @@ public class Potion extends Item {
                     Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
                     worked = true;
                 }
-                // 50% chance of taking 25% of health off from player
-                if(Math.random() < 0.5) {
+                // 25% chance of taking 25% of health off from player
+                if(Math.random() < 0.25) {
                     HealthController healthController = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
                     healthController.deductHealth((int)Math.round(0.25 * (double)healthController.getHealth()));
                     deltDamage = true;

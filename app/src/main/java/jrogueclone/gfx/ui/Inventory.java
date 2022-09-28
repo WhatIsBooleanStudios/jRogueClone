@@ -92,15 +92,7 @@ public class Inventory {
             cursorPos = 0;
         }
         if(Global.terminalHandler.keyIsPressed('\n')) {
-            Item item = getItems().get(cursorPos + currentPage * Global.rows);
             equipItem(getItems().get(cursorPos + currentPage * Global.rows));
-//            if(item != getItems().get(cursorPos + currentPage * 24)) {
-//                cursorPos--;
-//            }
-            /*System.out.println(currentPage == Math.ceil((double)m_Items.size() / Global.rows) - 1);
-            System.out.println("size: " + m_Items.size());
-            System.out.println(cursorPos > m_Items.size() % Global.rows - 1);
-            System.out.println(cursorPos + " > " + (m_Items.size() % Global.rows - 1));*/
             if(currentPage == Math.ceil((double)m_Items.size() / Global.rows) - 1 && cursorPos > (m_Items.size() % Global.rows - 1)) {
                 cursorPos--;
             }
@@ -166,7 +158,7 @@ public class Inventory {
 
         String helpString = "w/s=PRV_ITM/NXT_ITM  a/d=PRV_PG/NXT_PG  <RET>=USE  x=DEL";
         String pageString = "pg=[" + (currentPage + 1) + "/" + (int)Math.ceil((double)m_Items.size() / Global.rows) + "]";
-        Global.terminalHandler.putBottomStatusBarString(0, helpString + " ".repeat(Global.columns - helpString.length() - pageString.length()) + pageString, 255, 232, false);
+        Global.terminalHandler.putBottomStatusBarString(0, 0, helpString + " ".repeat(Global.columns - helpString.length() - pageString.length()) + pageString, 255, 232, false);
     }
 
     private Vector<Item> m_Items = new Vector<Item>(), m_EquippedItems = new Vector<Item>();

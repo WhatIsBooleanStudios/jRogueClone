@@ -93,15 +93,15 @@ public class Player extends Entity {
             if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
                 boolean leveledUp = false;
                 HealthController hc = entity.getHealthController();
-                hc.addHealth(-activeWeapon.getWeaponDamage());
+                hc.deductHealth(activeWeapon.getWeaponDamage());
                 String toPrint = " You dealt " + activeWeapon.getWeaponDamage() + "dmg to " + entity.toString();
                 if(hc.getHealth() <= 0) {
                     m_XP += entity.getExperienceReward();
                     if(m_XP >= m_TargetXP) {
                         m_Level++;
                         m_XP = 0;
-                        m_TargetXP *= 3.0;
-                        getHealthController().setHealthCapacity((int)(getHealthController().getMaxHealth() + 50));
+                        m_TargetXP *= 2.0;
+                        getHealthController().setHealthCapacity(getHealthController().getMaxHealth() + 50);
                         getHealthController().setHealthMax();
                         leveledUp = true;
                     }
@@ -109,7 +109,6 @@ public class Player extends Entity {
                 } else {
                     toPrint += ". ";
                 }
-                //toPrint += " ".repeat(Global.columns - toPrint.length());
                 
                 activeWeapon.setDurability(activeWeapon.getDurability() - 1);
                 if(activeWeapon.getDurability() <= 0) {
@@ -336,7 +335,6 @@ public class Player extends Entity {
     
     @Override
     public int getExperienceReward() {
-        // Not applicable
         return 0;
     }
     

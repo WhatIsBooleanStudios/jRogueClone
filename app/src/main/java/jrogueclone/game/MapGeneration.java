@@ -39,9 +39,9 @@ public class MapGeneration {
 		// move them around
 		for (int it = 0; it < 3; it++)
 			for (int i = 0; i < rooms.size(); i++) {
-				int tgtHorizMovement = 10;// (int)(Math.random() * 3 + 1);
-				int tgtHorizDirection = (int) (Math.random() * 2) == 1 ? 1 : -1; // -1 = left, +1 = right
-				int tgtVertMovement = 10;// (int)(Math.random() * 2 + 1);
+				int tgtHorizMovement = 10;
+				int tgtHorizDirection = (int) (Math.random() * 2) == 1 ? 1 : -1;
+				int tgtVertMovement = 10;
 				int tgtVertDirection = (int) (Math.random() * 2) == 1 ? 1 : -1;
 
 				while (Math.abs(tgtHorizMovement) > 0) {
