@@ -79,7 +79,7 @@ public class Level implements GameState {
             m_Player.draw();
 
             int margin = 1;
-            String statusBarStr = "KILLS: " + this.getPlayer().getKillCount() 
+            String statusBarStr = "KILLS: " + this.getPlayer().getKillCount()
                     + " LVL: " + getDifficulty()
                     + " PLR_LVL: " + m_Player.getLevel()
                     + " XP: (" + m_Player.getXP() + "/" + m_Player.getTargetXP() + ")"
@@ -100,7 +100,8 @@ public class Level implements GameState {
                     232,
                     true);
         } else {
-            Global.terminalHandler.resetCursor();;
+            Global.terminalHandler.resetCursor();
+            ;
             m_Player.getInventory().updateUI();
             m_Player.getInventory().draw();
         }

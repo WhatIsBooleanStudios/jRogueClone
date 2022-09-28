@@ -1,7 +1,5 @@
 package jrogueclone.entity;
 
-import org.checkerframework.checker.units.qual.g;
-
 import jrogueclone.Global;
 import jrogueclone.game.Room;
 import jrogueclone.game.Vector2D;

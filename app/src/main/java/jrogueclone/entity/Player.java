@@ -2,17 +2,13 @@ package jrogueclone.entity;
 
 import java.util.Vector;
 
-import org.checkerframework.common.reflection.qual.NewInstance;
-
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory.ItemType;
 import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
-import jrogueclone.item.Potion;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
-import jrogueclone.item.Potion.PotionType;
 import jrogueclone.game.EmptySpace;
 import jrogueclone.game.Hallway;
 import jrogueclone.game.Room;
@@ -43,7 +39,7 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-                20, 70, 5));
+                20, 70, 10));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(100);
         this.getHealthController().setHealthMax();
