@@ -25,7 +25,6 @@ public class GameLoop {
         Global.setGameState(GameStates.GAME, m_CurrentLevel);
         boolean firstFrame = true;
         while (!this.m_EndGame) {
-            Global.terminalHandler.begin();
 
             this.m_InputHandler.update();
             try {
@@ -39,6 +38,7 @@ public class GameLoop {
                 e.printStackTrace();
             }
             firstFrame = false;
+            Global.terminalHandler.begin();
             Global.getGameState().update();
 
             if (this.m_UpdateLevel) {
