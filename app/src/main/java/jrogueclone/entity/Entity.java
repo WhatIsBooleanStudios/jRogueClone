@@ -148,6 +148,8 @@ public abstract class Entity {
     public abstract void update();
 
     public abstract String toString();
+    
+    public abstract int getExperienceReward();
 
     private char m_EntityCharacter;
     private Vector2D m_EntityPosition = new Vector2D();

@@ -21,7 +21,7 @@ public class Skeleton extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Rusty Sword",
-                25, 35));
+                25, 35, Integer.MAX_VALUE));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(30);
         this.getHealthController().setHealthMax();
@@ -40,5 +40,10 @@ public class Skeleton extends Entity {
     @Override
     public String toString() {
         return "Skeleton";
+    }
+    
+    @Override
+    public int getExperienceReward() {
+        return 6;
     }
 }

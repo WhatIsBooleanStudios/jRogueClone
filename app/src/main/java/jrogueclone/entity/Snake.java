@@ -21,7 +21,7 @@ public class Snake extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Fangs",
-                10, 50));
+                10, 50, Integer.MAX_VALUE));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(10);
         this.getHealthController().setHealthMax();
@@ -51,5 +51,10 @@ public class Snake extends Entity {
         } else {
             setEntityCharacter('Ƨ');
         }
+    }
+    
+    @Override
+    public int getExperienceReward() {
+        return 2;
     }
 }

@@ -2,9 +2,12 @@ package jrogueclone.entity;
 
 import java.util.Vector;
 
+import org.checkerframework.common.reflection.qual.NewInstance;
+
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory.ItemType;
+import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Potion;
 import jrogueclone.item.Staircase;
@@ -26,7 +29,7 @@ public class Player extends Entity {
                 getPosition().getX(),
                 getPosition().getY(),
                 getEntityCharacter(),
-                9,
+                m_Invisible ? 239 : 9,
                 m_FrozenDuration == 0 ? Global.terminalHandler.getBackgroundColorAt(getPosition().getX(), getPosition().getY()) : 75,
                 true);
     }
@@ -40,7 +43,7 @@ public class Player extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Damaged Wooden Sword",
-                20, 70));
+                20, 70, 5));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(100);
         this.getHealthController().setHealthMax();
@@ -85,21 +88,58 @@ public class Player extends Entity {
         if (activeWeapon == null)
             return;
 
+        if(m_Invisible) {
+            Global.terminalHandler.appendTopStatusBarString(" You are now visible!", 255, 232, false);
+        }
         this.setInvisible(false);
 
         if(getFrozenDuration() <= 0) {
             if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
+                boolean leveledUp = false;
                 HealthController hc = entity.getHealthController();
                 hc.addHealth(-activeWeapon.getWeaponDamage());
                 String toPrint = " You dealt " + activeWeapon.getWeaponDamage() + "dmg to " + entity.toString();
                 if(hc.getHealth() <= 0) {
+                    m_XP += entity.getExperienceReward();
+                    if(m_XP >= m_TargetXP) {
+                        m_Level++;
+                        m_XP = 0;
+                        m_TargetXP *= 3.0;
+                        getHealthController().setHealthCapacity((int)(getHealthController().getMaxHealth() + 50));
+                        getHealthController().setHealthMax();
+                        leveledUp = true;
+                    }
                     toPrint += " and killed it! ";
                 } else {
                     toPrint += ". ";
                 }
                 //toPrint += " ".repeat(Global.columns - toPrint.length());
+                
+                activeWeapon.setDurability(activeWeapon.getDurability() - 1);
+                if(activeWeapon.getDurability() <= 0) {
+                    toPrint += "Your weapon broke! ";
+                    getInventory().getItems().remove(activeWeapon);
+                    getInventory().getEquippedItems().remove(activeWeapon);
+                    Weapon newWeapon = null;
+                    for(Item w : getInventory().getItems()) {
+                        if(w.getClass() == Weapon.class) {
+                            newWeapon = (Weapon)w;
+                            break;
+                        }
+                    }
+                    if(newWeapon == null) {
+                        toPrint += "No weapons to equip! ";
+                    } else {
+                        getInventory().equipItem(newWeapon);
+                    }
+                }
+
                 Global.terminalHandler.appendTopStatusBarString(
                         toPrint, 255, 232, false);
+                if(leveledUp) {
+                    Global.terminalHandler.appendTopStatusBarString(
+                        " You leveled up to level " + m_Level + "!", 255, 232, false);
+                }
             } else {
                 String toDisplay = " You missed the " + entity.toString();
                 //toDisplay += " ".repeat(Global.columns - toDisplay.length());
@@ -297,9 +337,22 @@ public class Player extends Entity {
     public int getFrozenDuration() {
         return m_FrozenDuration;
     }
+    
+    @Override
+    public int getExperienceReward() {
+        // Not applicable
+        return 0;
+    }
+    
+    public int getXP() { return m_XP; }
+    public int getTargetXP() { return m_TargetXP; }
+    public int getLevel() { return m_Level; }
 
     private int m_KillCount = 0;
     private int m_FrozenDuration = 0;
+    private int m_Level = 1;
+    private int m_XP = 0;
+    private int m_TargetXP = 10;
     private boolean m_Invisible = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();

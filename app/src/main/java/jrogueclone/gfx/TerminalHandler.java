@@ -3,6 +3,7 @@ package jrogueclone.gfx;
 import com.sun.jna.ptr.IntByReference;
 
 import java.util.Arrays;
+import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.LibC;
@@ -21,8 +22,9 @@ public class TerminalHandler {
         tios.c_lflag &= ~(LibC.ICANON | LibC.ECHO | LibC.ECHONL);
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
 
+        topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
         for(int i = 0; i < Global.columns; i++) {
-            topStatusBarRenderData[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
+            topStatusBarRenderData.get(0)[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
         }
 
         for (int i = 0; i < Global.columns; i++) {
@@ -188,7 +190,8 @@ public class TerminalHandler {
         }
     }
 
-    RenderableCharacter[][] topStatusBarRenderData = new RenderableCharacter[Global.columns][1];
+    Vector<RenderableCharacter[][]> topStatusBarRenderData = new Vector<RenderableCharacter[][]>();
+    int currentTopStatusBarLine = 0;
     RenderableCharacter[][] renderData = new RenderableCharacter[Global.columns][Global.rows];
     RenderableCharacter[][] bottomStatusBarRenderData = new RenderableCharacter[Global.columns][1];
 
@@ -198,12 +201,17 @@ public class TerminalHandler {
     public void begin() {
         // clear render data
         for(int i = 0; i < Global.columns; i++) {
-            topStatusBarRenderData[i][0].character = ' ';
-            topStatusBarRenderData[i][0].fgColor = 232;
-            topStatusBarRenderData[i][0].bgColor = 232;
-            topStatusBarRenderData[i][0].bold = false;
-            topStatusBarRenderData[i][0].userData = null;
+            topStatusBarRenderData.get(0)[i][0].character = ' ';
+            topStatusBarRenderData.get(0)[i][0].fgColor = 232;
+            topStatusBarRenderData.get(0)[i][0].bgColor = 232;
+            topStatusBarRenderData.get(0)[i][0].bold = false;
+            topStatusBarRenderData.get(0)[i][0].userData = null;
         }
+
+        if(currentTopStatusBarLine > 0) {
+            clear();
+        }
+        currentTopStatusBarLine = 0;
 
         for (int i = 0; i < Global.columns; i++) {
             for (int j = 0; j < Global.rows; j++) {
@@ -276,26 +284,35 @@ public class TerminalHandler {
     }
 
     public void putTopStatusBarChar(int col, char c, int fg, int bg, boolean bold) {
-        topStatusBarRenderData[col][0].userData = null;
-        topStatusBarRenderData[col][0].fgColor = fg;
-        topStatusBarRenderData[col][0].bgColor = bg;
-        topStatusBarRenderData[col][0].bold = bold;
-        topStatusBarRenderData[col][0].character = c;
+        topStatusBarRenderData.get(currentTopStatusBarLine)[col][0].userData = null;
+        topStatusBarRenderData.get(currentTopStatusBarLine)[col][0].fgColor = fg;
+        topStatusBarRenderData.get(currentTopStatusBarLine)[col][0].bgColor = bg;
+        topStatusBarRenderData.get(currentTopStatusBarLine)[col][0].bold = bold;
+        topStatusBarRenderData.get(currentTopStatusBarLine)[col][0].character = c;
     }
 
     public void putTopStatusBarString(int col, String s, int fg, int bg, boolean bold) {
+        int modCol = col;
         for(int i = 0; i < s.length(); i++) {
-            putTopStatusBarChar(col + i, s.charAt(i), fg, bg, bold);
+            if(col + i >= Global.columns) {
+                s = s.substring(i);
+                i = 0;
+                currentTopStatusBarLine++;
+                topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
+                for(int j = 0; j < Global.columns; j++) {
+                    RenderableCharacter[][] c = topStatusBarRenderData.lastElement();
+                    c[j][0] = new RenderableCharacter(' ', 255, 232, false, null);
+                }
+                modCol = 0;
+            }
+            putTopStatusBarChar(modCol + i, s.charAt(i), fg, bg, bold);
         }
     }
     
     public void appendTopStatusBarString(String s, int fg, int bg, boolean bold) {
         for(int i = Global.columns - 1; i >=0; i--) {
-            if(topStatusBarRenderData[i][0].character != ' ') {
-                if(!(s.length() + i + 1 > Global.columns))
-                    putTopStatusBarString(i + 1, s, fg, bg, bold);
-                else
-                    putTopStatusBarString(0, s + " ".repeat(Global.columns - s.length()), fg, bg, bold);
+            if(topStatusBarRenderData.get(currentTopStatusBarLine)[i][0].character != ' ') {
+                putTopStatusBarString(i + 1, s, fg, bg, bold);
                 return;
             }
         }
@@ -417,9 +434,15 @@ public class TerminalHandler {
      * Flush the renderBuffer to stdout
      */
     public void end() {
-        drawRenderData(this.topStatusBarRenderData);
+        for(RenderableCharacter[][] rd : this.topStatusBarRenderData)
+            drawRenderData(rd);
         drawRenderData(this.renderData);
         drawRenderData(this.bottomStatusBarRenderData);
+        this.topStatusBarRenderData.clear();
+        this.topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
+        for(int i = 0; i < Global.columns; i++) {
+            topStatusBarRenderData.get(0)[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
+        }
     }
 
     /**

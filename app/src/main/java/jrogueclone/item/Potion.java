@@ -27,6 +27,10 @@ public class Potion extends Item {
                 break;
         }
     }
+    
+    public Potion(Potion p) {
+        this(p.getPotionType());
+    }
 
     @Override
     public void useItem() {
@@ -79,16 +83,21 @@ public class Potion extends Item {
                 if (randomEffect == 1) {
 
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                    if (hc.getHealth() + 40 <= hc.getMaxHealth())
+                    if (hc.getHealth() + 40 <= hc.getMaxHealth()) {
                         hc.addHealth(40);
-                    else
+                        Global.terminalHandler.appendTopStatusBarString(". You gained 40 health!", 255, 233, false);
+                    } else {
                         hc.setHealthMax();
+                        Global.terminalHandler.appendTopStatusBarString(". You gained full health!", 255, 233, false);
+                    }
 
                 } else if (randomEffect == 2) {
                     Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
+                    Global.terminalHandler.appendTopStatusBarString(". You are now invisible!", 255, 233, false);
                 } else {
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
                     hc.addHealth(-40);
+                    Global.terminalHandler.appendTopStatusBarString(". You lost 40 health!", 255, 233, false);
                 }
                 break;
             }
@@ -106,7 +115,7 @@ public class Potion extends Item {
                 return "\"" + m_PotionName + "\"" + " (Makes you invisible until you attack)";
 
             case MYSTERY:
-                return "\"" + m_PotionName + "\"" + " (A Mystery potion! Could be bad, could be good)";
+                return "\"" + m_PotionName + "\"" + " (A Mystery potion!)";
 
             default:
                 return "error";

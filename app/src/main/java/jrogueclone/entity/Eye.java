@@ -21,7 +21,7 @@ public class Eye extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Emotional damage",
-                10, 55));
+                10, 55, Integer.MAX_VALUE));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(30);
         this.getHealthController().setHealthMax();
@@ -40,5 +40,10 @@ public class Eye extends Entity {
     @Override
     public String toString() {
         return "Eye";
+    }
+    
+    @Override
+    public int getExperienceReward() {
+        return 5;
     }
 }

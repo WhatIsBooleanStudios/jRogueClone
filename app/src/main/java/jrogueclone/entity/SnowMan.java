@@ -21,7 +21,7 @@ public class SnowMan extends Entity {
     public void handleEntitySpawn() {
 
         this.getInventory().addItem(new Weapon("Snow Balls",
-                35, 35));
+                35, 35, Integer.MAX_VALUE));
         this.getInventory().equipItem(this.getInventory().getItems().elementAt(0));
         this.getHealthController().setHealthCapacity(40);
         this.getHealthController().setHealthMax();
@@ -51,5 +51,10 @@ public class SnowMan extends Entity {
         if(hit && Math.random() <= 0.35 && Global.getGameLoop().getCurrentLevel().getPlayer().getFrozenDuration() <= 0) {
             Global.getGameLoop().getCurrentLevel().getPlayer().setFrozenDuration((int)(Math.random() * 3 + 1));
         }
+    }
+    
+    @Override
+    public int getExperienceReward() {
+        return 12;
     }
 }
