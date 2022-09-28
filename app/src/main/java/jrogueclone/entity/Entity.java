@@ -91,9 +91,9 @@ public abstract class Entity {
         if (activeWeapon == null)
             return;
 
-        if (activeWeapon.getWeaponDamageChance() <= Math.random() * 99 + 1) {
+        if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
             HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-            hc.addHealth(-activeWeapon.getWeaponDamage());
+            hc.deductHealth(activeWeapon.getWeaponDamage());
             String toDisplay = this.toString() + " did " + activeWeapon.getWeaponDamage() + "dmg to you. ";
             //toDisplay += " ".repeat(Global.columns - toDisplay.length());
 
@@ -130,10 +130,11 @@ public abstract class Entity {
 
             if (!newPosition.Equals(playerPosition)) {
                 Object uData = Global.terminalHandler.getUserDataAt(newPosition.getX(), newPosition.getY());
-                if (uData.getClass() == EmptySpace.class) {
-
+                if (uData != null && uData.getClass() == EmptySpace.class) {
+                    this.m_SpawnRoom.drawContainedObjects();
                     this.setPosition(newPosition);
                 }
+                    
             } else
                 handleCombat();
 

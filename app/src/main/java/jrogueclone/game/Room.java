@@ -61,24 +61,19 @@ public class Room {
                 break;
             }
             case 3: {
-                int usedPositions = 1, positionElement = (int)(Math.random() * spawnPositions.size() - usedPositions);
+                int positionElement = (int)(Math.random() * spawnPositions.size() - 1);
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 spawnPositions.remove(positionElement);
-                usedPositions++;
 
-                positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions)) ;
-
+                positionElement = (int)(Math.random() * (spawnPositions.size() - 1));
                 m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
-                spawnPositions.remove(positionElement);
-                usedPositions++;
                 break;
             }
             default: {
-
-                int usedPositions = 0, positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
+                int positionElement = (int)(Math.random() * (spawnPositions.size()));
                 for(int i = 1; i < levelDifficulty; i++) {
                     if(this.getRect().contains(spawnPositions.elementAt(positionElement).getX(), spawnPositions.elementAt(positionElement).getY())) {
-                        positionElement = (int)(Math.random() * (spawnPositions.size() - usedPositions));
+                        positionElement = (int)(Math.random() * (spawnPositions.size() - 1));
                         int mobIndex = (int)(Math.random() * 6);
                         switch(mobIndex) {
                             case 0: {
@@ -100,7 +95,7 @@ public class Room {
                                 m_Entities.add(new Snake('S', spawnPositions.elementAt(positionElement), this));
                             }
                         }
-                        usedPositions++;
+                        spawnPositions.removeElementAt(positionElement);
                     }
                 }
                 break;

@@ -106,5 +106,5 @@ public class Level implements GameState {
     private Vector<Room> m_Rooms = new Vector<Room>();
     private Vector<Hallway> m_Hallways = new Vector<Hallway>();
     private Player m_Player;
-    private int m_LevelDifficuty = 1;
+    private int m_LevelDifficuty = 4;
 }
