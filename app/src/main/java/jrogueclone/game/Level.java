@@ -64,8 +64,10 @@ public class Level implements GameState {
     @Override
     public void update() {
 
-        if (Global.terminalHandler.keyIsPressed('i'))
+        if (Global.terminalHandler.keyIsPressed('i')) {
             m_Player.toggleInventoryState();
+            m_Player.getInventory().zeroCursor();
+        }
 
         if (!Global.getGameLoop().getInventoryToggled()) {
             this.drawLevel();

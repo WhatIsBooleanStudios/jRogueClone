@@ -23,6 +23,10 @@ public class Inventory {
     public Vector<Item> getItems() {
         return this.m_Items;
     }
+    
+    public void zeroCursor() {
+        cursorPos = 0;
+    }
 
     Vector<Item> m_RemoveQueue = new Vector<>();
 
