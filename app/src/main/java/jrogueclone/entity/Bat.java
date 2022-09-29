@@ -47,7 +47,7 @@ public class Bat extends Entity {
     public String toString() {
         return "Bat";
     }
-    
+
     @Override
     public int getExperienceReward() {
         return 2;

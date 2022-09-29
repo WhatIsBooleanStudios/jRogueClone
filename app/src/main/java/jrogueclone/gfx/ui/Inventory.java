@@ -23,7 +23,7 @@ public class Inventory {
     public Vector<Item> getItems() {
         return this.m_Items;
     }
-    
+
     public void zeroCursor() {
         cursorPos = 0;
     }
@@ -34,12 +34,12 @@ public class Inventory {
         for (Item item : this.m_EquippedItems) {
             if (newItem.getItemType() == ItemType.POTION) {
                 HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                Potion potion = (Potion)newItem;
+                Potion potion = (Potion) newItem;
                 if (hc.getMaxHealth() == hc.getHealth() && potion.getPotionType() == PotionType.HEALTH) {
                     Global.terminalHandler.putTopStatusBarString(1, "HP is allready full!", 255, 233, false);
                     return;
                 }
-                    
+
                 Global.terminalHandler.putTopStatusBarString(1, "Drank " + newItem.toString(), 255, 233, false);
                 newItem.useItem();
                 m_RemoveQueue.add(newItem);
@@ -67,7 +67,7 @@ public class Inventory {
         }
         return null;
     }
-    
+
     public Vector<Item> getEquippedItems() {
         return m_EquippedItems;
     }
@@ -79,60 +79,67 @@ public class Inventory {
         if (Global.terminalHandler.keyIsPressed('w') && cursorPos > 0) {
             cursorPos--;
         }
-        if(Global.terminalHandler.keyIsPressed('s') && cursorPos < Global.rows - 1 &&
-                !(currentPage == Math.ceil((double)m_Items.size() / Global.rows) - 1 && cursorPos >= (m_Items.size() % Global.rows - 1))) {
+        if (Global.terminalHandler.keyIsPressed('s') && cursorPos < Global.rows - 1 &&
+                !(currentPage == Math.ceil((double) m_Items.size() / Global.rows) - 1
+                        && cursorPos >= (m_Items.size() % Global.rows - 1))) {
             cursorPos++;
         }
-        if(Global.terminalHandler.keyIsPressed('a') && currentPage > 0) {
+        if (Global.terminalHandler.keyIsPressed('a') && currentPage > 0) {
             currentPage--;
             cursorPos = 0;
         }
-        if(Global.terminalHandler.keyIsPressed('d') && currentPage < ((int)Math.ceil((double)getItems().size() / Global.rows)) - 1) {
+        if (Global.terminalHandler.keyIsPressed('d')
+                && currentPage < ((int) Math.ceil((double) getItems().size() / Global.rows)) - 1) {
             currentPage++;
             cursorPos = 0;
         }
-        if(Global.terminalHandler.keyIsPressed('\n')) {
+        if (Global.terminalHandler.keyIsPressed('\n')) {
             equipItem(getItems().get(cursorPos + currentPage * Global.rows));
-            if(currentPage == Math.ceil((double)m_Items.size() / Global.rows) - 1 && cursorPos > (m_Items.size() % Global.rows - 1)) {
+            if (currentPage == Math.ceil((double) m_Items.size() / Global.rows) - 1
+                    && cursorPos > (m_Items.size() % Global.rows - 1)) {
                 cursorPos--;
             }
         }
-        if(Global.terminalHandler.keyIsPressed('x')) {
+        if (Global.terminalHandler.keyIsPressed('x')) {
             Item itemUnderCursor = getItems().get(cursorPos + currentPage * Global.rows);
             Global.terminalHandler.putTopStatusBarString(1, "Delete " + itemUnderCursor, 255, 233, false);
             m_Items.remove(itemUnderCursor);
-            if(getEquippedItem(itemUnderCursor.getItemType()) == itemUnderCursor) {
+            if (getEquippedItem(itemUnderCursor.getItemType()) == itemUnderCursor) {
                 boolean foundEquippedItem = false;
-                for(int i = 0; i < m_Items.size(); i++) {
-                    if(m_Items.get(i).getItemType() == itemUnderCursor.getItemType()) {
+                for (int i = 0; i < m_Items.size(); i++) {
+                    if (m_Items.get(i).getItemType() == itemUnderCursor.getItemType()) {
                         equipItem(m_Items.get(i));
                         foundEquippedItem = true;
                         break;
                     }
                 }
-                if(!foundEquippedItem) {
+                if (!foundEquippedItem) {
                     m_EquippedItems.remove(itemUnderCursor);
                 }
             }
-            if(currentPage == Math.ceil((double)m_Items.size() / Global.rows) - 1 && cursorPos > (m_Items.size() % Global.rows - 1)) {
+            if (currentPage == Math.ceil((double) m_Items.size() / Global.rows) - 1
+                    && cursorPos > (m_Items.size() % Global.rows - 1)) {
                 cursorPos--;
             }
         }
-        if(currentPage > Math.ceil((double)m_Items.size() / Global.rows) - 1) {
-            currentPage = (int)Math.ceil((double)m_Items.size() / Global.rows) - 1;
+        if (currentPage > Math.ceil((double) m_Items.size() / Global.rows) - 1) {
+            currentPage = (int) Math.ceil((double) m_Items.size() / Global.rows) - 1;
             cursorPos = 23;
-            if(currentPage < 0) {currentPage = 0; cursorPos = 0;}
+            if (currentPage < 0) {
+                currentPage = 0;
+                cursorPos = 0;
+            }
         }
-        if(cursorPos < 0 && currentPage > 0) {
+        if (cursorPos < 0 && currentPage > 0) {
             currentPage--;
             cursorPos = 23;
         }
     }
 
     public void draw() {
-        if(m_Items.size() > 0) {
-            for(int i = currentPage * Global.rows; i < (currentPage + 1) * Global.rows; i++) {
-                if(i > m_Items.size() - 1) {
+        if (m_Items.size() > 0) {
+            for (int i = currentPage * Global.rows; i < (currentPage + 1) * Global.rows; i++) {
+                if (i > m_Items.size() - 1) {
                     break;
                 }
                 Item item = getItems().get(i);
@@ -147,18 +154,21 @@ public class Inventory {
                 int bg = (i % Global.rows == cursorPos ? 255 : 232);
                 int fg = (i % Global.rows == cursorPos ? 232 : 255);
 
-                for(int j = 0; j < finalString.length(); j++) {
+                for (int j = 0; j < finalString.length(); j++) {
                     Global.terminalHandler.putChar(j, i % Global.rows, finalString.charAt(j), fg, bg, false);
                 }
-                if(getEquippedItem(item.getItemType()) == item) {
+                if (getEquippedItem(item.getItemType()) == item) {
                     Global.terminalHandler.putChar(Global.columns - 1 - 2, i % 24, '✓', fg, bg, true);
                 }
             }
         }
 
         String helpString = "w/s=PRV_ITM/NXT_ITM  a/d=PRV_PG/NXT_PG  <RET>=USE  x=DEL";
-        String pageString = "pg=[" + (currentPage + 1) + "/" + (int)Math.ceil((double)m_Items.size() / Global.rows) + "]";
-        Global.terminalHandler.putBottomStatusBarString(0, 0, helpString + " ".repeat(Global.columns - helpString.length() - pageString.length()) + pageString, 255, 232, false);
+        String pageString = "pg=[" + (currentPage + 1) + "/" + (int) Math.ceil((double) m_Items.size() / Global.rows)
+                + "]";
+        Global.terminalHandler.putBottomStatusBarString(0, 0,
+                helpString + " ".repeat(Global.columns - helpString.length() - pageString.length()) + pageString, 255,
+                232, false);
     }
 
     private Vector<Item> m_Items = new Vector<Item>(), m_EquippedItems = new Vector<Item>();

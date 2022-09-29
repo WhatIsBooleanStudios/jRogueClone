@@ -26,7 +26,9 @@ public class Player extends Entity {
                 getPosition().getY(),
                 getEntityCharacter(),
                 m_Invisible ? 239 : 9,
-                m_FrozenDuration == 0 ? Global.terminalHandler.getBackgroundColorAt(getPosition().getX(), getPosition().getY()) : 75,
+                m_FrozenDuration == 0
+                        ? Global.terminalHandler.getBackgroundColorAt(getPosition().getX(), getPosition().getY())
+                        : 75,
                 true);
     }
 
@@ -84,20 +86,20 @@ public class Player extends Entity {
         if (activeWeapon == null)
             return;
 
-        if(m_Invisible) {
+        if (m_Invisible) {
             Global.terminalHandler.appendTopStatusBarString(" You are now visible!", 255, 232, false);
         }
         this.setInvisible(false);
 
-        if(getFrozenDuration() <= 0) {
+        if (getFrozenDuration() <= 0) {
             if (activeWeapon.getWeaponDamageChance() >= Math.random() * 99 + 1) {
                 boolean leveledUp = false;
                 HealthController hc = entity.getHealthController();
                 hc.deductHealth(activeWeapon.getWeaponDamage());
                 String toPrint = " You dealt " + activeWeapon.getWeaponDamage() + "dmg to " + entity.toString();
-                if(hc.getHealth() <= 0) {
+                if (hc.getHealth() <= 0) {
                     m_XP += (entity.getExperienceReward() * (m_DoubleXP ? 2 : 1));
-                    if(m_XP >= m_TargetXP) {
+                    if (m_XP >= m_TargetXP) {
                         m_Level++;
                         m_XP = 0;
                         m_TargetXP *= 2.0;
@@ -109,20 +111,20 @@ public class Player extends Entity {
                 } else {
                     toPrint += ". ";
                 }
-                
+
                 activeWeapon.setDurability(activeWeapon.getDurability() - 1);
-                if(activeWeapon.getDurability() <= 0) {
+                if (activeWeapon.getDurability() <= 0) {
                     toPrint += "Your weapon broke! ";
                     getInventory().getItems().remove(activeWeapon);
                     getInventory().getEquippedItems().remove(activeWeapon);
                     Weapon newWeapon = null;
-                    for(Item w : getInventory().getItems()) {
-                        if(w.getClass() == Weapon.class) {
-                            newWeapon = (Weapon)w;
+                    for (Item w : getInventory().getItems()) {
+                        if (w.getClass() == Weapon.class) {
+                            newWeapon = (Weapon) w;
                             break;
                         }
                     }
-                    if(newWeapon == null) {
+                    if (newWeapon == null) {
                         toPrint += "No weapons to equip! ";
                     } else {
                         getInventory().equipItem(newWeapon);
@@ -131,9 +133,9 @@ public class Player extends Entity {
 
                 Global.terminalHandler.appendTopStatusBarString(
                         toPrint, 255, 232, false);
-                if(leveledUp) {
+                if (leveledUp) {
                     Global.terminalHandler.appendTopStatusBarString(
-                        " You leveled up to level " + m_Level + "!", 255, 232, false);
+                            " You leveled up to level " + m_Level + "!", 255, 232, false);
                 }
             } else {
                 String toDisplay = " You missed the " + entity.toString();
@@ -257,7 +259,7 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if(m_FrozenDuration <= 0) {
+        if (m_FrozenDuration <= 0) {
             m_FrozenDuration = 0;
             if (Global.terminalHandler.keyIsPressed('w'))
                 this.handleMovement(MoveDirection.UP);
@@ -271,8 +273,9 @@ public class Player extends Entity {
                 this.tryUse();
         } else {
             m_FrozenDuration--;
-            if(m_FrozenDuration > 0)
-                Global.terminalHandler.appendTopStatusBarString(" Frozen " + m_FrozenDuration + " more turns!", 255, 233, false);
+            if (m_FrozenDuration > 0)
+                Global.terminalHandler.appendTopStatusBarString(" Frozen " + m_FrozenDuration + " more turns!", 255,
+                        233, false);
         }
         if (this.getHealthController().getHealth() <= 0) {
             Global.terminalHandler.restoreState();
@@ -322,35 +325,43 @@ public class Player extends Entity {
     public void incrementKillCount() {
         this.m_KillCount++;
     }
-    
+
     public void setFrozenDuration(int duration) {
         m_FrozenDuration = duration;
     }
-    
+
     public int getFrozenDuration() {
         return m_FrozenDuration;
     }
-    
+
     @Override
     public int getExperienceReward() {
         return 0;
     }
-    
-    public int getXP() { return m_XP; }
-    public int getTargetXP() { return m_TargetXP; }
-    public int getLevel() { return m_Level; }
-    
+
+    public int getXP() {
+        return m_XP;
+    }
+
+    public int getTargetXP() {
+        return m_TargetXP;
+    }
+
+    public int getLevel() {
+        return m_Level;
+    }
+
     public void setDoubleXP(boolean doubleXP) {
         this.m_DoubleXP = doubleXP;
     }
 
-    private int m_KillCount = 0, 
-                m_FrozenDuration = 0, 
-                m_Level = 1, 
-                m_XP = 0, 
-                m_TargetXP = 10;
-    private boolean m_Invisible = false, 
-                    m_DoubleXP = false;
+    private int m_KillCount = 0,
+            m_FrozenDuration = 0,
+            m_Level = 1,
+            m_XP = 0,
+            m_TargetXP = 10;
+    private boolean m_Invisible = false,
+            m_DoubleXP = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();
 }

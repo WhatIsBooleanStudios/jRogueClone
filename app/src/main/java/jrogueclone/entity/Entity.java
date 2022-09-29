@@ -132,7 +132,7 @@ public abstract class Entity {
                     this.m_SpawnRoom.drawContainedObjects();
                     this.setPosition(newPosition);
                 }
-                    
+
             } else
                 handleCombat();
 
@@ -146,7 +146,7 @@ public abstract class Entity {
     public abstract void update();
 
     public abstract String toString();
-    
+
     public abstract int getExperienceReward();
 
     private char m_EntityCharacter;

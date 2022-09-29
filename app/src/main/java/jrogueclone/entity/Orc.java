@@ -26,10 +26,10 @@ public class Orc extends Entity {
         this.getHealthController().setHealthCapacity(70);
         this.getHealthController().setHealthMax();
     }
-    
+
     @Override
     public int getExperienceReward() {
-        return 10; 
+        return 10;
     }
 
     @Override
@@ -47,4 +47,3 @@ public class Orc extends Entity {
         return "Orc";
     }
 }
-

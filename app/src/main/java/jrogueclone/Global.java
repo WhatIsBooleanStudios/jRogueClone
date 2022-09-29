@@ -67,10 +67,10 @@ public class Global {
     public static final int topStatusBarColumns = 1;
     public static final int bottomStatusBarColumns = 2;
 
-
     // Game items
     public static List<Item> Items = new ArrayList<Item>();
-    public static void initializeItems () {
+
+    public static void initializeItems() {
 
         // Add potions to the list of items
         Items.add(new Potion(PotionType.HEALTH));
@@ -83,7 +83,7 @@ public class Global {
         Items.add(new Weapon("Sharp Steel Spear", 45, 85, 10));
         Items.add(new Weapon("Weathered Wood Knife", 15, 30, 5));
         Items.add(new Weapon("Unparalleled Steel Scythe", 50, 80, 15));
-        Items.add(new Weapon("Steel Axe", 35,80, 10));
+        Items.add(new Weapon("Steel Axe", 35, 80, 10));
         Items.add(new Weapon("Sickle", 30, 70, 7));
         Items.add(new Weapon("Trident", 40, 65, 18));
         Items.add(new Weapon("Long Sword", 45, 85, 20));

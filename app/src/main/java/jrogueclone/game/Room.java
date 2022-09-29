@@ -51,31 +51,32 @@ public class Room {
         }
         switch (levelDifficulty) {
             case 1: {
-                int positionElement = (int)(Math.random() * spawnPositions.size());
+                int positionElement = (int) (Math.random() * spawnPositions.size());
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 break;
             }
             case 2: {
-                int positionElement = (int)(Math.random() * spawnPositions.size());
+                int positionElement = (int) (Math.random() * spawnPositions.size());
                 m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
                 break;
             }
             case 3: {
-                int positionElement = (int)(Math.random() * spawnPositions.size() - 1);
+                int positionElement = (int) (Math.random() * spawnPositions.size() - 1);
                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                 spawnPositions.remove(positionElement);
 
-                positionElement = (int)(Math.random() * (spawnPositions.size() - 1));
+                positionElement = (int) (Math.random() * (spawnPositions.size() - 1));
                 m_Entities.add(new Skeleton('☠', spawnPositions.elementAt(positionElement), this));
                 break;
             }
             default: {
-                int positionElement = (int)(Math.random() * (spawnPositions.size()));
-                for(int i = 1; i < levelDifficulty; i++) {
-                    if(this.getRect().contains(spawnPositions.elementAt(positionElement).getX(), spawnPositions.elementAt(positionElement).getY())) {
-                        positionElement = (int)(Math.random() * (spawnPositions.size() - 1));
-                        int mobIndex = (int)(Math.random() * 6);
-                        switch(mobIndex) {
+                int positionElement = (int) (Math.random() * (spawnPositions.size()));
+                for (int i = 1; i < levelDifficulty; i++) {
+                    if (this.getRect().contains(spawnPositions.elementAt(positionElement).getX(),
+                            spawnPositions.elementAt(positionElement).getY())) {
+                        positionElement = (int) (Math.random() * (spawnPositions.size() - 1));
+                        int mobIndex = (int) (Math.random() * 6);
+                        switch (mobIndex) {
                             case 0: {
                                 m_Entities.add(new Bat('ʌ', spawnPositions.elementAt(positionElement), this));
                                 break;
@@ -87,11 +88,14 @@ public class Room {
                             case 2: {
                                 m_Entities.add(new Orc('᧠', spawnPositions.elementAt(positionElement), this));
                                 break;
-                            } case 3: {
+                            }
+                            case 3: {
                                 m_Entities.add(new SnowMan('☃', spawnPositions.elementAt(positionElement), this));
-                            } case 4: {
+                            }
+                            case 4: {
                                 m_Entities.add(new Eye('⊙', spawnPositions.elementAt(positionElement), this));
-                            } case 5: {
+                            }
+                            case 5: {
                                 m_Entities.add(new Snake('S', spawnPositions.elementAt(positionElement), this));
                             }
                         }

@@ -41,7 +41,7 @@ public class Snake extends Entity {
     public String toString() {
         return "Snake";
     }
-        
+
     @Override
     public void handleMovement() {
         super.handleMovement();
@@ -52,7 +52,7 @@ public class Snake extends Entity {
             setEntityCharacter('Ƨ');
         }
     }
-    
+
     @Override
     public int getExperienceReward() {
         return 2;

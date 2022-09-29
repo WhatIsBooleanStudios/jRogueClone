@@ -73,10 +73,10 @@ public class Level implements GameState {
 
         if (Global.terminalHandler.keyIsPressed('h')) {
             Global.terminalHandler.putTopStatusBarString(0, "Map unlocked!", 255, 232, true);
-            for(Room room : this.m_Rooms) {
+            for (Room room : this.m_Rooms) {
                 m_Player.setRoomDiscovered(room);
             }
-            for(Hallway hallway : this.m_Hallways) {
+            for (Hallway hallway : this.m_Hallways) {
                 m_Player.setHallwayDiscovered(hallway);
             }
         }

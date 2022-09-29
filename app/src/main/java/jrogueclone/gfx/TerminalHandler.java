@@ -23,7 +23,7 @@ public class TerminalHandler {
         Global.libc.tcsetattr(LibC.STDIN_FILENO, LibC.TCSANOW, tios);
 
         topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
-        for(int i = 0; i < Global.columns; i++) {
+        for (int i = 0; i < Global.columns; i++) {
             topStatusBarRenderData.get(0)[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
         }
 
@@ -33,8 +33,8 @@ public class TerminalHandler {
             }
         }
 
-        for(int i = 0; i < Global.columns; i++) {
-            for(int j = 0; j < Global.bottomStatusBarColumns; j++) {
+        for (int i = 0; i < Global.columns; i++) {
+            for (int j = 0; j < Global.bottomStatusBarColumns; j++) {
                 bottomStatusBarRenderData[i][j] = new RenderableCharacter(' ', 232, 232, false, null);
             }
         }
@@ -43,7 +43,8 @@ public class TerminalHandler {
         Global.libc.ioctl(LibC.STDIN_FILENO, LibC.TIOCGWINSZ, ws);
         terminalSize = ws;
 
-        if (terminalSize.ws_col < (Global.columns + Global.bottomStatusBarColumns + Global.topStatusBarColumns) && terminalSize.ws_row < Global.rows) {
+        if (terminalSize.ws_col < (Global.columns + Global.bottomStatusBarColumns + Global.topStatusBarColumns)
+                && terminalSize.ws_row < Global.rows) {
             restoreState();
             System.err.println("Terminal too small! Must be at least (" + Global.columns + ", " + Global.rows + ")");
             System.out.println("width: " + ws.ws_col + " height: " + ws.ws_row);
@@ -202,7 +203,7 @@ public class TerminalHandler {
      */
     public void begin() {
         // clear render data
-        for(int i = 0; i < Global.columns; i++) {
+        for (int i = 0; i < Global.columns; i++) {
             topStatusBarRenderData.get(0)[i][0].character = ' ';
             topStatusBarRenderData.get(0)[i][0].fgColor = 232;
             topStatusBarRenderData.get(0)[i][0].bgColor = 232;
@@ -210,7 +211,7 @@ public class TerminalHandler {
             topStatusBarRenderData.get(0)[i][0].userData = null;
         }
 
-        if(currentTopStatusBarLine > 0) {
+        if (currentTopStatusBarLine > 0) {
             clear();
         }
         currentTopStatusBarLine = 0;
@@ -225,13 +226,13 @@ public class TerminalHandler {
             }
         }
 
-        for(int i = 0; i < Global.columns; i++) {
-            for(int j = 0; j < Global.bottomStatusBarColumns; j++) {
-            bottomStatusBarRenderData[i][j].character = ' ';
-            bottomStatusBarRenderData[i][j].fgColor = 232;
-            bottomStatusBarRenderData[i][j].bgColor = 232;
-            bottomStatusBarRenderData[i][j].bold = false;
-            bottomStatusBarRenderData[i][j].userData = null;
+        for (int i = 0; i < Global.columns; i++) {
+            for (int j = 0; j < Global.bottomStatusBarColumns; j++) {
+                bottomStatusBarRenderData[i][j].character = ' ';
+                bottomStatusBarRenderData[i][j].fgColor = 232;
+                bottomStatusBarRenderData[i][j].bgColor = 232;
+                bottomStatusBarRenderData[i][j].bold = false;
+                bottomStatusBarRenderData[i][j].userData = null;
             }
         }
     }
@@ -297,13 +298,13 @@ public class TerminalHandler {
 
     public void putTopStatusBarString(int col, String s, int fg, int bg, boolean bold) {
         int modCol = col;
-        for(int i = 0; i < s.length(); i++) {
-            if(col + i >= Global.columns) {
+        for (int i = 0; i < s.length(); i++) {
+            if (col + i >= Global.columns) {
                 s = s.substring(i);
                 i = 0;
                 currentTopStatusBarLine++;
                 topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
-                for(int j = 0; j < Global.columns; j++) {
+                for (int j = 0; j < Global.columns; j++) {
                     RenderableCharacter[][] c = topStatusBarRenderData.lastElement();
                     c[j][0] = new RenderableCharacter(' ', 255, 232, false, null);
                 }
@@ -312,10 +313,10 @@ public class TerminalHandler {
             putTopStatusBarChar(modCol + i, s.charAt(i), fg, bg, bold);
         }
     }
-    
+
     public void appendTopStatusBarString(String s, int fg, int bg, boolean bold) {
-        for(int i = Global.columns - 1; i >=0; i--) {
-            if(topStatusBarRenderData.get(currentTopStatusBarLine)[i][0].character != ' ') {
+        for (int i = Global.columns - 1; i >= 0; i--) {
+            if (topStatusBarRenderData.get(currentTopStatusBarLine)[i][0].character != ' ') {
                 putTopStatusBarString(i + 1, s, fg, bg, bold);
                 return;
             }
@@ -331,12 +332,11 @@ public class TerminalHandler {
         bottomStatusBarRenderData[col][row].character = c;
     }
 
-    public void putBottomStatusBarString(int col,int row, String s, int fg, int bg, boolean bold) {
-        for(int i = 0; i < s.length(); i++) {
-            putBottomStatusBarChar(col + i,row,  s.charAt(i), fg, bg, bold);
+    public void putBottomStatusBarString(int col, int row, String s, int fg, int bg, boolean bold) {
+        for (int i = 0; i < s.length(); i++) {
+            putBottomStatusBarChar(col + i, row, s.charAt(i), fg, bg, bold);
         }
     }
-
 
     private void setForegroundColor(int color) {
         System.out.print(CSI + "38;5;" + color + "m");
@@ -438,13 +438,13 @@ public class TerminalHandler {
      * Flush the renderBuffer to stdout
      */
     public void end() {
-        for(RenderableCharacter[][] rd : this.topStatusBarRenderData)
+        for (RenderableCharacter[][] rd : this.topStatusBarRenderData)
             drawRenderData(rd);
         drawRenderData(this.renderData);
         drawRenderData(this.bottomStatusBarRenderData);
         this.topStatusBarRenderData.clear();
         this.topStatusBarRenderData.add(new RenderableCharacter[Global.columns][1]);
-        for(int i = 0; i < Global.columns; i++) {
+        for (int i = 0; i < Global.columns; i++) {
             topStatusBarRenderData.get(0)[i][0] = new RenderableCharacter(' ', 232, 232, false, null);
         }
     }

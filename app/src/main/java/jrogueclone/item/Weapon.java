@@ -4,14 +4,14 @@ import jrogueclone.gfx.ui.Inventory.ItemType;
 
 public class Weapon extends Item {
     public Weapon(String weaponName, int weaponDamage, int weaponDamageChance, int durability) {
-        this.m_ItemType = ItemType.WEAPON; 
+        this.m_ItemType = ItemType.WEAPON;
         this.m_WeaponName = weaponName;
         this.m_WeaponDamage = weaponDamage;
         this.m_WeaponDamageChance = weaponDamageChance;
         this.m_Durability = durability;
         this.m_MaxDurability = durability;
     }
-    
+
     public Weapon(Weapon weapon) {
         this.m_ItemType = weapon.m_ItemType;
         this.m_WeaponName = weapon.m_WeaponName;
@@ -36,11 +36,11 @@ public class Weapon extends Item {
     public int getDurability() {
         return m_Durability;
     }
-    
+
     public int getMaxDurability() {
         return m_MaxDurability;
     }
-    
+
     public void setDurability(int durability) {
         m_Durability = durability;
     }
@@ -53,11 +53,13 @@ public class Weapon extends Item {
     }
 
     @Override
-    public void useItem() {}
+    public void useItem() {
+    }
 
     @Override
     public String toString() {
-        return "\"" + m_WeaponName  + "\"" + " (" + m_WeaponDamage + "dmg, " + m_WeaponDamageChance + "% dmg chance " + m_Durability + "/" + m_MaxDurability + " durability)";
+        return "\"" + m_WeaponName + "\"" + " (" + m_WeaponDamage + "dmg, " + m_WeaponDamageChance + "% dmg chance "
+                + m_Durability + "/" + m_MaxDurability + " durability)";
     }
 
     private String m_WeaponName = "";

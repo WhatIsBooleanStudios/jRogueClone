@@ -11,7 +11,7 @@ public class InputHandler {
     }
 
     public boolean updateGame() {
-        if(!Global.getGameLoop().getInventoryToggled()) {
+        if (!Global.getGameLoop().getInventoryToggled()) {
             for (char c : m_KeyMap.toCharArray()) {
                 if (Global.terminalHandler.keyIsPressed(c)) {
                     if (c == 'e' || c == 'i') {

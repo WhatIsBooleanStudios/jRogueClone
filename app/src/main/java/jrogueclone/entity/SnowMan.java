@@ -41,18 +41,20 @@ public class SnowMan extends Entity {
     public String toString() {
         return "SnowMan";
     }
-    
+
     @Override
     public void handleCombat() {
         int prevPlayerHealth = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController().getHealth();
         super.handleCombat();
-        boolean hit = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController().getHealth() < prevPlayerHealth;
+        boolean hit = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController()
+                .getHealth() < prevPlayerHealth;
         // 35% chance of freezing player
-        if(hit && Math.random() <= 0.35 && Global.getGameLoop().getCurrentLevel().getPlayer().getFrozenDuration() <= 0) {
-            Global.getGameLoop().getCurrentLevel().getPlayer().setFrozenDuration((int)(Math.random() * 3 + 1));
+        if (hit && Math.random() <= 0.35
+                && Global.getGameLoop().getCurrentLevel().getPlayer().getFrozenDuration() <= 0) {
+            Global.getGameLoop().getCurrentLevel().getPlayer().setFrozenDuration((int) (Math.random() * 3 + 1));
         }
     }
-    
+
     @Override
     public int getExperienceReward() {
         return 12;
