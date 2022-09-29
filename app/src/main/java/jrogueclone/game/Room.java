@@ -157,7 +157,7 @@ public class Room {
     }
 
     public void addStaircase() {
-        this.m_Items.add(new Staircase('♯', 255, new Vector2D((int) (getRoomPosition().getX() + m_RoomWidth / 2),
+        this.m_Items.add(new Staircase('Ǝ', 255, new Vector2D((int) (getRoomPosition().getX() + m_RoomWidth / 2),
                 (int) getRoomPosition().getY() + m_RoomHeight - 2)));
     }
 

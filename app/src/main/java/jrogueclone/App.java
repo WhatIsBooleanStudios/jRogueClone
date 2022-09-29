@@ -2,6 +2,8 @@ package jrogueclone;
 
 import java.util.Scanner;
 
+import jrogueclone.util.ScoreReport;
+
 public class App {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

@@ -26,7 +26,7 @@ public class Staircase extends Item {
     @Override
     public void draw() {
         Global.terminalHandler.putChar(this.getItemPosition().getX(), this.getItemPosition().getY(),
-                this.getItemCharacter(), this.getItemCharacterColor(), 232, true, this);
+                this.getItemCharacter(), this.getItemCharacterColor(), 232, false, this);
 
     }
 

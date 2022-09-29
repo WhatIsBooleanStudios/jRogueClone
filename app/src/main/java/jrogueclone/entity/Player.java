@@ -9,6 +9,7 @@ import jrogueclone.item.Item;
 import jrogueclone.item.LootBox;
 import jrogueclone.item.Staircase;
 import jrogueclone.item.Weapon;
+import jrogueclone.util.ScoreReport;
 import jrogueclone.game.EmptySpace;
 import jrogueclone.game.Hallway;
 import jrogueclone.game.Room;
@@ -281,6 +282,7 @@ public class Player extends Entity {
             Global.terminalHandler.restoreState();
             System.out.println("Game Over! You died a tragic death\nFinal Score: "
                     + (this.getKillCount() + Global.getGameLoop().getCurrentLevel().getDifficulty()));
+            ScoreReport.displayScores();
             System.exit(0);
         }
 
