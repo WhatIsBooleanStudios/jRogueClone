@@ -36,7 +36,7 @@ public class InputHandler {
         return false;
     }
 
-    public static final String m_KeyMap = "iwasde ";
+    public static final String m_KeyMap = "iwasdeh ";
 
     public static final String m_InventoryKeyMap = "xwasd\ni";
 }
