@@ -1,16 +1,17 @@
 # JRogueClone
 
-Rogue is a terminal-based dungeon crawling adventure developed at U.C Berkley in the 70s where the player fights through endless hords monsters, collects
-terrifying weapons, and a wide variety of weapons. JRogueClone hopes to deliver the same amount of fun or more that users in the 70s experienced to players
+Rogue is a terminal-based dungeon crawling adventure developed at U.C Berkley in the 70's where the player fights through endless hords monsters, collects
+terrifying weapons, and a wide variety of weapons. JRogueClone hopes to deliver the same amount of fun or more that users in the 70's experienced to players
 today. Join **WHAT IS BOOLEAN** sutdios as we embark on yet another adventure.
 
 ## Controls
-| control | function |
-|---------|----------|
-| W/A/S/D | movement |
-| I       | open/close inventory |
+| control | function                 |
+|---------|----------                |
+| W/A/S/D | movement                 |
+| I       | open/close inventory     |
 | E       | interact with chest/item |
-| SPACE   | cycle frame |
+| SPACE   | cycle frame              |
+| H       | show hidden map          |
 
 ## Analysis of a Rogue Game World
 
@@ -37,8 +38,8 @@ today. Join **WHAT IS BOOLEAN** sutdios as we embark on yet another adventure.
                             ║(Fig B.).=║                                    
                             ║..........║                                    
                             ╚══════════╝                                    
- (Fig D.)(Fig E.)  (Fig F.) (Fig G.)     (Fig H.)                           
- KILLS: 1 LVL: 1 PLR_LVL: 1 XP: (2/10) | HP: (100/100) |▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆|
+ (Fig D.) (Fig E.)  (Fig F.) (Fig G.)     (Fig H.)                           
+ KILLS: 1 LVL: 1 PLR_LVL: 1 XP: (1/10) | HP: (100/100) ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆
 ```
 |Figure  | Description   |
 |--------|---------------|
