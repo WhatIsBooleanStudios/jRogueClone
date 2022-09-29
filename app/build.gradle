@@ -27,6 +27,10 @@ dependencies {
     implementation group: 'net.java.dev.jna', name: 'jna', version: '4.5.0'
 }
 
+tasks.withType(JavaCompile) {
+    options.release = 11
+} 
+
 application {
     // Define the main class for the application.
     mainClass = 'jrogueclone.App'
