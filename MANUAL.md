@@ -1,7 +1,8 @@
 # JRogueClone
 
-Rogue is a terminal-based dungeon crawling adventure developed at U.C Berkeley in the 70's where the player fights through endless hords monsters, collects terrifying weapons, and a wide variety of weapons. JRogueClone hopes to deliver the same amount of fun or more that users in the 70's experienced to players today. Join WHAT IS BOOLEAN studios as we embark on yet another adventure.
-
+Rogue is a terminal-based dungeon crawling adventure developed at U.C Berkley in the 80s where the player fights through endless hords monsters, collects
+terrifying weapons, and a wide variety of weapons. JRogueClone hopes to deliver the same amount of fun or more that users in the 80s experienced to players
+today. Join **WHAT IS BOOLEAN** sutdios as we embark on yet another adventure.
 
 ## Controls
 | control | function                 |
