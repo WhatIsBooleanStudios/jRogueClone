@@ -3,6 +3,7 @@ package jrogueclone.item;
 import jrogueclone.Global;
 import jrogueclone.game.Vector2D;
 import jrogueclone.gfx.ui.Inventory.ItemType;
+import jrogueclone.item.Potion.PotionType;
 
 public class LootBox extends Item {
     public LootBox(char itemCharacter, int itemCharacterColor, Vector2D itemPosition) {
@@ -34,16 +35,23 @@ public class LootBox extends Item {
         this.m_ItemUsed = true;
         this.setItemCharacter('␣');
         this.draw();
-        if (Math.random() * 100 <= 50) {
+        if (Math.round(Math.random() * 100) <= 50) {
+            /*
+             * Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
+             * .addItem(new Potion((Potion) Global.Items.get((int) (Math.round(Math.random()
+             * * 4)))));
+             */
             Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
-                    .addItem(new Potion((Potion)Global.Items.get((int)(Math.random() * 3))));
+                    .addItem(new Potion(PotionType.DOUBLEXP));
         } else { // weapon
             Global.getGameLoop().getCurrentLevel().getPlayer().getInventory()
-                    .addItem(new Weapon((Weapon)Global.Items.get((int) (Math.random() * (Global.Items.size() - 3)) + 3)));
+                    .addItem(new Weapon((Weapon) Global.Items
+                            .get((int) (Math.round(Math.random() * (Global.Items.size() - 1))) + 4)));
         }
         Global.terminalHandler.putTopStatusBarString(
                 1,
-                "Player got " + Global.getGameLoop().getCurrentLevel().getPlayer().getInventory().getItems().lastElement(),
+                "Player got "
+                        + Global.getGameLoop().getCurrentLevel().getPlayer().getInventory().getItems().lastElement(),
                 255,
                 232,
                 false);

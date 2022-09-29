@@ -20,6 +20,7 @@ public class Staircase extends Item {
         Global.getGameLoop().getCurrentLevel().setDifficulty(previousDifficulty);
         curPlayer.getHealthController().setHealthMax();
         curPlayer.setInvisible(false);
+        curPlayer.setDoubleXP(false);
     }
 
     @Override

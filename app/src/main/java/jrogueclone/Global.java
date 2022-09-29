@@ -76,6 +76,7 @@ public class Global {
         Items.add(new Potion(PotionType.HEALTH));
         Items.add(new Potion(PotionType.INVISIBILTY));
         Items.add(new Potion(PotionType.MYSTERY));
+        Items.add(new Potion(PotionType.DOUBLEXP));
 
         // Add weapons to the list of items
         Items.add(new Weapon("Damaged Wooden Spear", 20, 75, 7));

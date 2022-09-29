@@ -96,7 +96,7 @@ public class Player extends Entity {
                 hc.deductHealth(activeWeapon.getWeaponDamage());
                 String toPrint = " You dealt " + activeWeapon.getWeaponDamage() + "dmg to " + entity.toString();
                 if(hc.getHealth() <= 0) {
-                    m_XP += entity.getExperienceReward();
+                    m_XP += (entity.getExperienceReward() * (m_DoubleXP ? 2 : 1));
                     if(m_XP >= m_TargetXP) {
                         m_Level++;
                         m_XP = 0;
@@ -137,8 +137,6 @@ public class Player extends Entity {
                 }
             } else {
                 String toDisplay = " You missed the " + entity.toString();
-                //toDisplay += " ".repeat(Global.columns - toDisplay.length());
-
                 Global.terminalHandler.appendTopStatusBarString(
                         toDisplay, 255, 232, false);
             }
@@ -341,13 +339,18 @@ public class Player extends Entity {
     public int getXP() { return m_XP; }
     public int getTargetXP() { return m_TargetXP; }
     public int getLevel() { return m_Level; }
+    
+    public void setDoubleXP(boolean doubleXP) {
+        this.m_DoubleXP = doubleXP;
+    }
 
-    private int m_KillCount = 0;
-    private int m_FrozenDuration = 0;
-    private int m_Level = 1;
-    private int m_XP = 0;
-    private int m_TargetXP = 10;
-    private boolean m_Invisible = false;
+    private int m_KillCount = 0, 
+                m_FrozenDuration = 0, 
+                m_Level = 1, 
+                m_XP = 0, 
+                m_TargetXP = 10;
+    private boolean m_Invisible = false, 
+                    m_DoubleXP = false;
     private Vector<Room> m_DiscoveredRooms = new Vector<Room>();
     private Vector<Hallway> m_DiscoveredHallways = new Vector<Hallway>();
 }

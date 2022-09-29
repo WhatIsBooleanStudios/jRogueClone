@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import jrogueclone.Global;
 import jrogueclone.entity.Player;
+import jrogueclone.gfx.ui.Inventory.ItemType;
+import jrogueclone.item.Weapon;
 
 public class Level implements GameState {
     public Level(Vector<Room> rooms, Vector<Hallway> hallways, Player player) {
@@ -86,9 +88,14 @@ public class Level implements GameState {
                     + m_Player.getHealthController().getHealth() + "/"
                     + m_Player.getHealthController().getMaxHealth() + ") " + "▆".repeat(20),
                     statusbarStr2 = "KILLS: " + this.getPlayer().getKillCount()
-                            + " LVL: " + getDifficulty()
-                            + " PLR_LVL: " + m_Player.getLevel();
-             
+                            + " | LVL: " + getDifficulty()
+                            + " | PLR_LVL: " + m_Player.getLevel();
+            Weapon currentWeapon = ((Weapon) m_Player.getInventory().getEquippedItem(ItemType.WEAPON));
+            if (currentWeapon != null) {
+                statusbarStr2 += " | DURABILTY: [" + currentWeapon.getDurability() + "/"
+                        + currentWeapon.getMaxDurability() + "]";
+            }
+
             Global.terminalHandler.putBottomStatusBarString(
                     1,
                     0,
@@ -96,7 +103,7 @@ public class Level implements GameState {
                     9,
                     232,
                     true);
-            
+
             Global.terminalHandler.putBottomStatusBarString(
                     margin,
                     1,

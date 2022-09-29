@@ -9,7 +9,8 @@ public class Potion extends Item {
     public enum PotionType {
         HEALTH,
         INVISIBILTY,
-        MYSTERY
+        MYSTERY,
+        DOUBLEXP
     }
 
     public Potion(PotionType potionType) {
@@ -25,9 +26,12 @@ public class Potion extends Item {
             case MYSTERY:
                 m_PotionName = "Mystery Potion";
                 break;
+            case DOUBLEXP:
+                m_PotionName = "Double XP Potion";
+                break;
         }
     }
-    
+
     public Potion(Potion p) {
         this(p.getPotionType());
     }
@@ -47,30 +51,31 @@ public class Potion extends Item {
                 boolean worked = false;
                 boolean deltDamage = false;
                 // 75 percent chance of working
-                if(Math.random() < 0.75) {
+                if (Math.random() < 0.75) {
                     Global.getGameLoop().getCurrentLevel().getPlayer().setInvisible(true);
                     worked = true;
                 }
                 // 25% chance of taking 25% of health off from player
-                if(Math.random() < 0.25) {
-                    HealthController healthController = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                    healthController.deductHealth((int)Math.round(0.25 * (double)healthController.getHealth()));
+                if (Math.random() < 0.25) {
+                    HealthController healthController = Global.getGameLoop().getCurrentLevel().getPlayer()
+                            .getHealthController();
+                    healthController.deductHealth((int) Math.round(0.25 * (double) healthController.getHealth()));
                     deltDamage = true;
                 }
 
-                if(!worked && !deltDamage) {
+                if (!worked && !deltDamage) {
                     String message = "The invis potion failed";
                     message += " ".repeat(Global.columns - message.length() - 1);
                     Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
-                } else if(!worked && deltDamage) {
+                } else if (!worked && deltDamage) {
                     String message = "The invis potion failed and took 25% of your health!";
                     message += " ".repeat(Global.columns - message.length() - 1);
                     Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
-                } else if(worked && deltDamage) {
+                } else if (worked && deltDamage) {
                     String message = "The invis potion worked but took 25% of your health!";
                     message += " ".repeat(Global.columns - message.length() - 1);
                     Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
-                } else if(worked && !deltDamage) {
+                } else if (worked && !deltDamage) {
                     String message = "The invis potion worked!";
                     message += " ".repeat(Global.columns - message.length() - 1);
                     Global.terminalHandler.putTopStatusBarString(1, message, 255, 233, false);
@@ -79,7 +84,7 @@ public class Potion extends Item {
             }
             case MYSTERY: {
                 int randomEffect = (int) Math.round(Math.random() * 2 + 1);
-                
+
                 if (randomEffect == 1) {
 
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
@@ -96,11 +101,16 @@ public class Potion extends Item {
                     Global.terminalHandler.appendTopStatusBarString(". You are now invisible!", 255, 233, false);
                 } else {
                     HealthController hc = Global.getGameLoop().getCurrentLevel().getPlayer().getHealthController();
-                    hc.addHealth(-40);
+                    hc.deductHealth(40);
                     Global.terminalHandler.appendTopStatusBarString(". You lost 40 health!", 255, 233, false);
                 }
                 break;
             }
+            case DOUBLEXP:
+            Global.getGameLoop().getCurrentLevel().getPlayer().setDoubleXP(true);
+                break;
+            default:
+                break;
         }
 
     }
@@ -116,7 +126,8 @@ public class Potion extends Item {
 
             case MYSTERY:
                 return "\"" + m_PotionName + "\"" + " (A Mystery potion!)";
-
+            case DOUBLEXP:
+            return "\"" + m_PotionName + "\"" + " (x2 XP for 1 level!)";
             default:
                 return "error";
         }
