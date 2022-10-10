@@ -23,13 +23,7 @@ public class App {
         } else {
             System.out.println("Good, because you don't have a choice anyway.");
         }
-        /*
-         * try {
-         * Thread.sleep(2000);
-         * } catch(InterruptedException e) {
-         * e.printStackTrace();
-         * }
-         */
+
         System.out.print("Press enter to continue to the game: ");
         sc.nextLine();
         Global.initializeItems();
