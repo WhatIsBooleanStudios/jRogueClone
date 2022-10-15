@@ -1,4 +1,19 @@
-# jRogueClone
-A rogue clone written in Java for an APCS course. Documentation can be found here: https://docs.google.com/document/d/1yalAcBC2sBIdWUnINqwlQOZyY0MLWz4Xha-l0T2WdQA/edit?usp=sharing
+# JRogueClone
 
-https://docs.google.com/presentation/d/1AQd42Thw7V8jlIcHVsqi96encUXXld23sIE0xqqxo8c/edit?usp=sharing
+Rogue is a terminal-based dungeon crawling adventure developed at U.C Berkley in the 80s where the player fights through endless hords monsters, collects
+terrifying weapons, and a wide variety of weapons. JRogueClone hopes to deliver the same amount of fun or more that users in the 80s experienced to players
+today. Join **WhatIsBooleanStudios** as we embark on yet another adventure.
+
+## Compiling
+| Component     | Version|
+|:-------------:| -----: |
+| Gradle        | 7.3    |
+| Java          | 17.03  |
+
+A build script has been added for easy compilation, to run execute the "buildAndRun.sh" script in the project files. To make "buildAndRun.sh" script executable use the following commands in a terminal:
+```
+chmod +x buildAndRun.sh
+./buildAndRun.sh
+```
+
+## Media
