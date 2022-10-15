@@ -18,6 +18,10 @@ chmod +x buildAndRun.sh
 ./buildAndRun.sh
 ```
 
+## Controlls
+
+All controlls and information about the game are documented in the MANUAL.md
+
 ## Media
 
 Start Screen
