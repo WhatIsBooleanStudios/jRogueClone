@@ -4,6 +4,8 @@ Rogue is a terminal-based dungeon crawling adventure developed at U.C Berkley in
 terrifying weapons, and a wide variety of weapons. JRogueClone hopes to deliver the same amount of fun or more that users in the 80s experienced to players
 today. Join **WhatIsBooleanStudios** as we embark on yet another adventure.
 
+This project was created and coded by @notSam25(Samuel Wiseman) and @theVerySharpFlat(Aiden Lambert), for the purpose of a AP Computer Science course project. This project will also not be reciving any updates to the code, it will be archived.
+
 ## Compiling
 | Component     | Version|
 |:-------------:| -----: |
@@ -17,3 +19,12 @@ chmod +x buildAndRun.sh
 ```
 
 ## Media
+
+Start Screen
+ * ![plot](images/StartScreen.png?raw=true)
+
+Game
+ * ![plot](images/GamePlay.png?raw=true)
+
+Inventory
+ * ![plot](images/InventoryScreen.png?raw=true)
