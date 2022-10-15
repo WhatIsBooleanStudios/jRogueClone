@@ -16,7 +16,7 @@ public class App {
                         + "            (WHAT IS BOOLEAN STUDIOS)\n");
         System.out.print("Do you want to play another boring text adventure(y/n): ");
         String in = sc.nextLine();
-        if (in.length() > 0 && in.charAt(0) == 'y') {
+        if (in.length() > 0 && in.charAt(0) == 'n') {
             System.out.println("Good, because you don't have a choice anyway.");
         } else {
             System.out.println("Too bad! You get something fun.");
